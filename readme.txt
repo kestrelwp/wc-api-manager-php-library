@@ -1,11 +1,7 @@
 WooCommerce API Manager Compatibility
 ==========================
 
-For the API Manager version >= 2.1, use the current release of the API Manager PHP Library. https://github.com/toddlahman/api-manager-php-library/releases
-
-For the API Manager version 2.0 to pre 2.1, use the API Manager PHP Library version 2.5.2. https://github.com/toddlahman/api-manager-php-library/releases
-
-For the API Manager version < 2.0, use the API Manager PHP Library version 1.2. https://github.com/toddlahman/api-manager-php-library/archive/v1.2.zip
+For the API Manager version >= 2.1, use the current release of the API Manager PHP Library. https://github.com/toddlahman/wc-api-manager-php-library/releases
 
 WC API Manager PHP Library version 2.7
 ==========================

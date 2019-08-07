@@ -1,5 +1,8 @@
 *** API Manager PHP Library Changelog ***
 
+2019.08.07 - version 2.7
+ * New: Major update for API Manager version 2.1 and greater.
+
 2019.07.26 - version 2.6
  * New: Replaced 'request' API Key for actions with 'wc_am_action' to match new query string key in API Manager 2.1 API.
 
