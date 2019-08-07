@@ -1,0 +1,41 @@
+*** API Manager PHP Library Changelog ***
+
+2019.07.26 - version 2.6
+ * New: Replaced 'request' API Key for actions with 'wc_am_action' to match new query string key in API Manager 2.1 API.
+
+2019.05.09 - version 2.5.2
+ * Fix: $this->plugin_or_theme moved up so $this->identifier can evaluate $this->plugin_or_theme value.
+
+2019.05.09 - version 2.5.1
+ * Tweak: Update get_api_key_status() to use new API data format.
+ * Tweak: Get $this->identifier value based on whether plugin or theme value has been set for the object.
+ * Tweak: activation() method modified to prevent instance being generated more than once.
+ * Tweak: Other minor code changes.
+ * Tweak: $_REQUEST[ 'option_page' ] check to fix PHP notice as per https://github.com/toddlahman/api-manager-php-library/pull/95. Credit: https://github.com/maheshwaghmare
+ * New: Add filter wc_am_client_uninstall_disable as per https://github.com/toddlahman/api-manager-php-library/pull/96. Credit: https://github.com/maheshwaghmare
+ * New: Add filter wc_am_client_inactive_notice_override as per https://github.com/toddlahman/api-manager-php-library/pull/96. Credit: https://github.com/maheshwaghmare
+
+2019.3.25 - version 2.5
+ * Fix: Leave wp_safe_remote_post() sslverify to default value of on.
+
+2019.3.25 - version 2.4
+ * Tweak: get_api_key_status() can query live or saved.
+ * Tweak: Set wp_safe_remote_post() values timeout to 15 and sslverify to off.
+
+2019.3.14 - version 2.3
+ * New: When $product_id is an empty string in data sent to the library, a Product ID form field will be displayed to allow the customer to enter the product_id manually.
+
+2019.1.7 - version 2.2
+ * Fix: Moved $this->wc_am_activated_key = $this->data_key . '_activated'; above is_admin() since it would fail for frontend checks.
+
+2019.1.7 - version 2.1
+ * Added get_api_key_status() method.
+
+2018.9.8 - version 2.0
+ * Compatibility with WooCommerce API Manager 2.x.
+
+2016.12.31 - version 1.1
+ * Fix: Moved activation notice into if is_admin() evaluation block to eliminate a PHP warning.
+
+2016.06.17 - version 1.0
+ * First release of the vastly simplified, and combined, plugin and theme drop-in library.
