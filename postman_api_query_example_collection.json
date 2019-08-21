@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "15a2f398-c8a1-4fb9-9eae-4fbd2dc7bab7",
+		"name": "WC >= 2.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "activation 2.0",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=activate&instance=p1uOusaNM5ub3&object=http://dev.toddlahman.com/&product_id=137890&version=1.0&api_key=9f9273c809979608220752449d55fec9fbe85c3e",
+					"protocol": "http",
+					"host": [
+						"wc"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "wc-api",
+							"value": "wc-am-api"
+						},
+						{
+							"key": "wc_am_action",
+							"value": "activate"
+						},
+						{
+							"key": "instance",
+							"value": "p1uOusaNM5ub3"
+						},
+						{
+							"key": "object",
+							"value": "http://dev.toddlahman.com/"
+						},
+						{
+							"key": "product_id",
+							"value": "137890"
+						},
+						{
+							"key": "version",
+							"value": "1.0"
+						},
+						{
+							"key": "api_key",
+							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deactivation 2.0",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=deactivate&instance=p1uOusaNM5ub3&product_id=137890&api_key=9f9273c809979608220752449d55fec9fbe85c3e",
+					"protocol": "http",
+					"host": [
+						"wc"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "wc-api",
+							"value": "wc-am-api"
+						},
+						{
+							"key": "wc_am_action",
+							"value": "deactivate"
+						},
+						{
+							"key": "instance",
+							"value": "p1uOusaNM5ub3"
+						},
+						{
+							"key": "product_id",
+							"value": "137890"
+						},
+						{
+							"key": "api_key",
+							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "status 2.0",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=status&instance=p1uOusaNM5ub3&product_id=137890&api_key=9f9273c809979608220752449d55fec9fbe85c3e",
+					"protocol": "http",
+					"host": [
+						"wc"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "wc-api",
+							"value": "wc-am-api"
+						},
+						{
+							"key": "wc_am_action",
+							"value": "status"
+						},
+						{
+							"key": "instance",
+							"value": "p1uOusaNM5ub3"
+						},
+						{
+							"key": "product_id",
+							"value": "137890"
+						},
+						{
+							"key": "api_key",
+							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "information 2.0",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=information&instance=p1uOusaNM5ub3&product_id=137890&version=1.0&api_key=9f9273c809979608220752449d55fec9fbe85c3e&plugin_name=simple-comments/simple-comments.php",
+					"protocol": "http",
+					"host": [
+						"wc"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "wc-api",
+							"value": "wc-am-api"
+						},
+						{
+							"key": "wc_am_action",
+							"value": "information"
+						},
+						{
+							"key": "instance",
+							"value": "p1uOusaNM5ub3"
+						},
+						{
+							"key": "product_id",
+							"value": "137890"
+						},
+						{
+							"key": "version",
+							"value": "1.0"
+						},
+						{
+							"key": "api_key",
+							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+						},
+						{
+							"key": "plugin_name",
+							"value": "simple-comments/simple-comments.php"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update 2.0",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=update&instance=p1uOusaNM5ub3&product_id=137890&version=1.0&api_key=9f9273c809979608220752449d55fec9fbe85c3e&plugin_name=simple-comments",
+					"protocol": "http",
+					"host": [
+						"wc"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "wc-api",
+							"value": "wc-am-api"
+						},
+						{
+							"key": "wc_am_action",
+							"value": "update"
+						},
+						{
+							"key": "instance",
+							"value": "p1uOusaNM5ub3"
+						},
+						{
+							"key": "product_id",
+							"value": "137890"
+						},
+						{
+							"key": "version",
+							"value": "1.0"
+						},
+						{
+							"key": "api_key",
+							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+						},
+						{
+							"key": "plugin_name",
+							"value": "simple-comments"
+						},
+						{
+							"key": "slug",
+							"value": "api-manager-php-library",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "abf60ea2-7527-488c-a97a-3f4eeb8b9fd7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "37707542-3069-4c8a-8d71-26882d5b1616",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
