@@ -1,4 +1,4 @@
-*** API Manager PHP Library Changelog ***
+*** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
 2019.08.07 - version 2.7
  * New: Major update for API Manager version 2.1 and greater.

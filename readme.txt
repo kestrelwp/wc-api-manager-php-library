@@ -1,7 +1,12 @@
 WooCommerce API Manager Compatibility
 ==========================
 
-For the API Manager version >= 2.1, use the current release of the API Manager PHP Library. https://github.com/toddlahman/wc-api-manager-php-library/releases
+WooCommerce API Manager version >= 2.1 is recommended.
+
+Requirements
+============
+
+ WooCommerce API Manager 2.x.
 
 WC API Manager PHP Library version 2.7
 ==========================
@@ -122,15 +127,12 @@ Possible Solutions:
 * The API Manager store should also disable CloudFlare, or other CDNs, all firewall and caching software. Any of these can mangle HTTP/S requests. Also make sure the client software is not trying to connect using HTTP, and being forwarded to HTTPS, as this can cause breakage in some cases. The rule of thumb is to start working with the API Manager without a firewall or CDN, then add these services if desired, but always test to make sure everything is still working.
 * In the case of a DDOS, you may need to carefully add CloudFlare, or some other firewall service. This could make things worse if you're not sure how to implement a firewall, so get help if some things are not working as expected.
 
-Requirements
-============
-
-The WooCommerce API Manager 2.x.
-
 Screenshots
 ============
 
 The library uses the **Software Title** to create a unique settings menu item, and a page that can be used to activate and deactivate the product using the **API Key**. Below is a series of screenshots to demostrate the customer experience. Note: The API Email is not long used for authentication, which makes the screenshots out-of-date but still a close example to the current experience.
+
+https://www.toddlahman.com/shop/woocommerce-api-manager-php-library-for-plugins-and-themes/
 
 ![](https://cloud.githubusercontent.com/assets/3452849/15640356/183bd64a-25ec-11e6-9989-9311a87a78ad.png)
 

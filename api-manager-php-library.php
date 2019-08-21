@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes
- * Plugin URI: https://www.toddlahman.com/
+ * Plugin URI: https://www.toddlahman.com/shop/woocommerce-api-manager-php-library-for-plugins-and-themes/
  * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below after line 26.
  * Version: 2.7
  * Author: Todd Lahman LLC
