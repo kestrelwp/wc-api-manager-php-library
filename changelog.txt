@@ -1,5 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2019.09.04 - version 2.7.1
+ * Tweak: Changed the Plugin header file name to match directory name.
+ 
 2019.08.21 - version 2.7
  * https://www.getpostman.com/postman collection template file added. The preconfigured .json file can be imported into Postman to make it easy to test the API functions. Server URL, and keys/values will need to be modified specific to your product and server.
 
