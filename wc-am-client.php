@@ -15,9 +15,7 @@
  * @license       Copyright Todd Lahman LLC
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 	class WC_AM_Client_2_7 {
@@ -679,7 +677,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 		 */
 		public function activate( $args ) {
 			$defaults = array(
-				'wc_am_action'          => 'activate',
+				'wc_am_action'     => 'activate',
 				'product_id'       => $this->product_id,
 				'instance'         => $this->wc_am_instance_id,
 				'object'           => $this->wc_am_domain,
@@ -709,10 +707,10 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 		 */
 		public function deactivate( $args ) {
 			$defaults = array(
-				'wc_am_action'    => 'deactivate',
-				'product_id' => $this->product_id,
-				'instance'   => $this->wc_am_instance_id,
-				'object'     => $this->wc_am_domain
+				'wc_am_action' => 'deactivate',
+				'product_id'   => $this->product_id,
+				'instance'     => $this->wc_am_instance_id,
+				'object'       => $this->wc_am_domain
 			);
 
 			$args       = wp_parse_args( $defaults, $args );
@@ -736,11 +734,11 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 		 */
 		public function status() {
 			$defaults = array(
-				'wc_am_action'    => 'status',
-				'api_key'    => $this->data[ $this->wc_am_api_key_key ],
-				'product_id' => $this->product_id,
-				'instance'   => $this->wc_am_instance_id,
-				'object'     => $this->wc_am_domain
+				'wc_am_action' => 'status',
+				'api_key'      => $this->data[ $this->wc_am_api_key_key ],
+				'product_id'   => $this->product_id,
+				'instance'     => $this->wc_am_instance_id,
+				'object'       => $this->wc_am_domain
 			);
 
 			$target_url = esc_url_raw( $this->create_software_api_url( $defaults ) );
@@ -841,13 +839,13 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 			}
 
 			$args = array(
-				'wc_am_action'     => 'update',
-				'slug'        => $this->slug,
-				'plugin_name' => $this->plugin_name,
-				'version'     => $this->wc_am_software_version,
-				'product_id'  => $this->product_id,
-				'api_key'     => $this->data[ $this->wc_am_api_key_key ],
-				'instance'    => $this->wc_am_instance_id,
+				'wc_am_action' => 'update',
+				'slug'         => $this->slug,
+				'plugin_name'  => $this->plugin_name,
+				'version'      => $this->wc_am_software_version,
+				'product_id'   => $this->product_id,
+				'api_key'      => $this->data[ $this->wc_am_api_key_key ],
+				'instance'     => $this->wc_am_instance_id,
 			);
 
 			// Check for a plugin update
@@ -916,13 +914,13 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 			}
 
 			$args = array(
-				'wc_am_action'     => 'plugininformation',
-				'plugin_name' => $this->plugin_name,
-				'version'     => $this->wc_am_software_version,
-				'product_id'  => $this->product_id,
-				'api_key'     => $this->data[ $this->wc_am_api_key_key ],
-				'instance'    => $this->wc_am_instance_id,
-				'object'      => $this->wc_am_domain,
+				'wc_am_action' => 'plugininformation',
+				'plugin_name'  => $this->plugin_name,
+				'version'      => $this->wc_am_software_version,
+				'product_id'   => $this->product_id,
+				'api_key'      => $this->data[ $this->wc_am_api_key_key ],
+				'instance'     => $this->wc_am_instance_id,
+				'object'       => $this->wc_am_domain,
 			);
 
 			$response = unserialize( $this->send_query( $args ) );

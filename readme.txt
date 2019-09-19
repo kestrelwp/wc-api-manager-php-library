@@ -97,7 +97,7 @@ To prevent a customer from using your software until after activating it with th
  * When argument is set to true, the result comes from the API Manager on the live store.
  * Default is false.
  */
-if ( $wcam_lib->get_api_key_status( false ) ) {
+if ( is_object( $wcam_lib ) && $wcam_lib->get_api_key_status( false ) ) {
     // Code to load your plugin or theme here.
     // This code will not run until the API Key is activated.
 }
