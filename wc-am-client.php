@@ -8,7 +8,7 @@
  * but are not limited to, the working concept, function, and behavior of this software,
  * the logical code structure and expression as written.
  *
- * @version       2.7
+ * @version       2.7.2
  * @author        Todd Lahman LLC https://www.toddlahman.com/
  * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
  * @package       WooCommerce API Manager plugin and theme library
@@ -17,8 +17,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
-	class WC_AM_Client_2_7 {
+if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
+	class WC_AM_Client_2_7_2 {
 
 		/**
 		 * Class args
@@ -64,7 +64,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 
 		public function __construct( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '' ) {
 			$this->no_product_id   = empty( $product_id ) ? true : false;
-			$this->plugin_or_theme = esc_attr( $plugin_or_theme );
+			$this->plugin_or_theme = esc_attr( strtolower( $plugin_or_theme ) );
 
 			if ( $this->no_product_id ) {
 				$this->identifier        = $this->plugin_or_theme == 'plugin' ? dirname( untrailingslashit( plugin_basename( $file ) ) ) : get_stylesheet();
@@ -222,7 +222,13 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 		public function migrate_error_notice() { ?>
             <div class="notice notice-error">
                 <p>
-					<?php esc_html_e( 'Attempt to migrate data failed. Deactivate then reactive this plugin or theme, then enter your API Key on the settings screen to receive software updates. Contact support if assistance is required.', $this->text_domain ); ?>
+					<?php
+					if ( $this->plugin_or_theme == 'plugin' ) {
+						esc_html_e( 'Attempt to migrate data failed. Go to the Plugins screen then deactivate and reactive this plugin to reset the API Key data, then enter your API Key on the settings screen to receive software updates. Contact support if assistance is required.', $this->text_domain );
+					} else {
+						esc_html_e( 'Attempt to migrate data failed. Switch themes, then switch back to this theme to reset the API Key data, then enter your API Key on the settings screen to receive software updates. Contact support if assistance is required.', $this->text_domain );
+					}
+					?>
                 </p>
             </div>
 			<?php

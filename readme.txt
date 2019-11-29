@@ -36,7 +36,7 @@ Example Code to add to Plugins and Themes
  */
 
 // Load WC_AM_Client class if it exists.
-if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 	// Uncomment next line if this is a plugin
 	require_once( plugin_dir_path( __FILE__ ) . 'wc-am-client.php' );
 
@@ -45,7 +45,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
 }
 
 // Instantiate WC_AM_Client class object if the WC_AM_Client class is loaded.
-if ( class_exists( 'WC_AM_Client_2_7' ) ) {
+if ( class_exists( 'WC_AM_Client_2_7_2' ) ) {
 	/**
 	 * This file is only an example that includes a plugin header, and this code used to instantiate the client object. The variable $wcam_lib
 	 * can be used to access the public properties from the WC_AM_Client class, but $wcam_lib must have a unique name. To find data saved by
@@ -72,10 +72,10 @@ if ( class_exists( 'WC_AM_Client_2_7' ) ) {
 	 */
 
 	 // Example of empty string product_id.
-	//$wcam_lib = new WC_AM_Client_2_7( __FILE__, '', '1.0', 'plugin', 'http://wc/', 'Simple Comments - Simple' );
+	//$wcam_lib = new WC_AM_Client_2_7_2( __FILE__, '', '1.0', 'plugin', 'http://wc/', 'Simple Comments - Simple' );
 
 	// Preferred positive integer product_id.
-	$wcam_lib = new WC_AM_Client_2_7( __FILE__, 132967, '1.0', 'plugin', 'http://wc/', 'Simple Comments - Simple' );
+	$wcam_lib = new WC_AM_Client_2_7_2( __FILE__, 132967, '1.0', 'plugin', 'http://wc/', 'Simple Comments - Simple' );
 }
 ```
 
