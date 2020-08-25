@@ -1,5 +1,10 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2020.08.24 - version 2.7.3
+ * Tweak: Minor code improvements/revisions.
+ * Tweak: Removed pre 2.0 migration code.
+ * Fix: Fixed a few PHP warnings.
+
 2019.11.29 - version 2.7.2
  * Tweak: Make migration failure instructions more detailed and specific to plugin or theme.
  * Tweak: Format 'plugin' or 'theme' string to lower case to insure proper string format.

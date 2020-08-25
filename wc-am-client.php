@@ -8,7 +8,7 @@
  * but are not limited to, the working concept, function, and behavior of this software,
  * the logical code structure and expression as written.
  *
- * @version       2.7.2
+ * @version       2.7.3
  * @author        Todd Lahman LLC https://www.toddlahman.com/
  * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
  * @package       WooCommerce API Manager plugin and theme library
@@ -17,8 +17,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
-	class WC_AM_Client_2_7_2 {
+if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
+	class WC_AM_Client_2_7_3 {
 
 		/**
 		 * Class args
@@ -63,7 +63,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 		public $wc_am_software_version            = '';
 
 		public function __construct( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '' ) {
-			$this->no_product_id   = empty( $product_id ) ? true : false;
+			$this->no_product_id   = empty( $product_id );
 			$this->plugin_or_theme = esc_attr( strtolower( $plugin_or_theme ) );
 
 			if ( $this->no_product_id ) {
@@ -150,9 +150,6 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 				$this->wc_am_domain           = str_ireplace( array( 'http://', 'https://' ), '', home_url() ); // blog domain name
 				$this->wc_am_software_version = $this->software_version; // The software version
 
-				// Check if data has been migrated from pre-2.0.
-				$this->migrate_pre_2_0_data( $product_id, $software_title );
-
 				/**
 				 * Check for software updates
 				 */
@@ -173,65 +170,6 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 			if ( $this->plugin_or_theme == 'theme' ) {
 				add_action( 'switch_theme', array( $this, 'uninstall' ) );
 			}
-		}
-
-		/**
-		 * Migrates pre 2.0 data to prevent breaking old software activations.
-		 *
-		 * @since 2.0
-		 *
-		 * @param int    $product_id
-		 * @param string $software_title
-		 */
-		public function migrate_pre_2_0_data( $product_id, $software_title ) {
-			$upraded_postfix = strtolower( str_ireplace( array( ' ', '_', '&', '?', '-' ), '_', $product_id ) );
-			$upraded         = get_option( 'wc_client_20_ugrade_attempt_' . $upraded_postfix );
-
-			if ( $upraded != 'yes' ) {
-				$title        = is_int( $product_id ) ? strtolower( $software_title ) : strtolower( $product_id );
-				$title        = str_ireplace( array( ' ', '_', '&', '?' ), '_', $title );
-				$old_data_key = $title . '_data';
-				$data         = get_option( $old_data_key );
-				$instance     = get_option( $title . '_instance' );
-
-				if ( ! empty( $data ) && ! empty( $instance ) ) {
-					$api_key = array(
-						$this->wc_am_api_key_key => $data[ 'api_key' ],
-					);
-
-					update_option( $this->data_key, $api_key );
-					update_option( $this->wc_am_instance_key, $instance );
-					! empty( $instance ) ? update_option( $this->wc_am_deactivate_checkbox_key, 'off' ) : update_option( $this->wc_am_deactivate_checkbox_key, 'on' );
-					! empty( $instance ) ? update_option( $this->wc_am_activated_key, 'Activated' ) : update_option( $this->wc_am_activated_key, 'Deactivated' );
-					// Success!
-					update_option( 'wc_client_20_ugrade_attempt_' . $upraded_postfix, 'yes' );
-				} else {
-					if ( empty( $this->wc_am_instance_id ) ) {
-						// Failed migration. :( Cue the violins to play a sad song.
-						add_action( 'admin_notices', array( $this, 'migrate_error_notice' ) );
-					}
-				}
-			}
-		}
-
-		/**
-		 * Provides one-time instructions for customer to reactivate the API Key if the migration fails.
-		 *
-		 * @since 2.0
-		 */
-		public function migrate_error_notice() { ?>
-            <div class="notice notice-error">
-                <p>
-					<?php
-					if ( $this->plugin_or_theme == 'plugin' ) {
-						esc_html_e( 'Attempt to migrate data failed. Go to the Plugins screen then deactivate and reactive this plugin to reset the API Key data, then enter your API Key on the settings screen to receive software updates. Contact support if assistance is required.', $this->text_domain );
-					} else {
-						esc_html_e( 'Attempt to migrate data failed. Switch themes, then switch back to this theme to reset the API Key data, then enter your API Key on the settings screen to receive software updates. Contact support if assistance is required.', $this->text_domain );
-					}
-					?>
-                </p>
-            </div>
-			<?php
 		}
 
 		/**
@@ -318,8 +256,10 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 				'api_key' => $api_key,
 			);
 
-			if ( $activation_status == 'Activated' && $api_key != '' ) {
-				$this->deactivate( $args ); // reset API Key activation
+			if ( ! empty( $api_key ) && $activation_status == 'Activated' ) {
+				if ( empty( $this->deactivate( $args ) ) ) {
+					add_settings_error( 'not_deactivated_text', 'not_deactivated_error', esc_html__( 'The API Key could not be deactivated. Use the API Key Deactivation tab to manually deactivate the API Key before activating a new API Key. If all else fails, go to Plugins, then deactivate and reactivate this plugin, or if a theme change themes, then change back to this theme, then go to the Settings for this plugin/theme and enter the API Key information again to activate it. Also check the My Account dashboard to see if the API Key for this site was still active before the error message was displayed.', $this->text_domain ), 'updated' );
+				}
 			}
 		}
 
@@ -451,8 +391,6 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 
 		// Returns the API Key status from the WooCommerce API Manager on the server
 		public function wc_am_api_key_status() {
-			$license_status_check = '';
-
 			if ( $this->get_api_key_status( true ) ) {
 				$license_status_check = esc_html__( 'Activated', $this->text_domain );
 				update_option( $this->wc_am_activated_key, 'Activated' );
@@ -470,7 +408,9 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 		 * @return array|mixed|object
 		 */
 		public function license_key_status() {
-			return json_decode( $this->status(), true );
+			$status = $this->status();
+
+			return ! empty( $status ) ? json_decode( $this->status(), true ) : $status;
 		}
 
 		/**
@@ -491,7 +431,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 			if ( $live ) {
 				$license_status = $this->license_key_status();
 
-				return ! empty( $license_status[ 'data' ][ 'activated' ] ) && $license_status[ 'data' ][ 'activated' ];
+				return ! empty( $license_status ) && ! empty( $license_status[ 'data' ][ 'activated' ] ) && $license_status[ 'data' ][ 'activated' ];
 			}
 
 			/**
@@ -563,9 +503,9 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 				if ( $activation_status == 'Deactivated' || $activation_status == '' || $api_key == '' || $checkbox_status == 'on' || $current_api_key != $api_key ) {
 					/**
 					 * If this is a new key, and an existing key already exists in the database,
-					 * deactivate the existing key before activating the new key.
+					 * try to deactivate the existing key before activating the new key.
 					 */
-					if ( $current_api_key != $api_key ) {
+					if ( ! empty( $current_api_key ) && $current_api_key != $api_key ) {
 						$this->replace_license_key( $current_api_key );
 					}
 
@@ -573,22 +513,28 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 						'api_key' => $api_key,
 					);
 
-					$activate_results = json_decode( $this->activate( $args ), true );
+					$activation_result = $this->activate( $args );
 
-					if ( $activate_results[ 'success' ] === true && $activate_results[ 'activated' ] === true ) {
-						add_settings_error( 'activate_text', 'activate_msg', sprintf( __( '%s activated. ', $this->text_domain ), esc_attr( $this->software_title ) ) . esc_attr( "{$activate_results['message']}." ), 'updated' );
-						update_option( $this->wc_am_activated_key, 'Activated' );
-						update_option( $this->wc_am_deactivate_checkbox_key, 'off' );
-					}
+					if ( ! empty( $activation_result ) ) {
+						$activate_results = json_decode( $activation_result, true );
 
-					if ( $activate_results == false && ! empty( $this->data ) && ! empty( $this->wc_am_activated_key ) ) {
-						add_settings_error( 'api_key_check_text', 'api_key_check_error', esc_html__( 'Connection failed to the License Key API server. Try again later. There may be a problem on your server preventing outgoing requests, or the store is blocking your request to activate the plugin/theme.', $this->text_domain ), 'error' );
-						update_option( $this->data[ $this->wc_am_activated_key ], 'Deactivated' );
-					}
+						if ( $activate_results[ 'success' ] === true && $activate_results[ 'activated' ] === true ) {
+							add_settings_error( 'activate_text', 'activate_msg', sprintf( __( '%s activated. ', $this->text_domain ), esc_attr( $this->software_title ) ) . esc_attr( "{$activate_results['message']}." ), 'updated' );
+							update_option( $this->wc_am_activated_key, 'Activated' );
+							update_option( $this->wc_am_deactivate_checkbox_key, 'off' );
+						}
 
-					if ( isset( $activate_results[ 'data' ][ 'error_code' ] ) && ! empty( $this->data ) && ! empty( $this->wc_am_activated_key ) ) {
-						add_settings_error( 'wc_am_client_error_text', 'wc_am_client_error', esc_attr( "{$activate_results['data']['error']}" ), 'error' );
-						update_option( $this->data[ $this->wc_am_activated_key ], 'Deactivated' );
+						if ( $activate_results == false && ! empty( $this->data ) && ! empty( $this->wc_am_activated_key ) ) {
+							add_settings_error( 'api_key_check_text', 'api_key_check_error', esc_html__( 'Connection failed to the License Key API server. Try again later. There may be a problem on your server preventing outgoing requests, or the store is blocking your request to activate the plugin/theme.', $this->text_domain ), 'error' );
+							update_option( $this->wc_am_activated_key, 'Deactivated' );
+						}
+
+						if ( isset( $activate_results[ 'data' ][ 'error_code' ] ) && ! empty( $this->data ) && ! empty( $this->wc_am_activated_key ) ) {
+							add_settings_error( 'wc_am_client_error_text', 'wc_am_client_error', esc_attr( "{$activate_results['data']['error']}" ), 'error' );
+							update_option( $this->wc_am_activated_key, 'Deactivated' );
+						}
+					} else {
+						add_settings_error( 'not_activated_empty_response_text', 'not_activated_empty_response_error', esc_html__( 'The API Key activation could not be commpleted due to an unknown error possibly on the store server The activation results were empty.', $this->text_domain ), 'updated' );
 					}
 				} // End Plugin Activation
 			}
@@ -605,52 +551,45 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 				'api_key' => $this->data[ $this->wc_am_api_key_key ],
 			);
 
-			if ( $options == 'on' && $activation_status == 'Activated' && $this->data[ $this->wc_am_api_key_key ] != '' ) {
+			if ( ! empty( $this->data[ $this->wc_am_api_key_key ] ) && $options == 'on' && $activation_status == 'Activated' ) {
 				// deactivates API Key key activation
-				$activate_results = json_decode( $this->deactivate( $args ), true );
+				$deactivation_result = $this->deactivate( $args );
 
-				if ( $activate_results[ 'success' ] === true && $activate_results[ 'deactivated' ] === true ) {
-					if ( ! empty( $this->wc_am_activated_key ) ) {
-						update_option( $this->wc_am_activated_key, 'Deactivated' );
-						add_settings_error( 'wc_am_deactivate_text', 'deactivate_msg', esc_html__( 'API Key deactivated. ', $this->text_domain ) . esc_attr( "{$activate_results['activations_remaining']}." ), 'updated' );
+				if ( ! empty( $deactivation_result ) ) {
+					$activate_results = json_decode( $deactivation_result, true );
+
+					if ( $activate_results[ 'success' ] === true && $activate_results[ 'deactivated' ] === true ) {
+						if ( ! empty( $this->wc_am_activated_key ) ) {
+							update_option( $this->wc_am_activated_key, 'Deactivated' );
+							add_settings_error( 'wc_am_deactivate_text', 'deactivate_msg', esc_html__( 'API Key deactivated. ', $this->text_domain ) . esc_attr( "{$activate_results['activations_remaining']}." ), 'updated' );
+						}
+
+						return $options;
 					}
 
-					return $options;
+					if ( isset( $activate_results[ 'data' ][ 'error_code' ] ) && ! empty( $this->data ) && ! empty( $this->wc_am_activated_key ) ) {
+						add_settings_error( 'wc_am_client_error_text', 'wc_am_client_error', esc_attr( "{$activate_results['data']['error']}" ), 'error' );
+						update_option( $this->wc_am_activated_key, 'Deactivated' );
+					}
+				} else {
+					add_settings_error( 'not_deactivated_empty_response_text', 'not_deactivated_empty_response_error', esc_html__( 'The API Key activation could not be commpleted due to an unknown error possibly on the store server The activation results were empty.', $this->text_domain ), 'updated' );
 				}
-
-				if ( isset( $activate_results[ 'data' ][ 'error_code' ] ) && ! empty( $this->data ) && ! empty( $this->wc_am_activated_key ) ) {
-					add_settings_error( 'wc_am_client_error_text', 'wc_am_client_error', esc_attr( "{$activate_results['data']['error']}" ), 'error' );
-					update_option( $this->data[ $this->wc_am_activated_key ], 'Deactivated' );
-				}
-			} else {
-
-				return $options;
 			}
 
-			return false;
+			return $options;
 		}
 
 		/**
 		 * Deactivate the current API Key before activating the new API Key
 		 *
 		 * @param string $current_api_key
-		 *
-		 * @return bool
 		 */
 		public function replace_license_key( $current_api_key ) {
 			$args = array(
 				'api_key' => $current_api_key,
 			);
 
-			$reset = $this->deactivate( $args ); // reset API Key activation
-
-			if ( $reset == true ) {
-				return true;
-			}
-
-			add_settings_error( 'not_deactivated_text', 'not_deactivated_error', esc_html__( 'The API Key could not be deactivated. Use the API Key Deactivation tab to manually deactivate the API Key before activating a new API Key. If all else fails, go to Plugins, then deactivate and reactivate this plugin, or if a theme change themes, then change back to this theme, then go to the Settings for this plugin/theme and enter the API Key information again to activate it. Also check the My Account dashboard to see if the API Key for this site was still active before the error message was displayed.', $this->text_domain ), 'updated' );
-
-			return false;
+			$this->deactivate( $args );
 		}
 
 		public function wc_am_deactivate_text() { }
@@ -679,9 +618,15 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 		 *
 		 * @param array $args
 		 *
-		 * @return bool|string
+		 * @return string
 		 */
 		public function activate( $args ) {
+			if ( empty( $args ) ) {
+				add_settings_error( 'not_activated_text', 'not_activated_error', esc_html__( 'The API Key is missing from the deactivation request.', $this->text_domain ), 'updated' );
+
+				return '';
+			}
+
 			$defaults = array(
 				'wc_am_action'     => 'activate',
 				'product_id'       => $this->product_id,
@@ -696,12 +641,10 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
 				// Request failed
-				return false;
+				return '';
 			}
 
-			$response = wp_remote_retrieve_body( $request );
-
-			return $response;
+			return wp_remote_retrieve_body( $request );
 		}
 
 		/**
@@ -709,9 +652,15 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 		 *
 		 * @param array $args
 		 *
-		 * @return bool|string
+		 * @return string
 		 */
 		public function deactivate( $args ) {
+			if ( empty( $args ) ) {
+				add_settings_error( 'not_deactivated_text', 'not_deactivated_error', esc_html__( 'The API Key is missing from the deactivation request.', $this->text_domain ), 'updated' );
+
+				return '';
+			}
+
 			$defaults = array(
 				'wc_am_action' => 'deactivate',
 				'product_id'   => $this->product_id,
@@ -725,12 +674,10 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
 				// Request failed
-				return false;
+				return '';
 			}
 
-			$response = wp_remote_retrieve_body( $request );
-
-			return $response;
+			return wp_remote_retrieve_body( $request );
 		}
 
 		/**
@@ -739,6 +686,10 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 		 * @return bool|string
 		 */
 		public function status() {
+			if ( empty( $this->data[ $this->wc_am_api_key_key ] ) ) {
+				return '';
+			}
+
 			$defaults = array(
 				'wc_am_action' => 'status',
 				'api_key'      => $this->data[ $this->wc_am_api_key_key ],
@@ -752,12 +703,10 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
 				// Request failed
-				return false;
+				return '';
 			}
 
-			$response = wp_remote_retrieve_body( $request );
-
-			return $response;
+			return wp_remote_retrieve_body( $request );
 		}
 
 		/**
@@ -850,7 +799,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 				'plugin_name'  => $this->plugin_name,
 				'version'      => $this->wc_am_software_version,
 				'product_id'   => $this->product_id,
-				'api_key'      => $this->data[ $this->wc_am_api_key_key ],
+				'api_key'      => ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '',
 				'instance'     => $this->wc_am_instance_id,
 			);
 
@@ -881,7 +830,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 				);
 
 				if ( isset( $new_ver ) && isset( $curr_ver ) ) {
-					if ( $response !== false && version_compare( $new_ver, $curr_ver, '>' ) ) {
+					if ( version_compare( $new_ver, $curr_ver, '>' ) ) {
 						if ( $this->plugin_or_theme == 'plugin' ) {
 							$transient->response[ $this->plugin_name ] = (object) $package;
 							unset( $transient->no_update[ $this->plugin_name ] );
@@ -924,7 +873,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7_2' ) ) {
 				'plugin_name'  => $this->plugin_name,
 				'version'      => $this->wc_am_software_version,
 				'product_id'   => $this->product_id,
-				'api_key'      => $this->data[ $this->wc_am_api_key_key ],
+				'api_key'      => ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '',
 				'instance'     => $this->wc_am_instance_id,
 				'object'       => $this->wc_am_domain,
 			);
