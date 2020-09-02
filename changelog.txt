@@ -12,11 +12,9 @@
 2019.09.04 - version 2.7.1
  * Tweak: Changed the Plugin header file name to match directory name.
 
-2019.08.21 - version 2.7
- * New: https://www.getpostman.com/postman collection template file added. The preconfigured .json file can be imported into Postman to make it easy to test the API functions. Server URL, and keys/values will need to be modified specific to your product and server.
-
 2019.08.07 - version 2.7
  * New: Major update for API Manager version 2.1 and greater.
+ * New: https://www.getpostman.com/postman collection template file added. The preconfigured .json file can be imported into Postman to make it easy to test the API functions. Server URL, and keys/values will need to be modified specific to your product and server.
 
 2019.07.26 - version 2.6
  * New: Replaced 'request' API Key for actions with 'wc_am_action' to match new query string key in API Manager 2.1 API.
