@@ -4,7 +4,7 @@
  * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes
  * Plugin URI: https://www.toddlahman.com/shop/woocommerce-api-manager-php-library-for-plugins-and-themes/
  * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below after line 26.
- * Version: 2.7.3
+ * Version: 2.8
  * Author: Todd Lahman LLC
  * Author URI: https://www.toddlahman.com/
  * License: Copyright Todd Lahman LLC
@@ -29,16 +29,15 @@ defined( 'ABSPATH' ) || exit;
  */
 
 // Load WC_AM_Client class if it exists.
-if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
-	// Uncomment next line if this is a plugin
+if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
+	//---------------------------------------------------------------------
+	// This next line must be exactly the same for both plugins and themes.
+	//---------------------------------------------------------------------
 	require_once( plugin_dir_path( __FILE__ ) . 'wc-am-client.php' );
-
-	// Uncomment next line if this is a theme
-	// require_once( get_stylesheet_directory() . '/wc-am-client.php' );
 }
 
 // Instantiate WC_AM_Client class object if the WC_AM_Client class is loaded.
-if ( class_exists( 'WC_AM_Client_2_7_3' ) ) {
+if ( class_exists( 'WC_AM_Client_2_8' ) ) {
 	/**
 	 * This file is only an example that includes a plugin header, and this code used to instantiate the client object. The variable $wcam_lib
 	 * can be used to access the public properties from the WC_AM_Client class, but $wcam_lib must have a unique name. To find data saved by
@@ -61,13 +60,12 @@ if ( class_exists( 'WC_AM_Client_2_7_3' ) ) {
 	 *
 	 * Example:
 	 *
-	 * $wcam_lib = new WC_AM_Client_2_7_3( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title );
+	 * $wcam_lib = new WC_AM_Client_2_8( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title );
 	 */
 
 	// Example of empty string product_id.
-	//$wcam_lib = new WC_AM_Client_2_7_3( __FILE__, '', '1.0', 'plugin', 'http://wc/', ' ' );
-	//$wcam_lib = new WC_AM_Client_2_7_3( __FILE__, '', '1.0', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	//$wcam_lib = new WC_AM_Client_2_8( __FILE__, '', '1.0', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 
 	// Preferred positive integer product_id.
-	$wcam_lib = new WC_AM_Client_2_7_3( __FILE__, 138828, '2.7.3', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	$wcam_lib = new WC_AM_Client_2_8( __FILE__, 138828, '2.7.3', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 }

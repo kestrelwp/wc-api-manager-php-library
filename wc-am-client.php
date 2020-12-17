@@ -8,7 +8,7 @@
  * but are not limited to, the working concept, function, and behavior of this software,
  * the logical code structure and expression as written.
  *
- * @version       2.7.3
+ * @version       2.8
  * @author        Todd Lahman LLC https://www.toddlahman.com/
  * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
  * @package       WooCommerce API Manager plugin and theme library
@@ -17,57 +17,58 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
-	class WC_AM_Client_2_7_3 {
+if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
+	class WC_AM_Client_2_8 {
 
 		/**
 		 * Class args
 		 *
 		 * @var string
 		 */
-		public $api_url          = '';
-		public $data_key         = '';
-		public $file             = '';
-		public $plugin_name      = '';
-		public $plugin_or_theme  = '';
-		public $product_id       = '';
-		public $slug             = '';
-		public $software_title   = '';
-		public $software_version = '';
-		public $text_domain      = ''; // For language translation.
+		private $api_url          = '';
+		private $data_key         = '';
+		private $file             = '';
+		private $plugin_name      = '';
+		private $plugin_or_theme  = '';
+		private $product_id       = '';
+		private $slug             = '';
+		private $software_title   = '';
+		private $software_version = '';
+		private $text_domain      = ''; // For language translation.
 
 		/**
 		 * Class properties.
 		 *
 		 * @var string
 		 */
-		public $data                              = array();
-		public $identifier                        = '';
-		public $no_product_id                     = false;
-		public $product_id_chosen                 = 0;
-		public $wc_am_activated_key               = '';
-		public $wc_am_activation_tab_key          = '';
-		public $wc_am_api_key_key                 = '';
-		public $wc_am_deactivate_checkbox_key     = '';
-		public $wc_am_deactivation_tab_key        = '';
-		public $wc_am_domain                      = '';
-		public $wc_am_instance_id                 = '';
-		public $wc_am_instance_key                = '';
-		public $wc_am_menu_tab_activation_title   = '';
-		public $wc_am_menu_tab_deactivation_title = '';
-		public $wc_am_plugin_name                 = '';
-		public $wc_am_product_id                  = '';
-		public $wc_am_renew_license_url           = '';
-		public $wc_am_settings_menu_title         = '';
-		public $wc_am_settings_title              = '';
-		public $wc_am_software_version            = '';
+		private $data                              = array();
+		private $identifier                        = '';
+		private $no_product_id                     = false;
+		private $product_id_chosen                 = 0;
+		private $wc_am_activated_key               = '';
+		private $wc_am_activation_tab_key          = '';
+		private $wc_am_api_key_key                 = '';
+		private $wc_am_deactivate_checkbox_key     = '';
+		private $wc_am_deactivation_tab_key        = '';
+		private $wc_am_auto_update_key             = '';
+		private $wc_am_domain                      = '';
+		private $wc_am_instance_id                 = '';
+		private $wc_am_instance_key                = '';
+		private $wc_am_menu_tab_activation_title   = '';
+		private $wc_am_menu_tab_deactivation_title = '';
+		private $wc_am_plugin_name                 = '';
+		private $wc_am_product_id                  = '';
+		private $wc_am_renew_license_url           = '';
+		private $wc_am_settings_menu_title         = '';
+		private $wc_am_settings_title              = '';
+		private $wc_am_software_version            = '';
 
 		public function __construct( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '' ) {
 			$this->no_product_id   = empty( $product_id );
 			$this->plugin_or_theme = esc_attr( strtolower( $plugin_or_theme ) );
 
 			if ( $this->no_product_id ) {
-				$this->identifier        = $this->plugin_or_theme == 'plugin' ? dirname( untrailingslashit( plugin_basename( $file ) ) ) : get_stylesheet();
+				$this->identifier        = $this->plugin_or_theme == 'plugin' ? dirname( untrailingslashit( plugin_basename( $file ) ) ) : basename( dirname( plugin_basename( $file ) ) );
 				$product_id              = strtolower( str_ireplace( array( ' ', '_', '&', '?', '-' ), '_', $this->identifier ) );
 				$this->wc_am_product_id  = 'wc_am_product_id_' . $product_id;
 				$this->product_id_chosen = get_option( $this->wc_am_product_id );
@@ -124,6 +125,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 				$this->wc_am_deactivate_checkbox_key     = $this->data_key . '_deactivate_checkbox';
 				$this->wc_am_activation_tab_key          = $this->data_key . '_dashboard';
 				$this->wc_am_deactivation_tab_key        = $this->data_key . '_deactivation';
+				$this->wc_am_auto_update_key             = $this->data_key . '_auto_update';
 				$this->wc_am_settings_menu_title         = $this->software_title . esc_html__( ' Activation', $this->text_domain );
 				$this->wc_am_settings_title              = $this->software_title . esc_html__( ' API Key Activation', $this->text_domain );
 				$this->wc_am_menu_tab_activation_title   = esc_html__( 'API Key Activation', $this->text_domain );
@@ -133,7 +135,7 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 				 * Set all software update data here
 				 */
 				$this->data                    = get_option( $this->data_key );
-				$this->wc_am_plugin_name       = $this->plugin_or_theme == 'plugin' ? untrailingslashit( plugin_basename( $this->file ) ) : get_stylesheet(); // same as plugin slug. if a theme use a theme name like 'twentyeleven'
+				$this->wc_am_plugin_name       = $this->plugin_or_theme == 'plugin' ? untrailingslashit( plugin_basename( $this->file ) ) : basename( dirname( plugin_basename( $file ) ) ); // same as plugin slug. if a theme use a theme name like 'twentyeleven'
 				$this->wc_am_renew_license_url = $this->api_url . 'my-account'; // URL to renew an API Key. Trailing slash in the upgrade_url is required.
 				$this->wc_am_instance_id       = get_option( $this->wc_am_instance_key ); // Instance ID (unique to each blog activation)
 				/**
@@ -158,18 +160,26 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 				if ( ! empty( $this->wc_am_activated_key ) && get_option( $this->wc_am_activated_key ) != 'Activated' ) {
 					add_action( 'admin_notices', array( $this, 'inactive_notice' ) );
 				}
+
+				/**
+				 * Tries to execute auto updates.
+				 *
+				 * @since 2.8
+				 */
+				$this->try_automatic_updates();
+				add_action( 'wp_ajax_update_auto_update_setting', array( $this, 'update_auto_update_setting' ) );
+				add_filter( 'plugin_auto_update_setting_html', array( $this, 'auto_update_message' ), 10, 3 );
 			}
 
 			/**
 			 * Deletes all data if plugin deactivated
-			 */
-			if ( $this->plugin_or_theme == 'plugin' ) {
-				register_deactivation_hook( $this->file, array( $this, 'uninstall' ) );
-			}
-
-			if ( $this->plugin_or_theme == 'theme' ) {
-				add_action( 'switch_theme', array( $this, 'uninstall' ) );
-			}
+			 */ //if ( $this->plugin_or_theme == 'plugin' ) {
+			//	register_deactivation_hook( $this->file, array( $this, 'uninstall' ) );
+			//}
+			//
+			//if ( $this->plugin_or_theme == 'theme' ) {
+			//	add_action( 'switch_theme', array( $this, 'uninstall' ) );
+			//}
 		}
 
 		/**
@@ -181,6 +191,186 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 				$this,
 				'config_page'
 			) );
+		}
+
+		/**
+		 *  Tries auto updates.
+		 *
+		 * @since 2.8
+		 */
+		public function try_automatic_updates() {
+			global $wp_version;
+
+			if ( version_compare( $wp_version, '5.5', '>=' ) ) {
+				if ( empty( get_option( $this->wc_am_auto_update_key ) ) ) {
+					update_option( $this->wc_am_auto_update_key, 'on' );
+				}
+
+				if ( $this->plugin_or_theme == 'plugin' ) {
+					add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
+				} elseif ( $this->plugin_or_theme == 'theme' ) {
+					add_filter( 'auto_update_theme', array( $this, 'maybe_auto_update' ), 10, 2 );
+				}
+			}
+		}
+
+		/**
+		 * Tries to set auto updates.
+		 *
+		 * @since 2.8
+		 *
+		 * @param $update
+		 * @param $item
+		 *
+		 * @return bool
+		 */
+		public function maybe_auto_update( $update, $item ) {
+			if ( strpos( $this->wc_am_plugin_name, '.php' ) !== 0 ) {
+				$slug = dirname( $this->wc_am_plugin_name );
+			} else {
+				$slug = $this->wc_am_plugin_name;
+			}
+
+			if ( isset( $item->slug ) && $item->slug == $slug ) {
+				$auto_update_disabled = $this->is_auto_update_disabled();
+
+				if ( $auto_update_disabled ) {
+					return false;
+				}
+
+				return true;
+			}
+
+			return $update;
+		}
+
+		/**
+		 * Checks if auto updates are disabled.
+		 *
+		 * @since 2.8
+		 *
+		 * @return bool
+		 */
+		public function is_auto_update_disabled() {
+			// WordPress will not offer to update if background updates are disabled.
+			// WordPress background updates are disabled if file changes are not allowed.
+			if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
+				return true;
+			}
+
+			if ( defined( 'WP_INSTALLING' ) ) {
+				return true;
+			}
+
+			$wp_updates_disabled = defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED;
+
+			/**
+			 * Overrides the WordPress AUTOMATIC_UPDATER_DISABLED constant.
+			 *
+			 * @since Unknown
+			 *
+			 * @param bool $wp_updates_disabled true if disables.  false otherwise.
+			 */
+			$wp_updates_disabled = apply_filters( 'automatic_updater_disabled', $wp_updates_disabled );
+
+			if ( $wp_updates_disabled ) {
+				return true;
+			}
+
+			// Return if this plugin or theme background updates is enabled.
+			return get_option( $this->wc_am_auto_update_key ) == 'on';
+		}
+
+		/**
+		 * Enable or disable auto-updates.
+		 *
+		 * AJAX function to enable or disable auto-updates from the WordPress plugins page.
+		 *
+		 * @since 2.8
+		 */
+		public function update_auto_update_setting() {
+			if ( ! wp_verify_nonce( $_POST[ 'nonce' ], $this->data_key . '-updates' ) ) {
+				wp_send_json_error( __( 'Permissions error.', $this->text_domain ) );
+			}
+
+			$acceptable_tasks = array( 'enable-' . $this->data_key . '-updates', 'disable-' . $this->data_key . '-updates' );
+
+			if ( ! $this->get_val( $_POST, 'task' ) || ! in_array( $_POST[ 'task' ], $acceptable_tasks ) ) {
+				wp_send_json_error( __( 'Error processing request.  Please refresh and try again.', $this->text_domain ) );
+			}
+
+			if ( 'enable-' . $this->data_key . '-updates' == $_POST[ 'task' ] ) {
+				update_option( $this->wc_am_auto_update_key, 'on' );
+				wp_send_json_success( 'success' );
+			} else {
+				update_option( $this->wc_am_auto_update_key, 'off' );
+				wp_send_json_success( 'success' );
+			}
+		}
+
+		/**
+		 * Filter the auto-update message on the plugins page.
+		 *
+		 * @since 2.8
+		 *
+		 * @param string $html        HTML of the auto-update message.
+		 * @param string $plugin_file Plugin file.
+		 * @param array  $plugin_data Plugin details.
+		 *
+		 * @return string|void
+		 */
+		public function auto_update_message( $html, $plugin_file, $plugin_data ) {
+			if ( $this->wc_am_plugin_name == $plugin_file ) {
+				$no_update_message = esc_html__( 'Auto-updates unavailable.', $this->text_domain );
+				$api_key_active    = $this->get_api_key_status();
+
+				if ( ! $api_key_active || get_option( $this->wc_am_auto_update_key ) !== 'on' ) {
+					return $no_update_message;
+				}
+
+				if ( $this->get_val( $plugin_data, 'auto-update-forced' ) ) {
+					// auto-updates are enabled, so clicking on this will disable them.
+					$message = esc_html__( 'Disable auto-updates', $this->text_domain );
+					$action  = 'disable';
+				} else {
+					// auto-updates are disabled, so clicking on this will enable them.
+					$message = esc_html__( 'Enable auto-updates', $this->text_domain );
+					$action  = 'enable';
+				}
+
+				$html = sprintf( '<a href="%s" class="wc_am_client-toggle-auto-update aria-button-if-js" data-' . $this->data_key . '-action="%s" data-nonce="%s"><span class="dashicons dashicons-update spin hidden wc_am_client-update-setting" aria-hidden="true"></span><span class="label wc_am_client-update-label">%s</span></a><div class="wc_am_client-auto-update-notice notice notice-error notice-alt inline hidden"><p></p></div>', esc_url( 'admin.php?page=' . $this->wc_am_activation_tab_key ), $action . '-' . $this->data_key . '-updates', wp_create_nonce( $this->data_key . '-updates' ), $message );
+			}
+
+			return $html;
+		}
+
+		/**
+		 * Get a specific property of an array without needing to check if that property exists.
+		 *
+		 * Provide a default value if you want to return a specific value if the property is not set.
+		 *
+		 * @since  Unknown
+		 * @access public
+		 *
+		 * @param array  $array   Array from which the property's value should be retrieved.
+		 * @param string $prop    Name of the property to be retrieved.
+		 * @param string $default Optional. Value that should be returned if the property is not set or empty. Defaults to null.
+		 *
+		 * @return null|string|mixed The value
+		 */
+		public function get_val( $array, $prop, $default = null ) {
+
+			if ( ! is_array( $array ) && ! ( is_object( $array ) && $array instanceof ArrayAccess ) ) {
+				return $default;
+			}
+
+			if ( isset( $array[ $prop ] ) ) {
+				$value = $array[ $prop ];
+			} else {
+				$value = '';
+			}
+
+			return empty( $value ) && $default !== null ? $default : $value;
 		}
 
 		/**
@@ -346,6 +536,8 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 
 		// Register settings
 		public function load_settings() {
+			global $wp_version;
+
 			register_setting( $this->data_key, $this->data_key, array( $this, 'validate_options' ) );
 			// API Key
 			add_settings_section( $this->wc_am_api_key_key, esc_html__( 'API Key Activation', $this->text_domain ), array(
@@ -364,6 +556,16 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 				add_settings_field( 'product_id', esc_html__( 'Product ID', $this->text_domain ), array(
 					$this,
 					'wc_am_product_id_field'
+				), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
+			}
+
+			/**
+			 * @since 2.8
+			 */
+			if ( version_compare( $wp_version, '5.5', '>=' ) ) {
+				add_settings_field( $this->wc_am_auto_update_key, esc_html__( 'Auto Plugin Updates', $this->text_domain ), array(
+					$this,
+					'wc_am_auto_update_radio'
 				), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
 			}
 
@@ -469,6 +671,16 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 		}
 
 		/**
+		 * Radio buttons to toggle auto-updates on or off.
+		 *
+		 * @since 2.8
+		 */
+		public function wc_am_auto_update_radio() {
+			echo '<input type="radio" name="' . esc_attr( $this->wc_am_auto_update_key ) . '" value="on"' . checked( get_option( $this->wc_am_auto_update_key ), 'on', false ) . '>' . esc_html__( 'On', $this->text_domain ) . '<br /><br />';
+			echo '<input type="radio" name="' . esc_attr( $this->wc_am_auto_update_key ) . '" value="off"' . checked( get_option( $this->wc_am_auto_update_key ), 'off', false ) . '>' . esc_html__( 'Off', $this->text_domain );
+		}
+
+		/**
 		 * Sanitizes and validates all input and output for Dashboard
 		 *
 		 * @since 2.0
@@ -496,6 +708,17 @@ if ( ! class_exists( 'WC_AM_Client_2_7_3' ) ) {
 					update_option( $this->wc_am_product_id, $new_product_id );
 					$this->product_id = $new_product_id;
 				}
+			}
+
+			/**
+			 * Toggle auto-updates.
+			 *
+			 * @since 2.8
+			 */
+			if ( ! empty( $_REQUEST[ $this->wc_am_auto_update_key ] ) && $_REQUEST[ $this->wc_am_auto_update_key ] == 'on' ) {
+				update_option( $this->wc_am_auto_update_key, 'on' );
+			} else {
+				update_option( $this->wc_am_auto_update_key, 'off' );
 			}
 
 			// Should match the settings_fields() value

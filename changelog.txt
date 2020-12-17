@@ -1,5 +1,9 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2020.12.17 - version 2.8
+ * New: Updated so both Parent and Child themes can have activated API Keys at the same time, and can do a theme update at the same time, provided each have had their API Keys activated and remain activated. See readme for setup.
+ * New: Auto-Updates now available for Plugins, Parent and Child Themes, as was introduced in WP 5.5.
+
 2020.08.24 - version 2.7.3
  * Tweak: Minor code improvements/revisions.
  * Tweak: Removed pre 2.0 migration code.
@@ -14,7 +18,7 @@
 
 2019.08.07 - version 2.7
  * New: Major update for API Manager version 2.1 and greater.
- * New: https://www.getpostman.com/postman collection template file added. The preconfigured .json file can be imported into Postman to make it easy to test the API functions. Server URL, and keys/values will need to be modified specific to your product and server.
+ * New: https://www.postman.com/ collection template file added. The preconfigured .json file can be imported into Postman to make it easy to test the API functions. Server URL, and keys/values will need to be modified specific to your product and server.
 
 2019.07.26 - version 2.6
  * New: Replaced 'request' API Key for actions with 'wc_am_action' to match new query string key in API Manager 2.1 API.
@@ -27,16 +31,14 @@
  * Tweak: Get $this->identifier value based on whether plugin or theme value has been set for the object.
  * Tweak: activation() method modified to prevent instance being generated more than once.
  * Tweak: Other minor code changes.
- * Tweak: $_REQUEST[ 'option_page' ] check to fix PHP notice as per https://github.com/toddlahman/api-manager-php-library/pull/95. Credit: https://github.com/maheshwaghmare
- * New: Add filter wc_am_client_uninstall_disable as per https://github.com/toddlahman/api-manager-php-library/pull/96. Credit: https://github.com/maheshwaghmare
- * New: Add filter wc_am_client_inactive_notice_override as per https://github.com/toddlahman/api-manager-php-library/pull/96. Credit: https://github.com/maheshwaghmare
+ * New: Add filter wc_am_client_uninstall_disable.
+ * New: Add filter wc_am_client_inactive_notice_override.
 
 2019.3.25 - version 2.5
- * Fix: Leave wp_safe_remote_post() sslverify to default value of on.
+ * Fix: wp_safe_remote_post() sslverify to defaults value of on.
 
 2019.3.25 - version 2.4
  * Tweak: get_api_key_status() can query live or saved.
- * Tweak: Set wp_safe_remote_post() values timeout to 15 and sslverify to off.
 
 2019.3.14 - version 2.3
  * New: When $product_id is an empty string in data sent to the library, a Product ID form field will be displayed to allow the customer to enter the product_id manually.
