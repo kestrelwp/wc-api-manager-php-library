@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes
- * Plugin URI: https://www.toddlahman.com/shop/woocommerce-api-manager-php-library-for-plugins-and-themes/
+ * Plugin URI: https://toddlahman.com/shop/woocommerce-api-manager-php-library-for-plugins-and-themes/
  * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below after line 26.
  * Version: 2.8
  * Author: Todd Lahman LLC
@@ -30,9 +30,11 @@ defined( 'ABSPATH' ) || exit;
 
 // Load WC_AM_Client class if it exists.
 if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
-	//---------------------------------------------------------------------
-	// This next line must be exactly the same for both plugins and themes.
-	//---------------------------------------------------------------------
+	/*
+	 * |---------------------------------------------------------------------
+	 * | This must be exactly the same for both plugins and themes.
+	 * |---------------------------------------------------------------------
+	 */
 	require_once( plugin_dir_path( __FILE__ ) . 'wc-am-client.php' );
 }
 
@@ -55,7 +57,7 @@ if ( class_exists( 'WC_AM_Client_2_8' ) ) {
 	 * @param int    $product_id       Must match the Product ID number (integer) in the product.
 	 * @param string $software_version This product's current software version.
 	 * @param string $plugin_or_theme  'plugin' or 'theme'
-	 * @param string $api_url          The URL to the site that is running the API Manager. Example: https://www.toddlahman.com/
+	 * @param string $api_url          The URL to the site that is running the API Manager. Example: https://www.toddlahman.com/ Must be the root URL.
 	 * @param string $software_title   The name, or title, of the product. The title is not sent to the API Manager APIs, but is used for menu titles.
 	 *
 	 * Example:
@@ -63,9 +65,10 @@ if ( class_exists( 'WC_AM_Client_2_8' ) ) {
 	 * $wcam_lib = new WC_AM_Client_2_8( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title );
 	 */
 
-	// Example of empty string product_id.
-	//$wcam_lib = new WC_AM_Client_2_8( __FILE__, '', '1.0', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	// Theme exacmple.
+	//$wcam_lib = new WC_AM_Client_2_8( __FILE__, 234, '1.0', 'theme', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 
-	// Preferred positive integer product_id.
+	// Second argument must be the Product ID number if used. If left empty the client will need to enter it in the activation form.
+	// Plugin example. The $wcam_lib is optional, and must have a unique name if used to check if the API Key has been activated before allowing use of the plugin/theme.
 	$wcam_lib = new WC_AM_Client_2_8( __FILE__, 138828, '2.7.3', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 }

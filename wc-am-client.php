@@ -9,7 +9,7 @@
  * the logical code structure and expression as written.
  *
  * @version       2.8
- * @author        Todd Lahman LLC https://www.toddlahman.com/
+ * @author        Todd Lahman LLC https://toddlahman.com/
  * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
  * @package       WooCommerce API Manager plugin and theme library
  * @license       Copyright Todd Lahman LLC
