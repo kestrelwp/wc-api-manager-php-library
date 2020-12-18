@@ -162,13 +162,16 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 				}
 
 				/**
-				 * Tries to execute auto updates.
+				 * Makes auto updates available if WP >= 5.5.
 				 *
 				 * @since 2.8
 				 */
 				$this->try_automatic_updates();
-				add_action( 'wp_ajax_update_auto_update_setting', array( $this, 'update_auto_update_setting' ) );
-				add_filter( 'plugin_auto_update_setting_html', array( $this, 'auto_update_message' ), 10, 3 );
+
+				if ( $this->plugin_or_theme == 'plugin' ) {
+					//add_action( 'wp_ajax_update_auto_update_setting', array( $this, 'update_auto_update_setting' ) );
+					add_filter( 'plugin_auto_update_setting_html', array( $this, 'auto_update_message' ), 10, 3 );
+				}
 			}
 
 			/**
@@ -202,9 +205,9 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 			global $wp_version;
 
 			if ( version_compare( $wp_version, '5.5', '>=' ) ) {
-				if ( empty( get_option( $this->wc_am_auto_update_key ) ) ) {
-					update_option( $this->wc_am_auto_update_key, 'on' );
-				}
+				//if ( empty( get_option( $this->wc_am_auto_update_key ) ) ) {
+				//	update_option( $this->wc_am_auto_update_key, 'on' );
+				//}
 
 				if ( $this->plugin_or_theme == 'plugin' ) {
 					add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
@@ -219,8 +222,8 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 		 *
 		 * @since 2.8
 		 *
-		 * @param $update
-		 * @param $item
+		 * @param bool|null $update
+		 * @param object    $item
 		 *
 		 * @return bool
 		 */
@@ -232,9 +235,11 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 			}
 
 			if ( isset( $item->slug ) && $item->slug == $slug ) {
-				$auto_update_disabled = $this->is_auto_update_disabled();
+				if ( $this->is_auto_update_disabled() ) {
+					return false;
+				}
 
-				if ( $auto_update_disabled ) {
+				if ( ! $this->get_api_key_status() || ! $this->get_api_key_status( true ) ) {
 					return false;
 				}
 
@@ -252,8 +257,10 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 		 * @return bool
 		 */
 		public function is_auto_update_disabled() {
-			// WordPress will not offer to update if background updates are disabled.
-			// WordPress background updates are disabled if file changes are not allowed.
+			/*
+			 * WordPress will not offer to update if background updates are disabled.
+			 * WordPress background updates are disabled if file changes are not allowed.
+			 */
 			if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
 				return true;
 			}
@@ -267,8 +274,6 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 			/**
 			 * Overrides the WordPress AUTOMATIC_UPDATER_DISABLED constant.
 			 *
-			 * @since Unknown
-			 *
 			 * @param bool $wp_updates_disabled true if disables.  false otherwise.
 			 */
 			$wp_updates_disabled = apply_filters( 'automatic_updater_disabled', $wp_updates_disabled );
@@ -277,39 +282,18 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 				return true;
 			}
 
-			// Return if this plugin or theme background updates is enabled.
-			return get_option( $this->wc_am_auto_update_key ) == 'on';
-		}
+			// Return true if this plugin or theme background update is disabled.
+			// return get_option( $this->wc_am_auto_update_key ) !== 'on';
 
-		/**
-		 * Enable or disable auto-updates.
-		 *
-		 * AJAX function to enable or disable auto-updates from the WordPress plugins page.
-		 *
-		 * @since 2.8
-		 */
-		public function update_auto_update_setting() {
-			if ( ! wp_verify_nonce( $_POST[ 'nonce' ], $this->data_key . '-updates' ) ) {
-				wp_send_json_error( __( 'Permissions error.', $this->text_domain ) );
-			}
-
-			$acceptable_tasks = array( 'enable-' . $this->data_key . '-updates', 'disable-' . $this->data_key . '-updates' );
-
-			if ( ! $this->get_val( $_POST, 'task' ) || ! in_array( $_POST[ 'task' ], $acceptable_tasks ) ) {
-				wp_send_json_error( __( 'Error processing request.  Please refresh and try again.', $this->text_domain ) );
-			}
-
-			if ( 'enable-' . $this->data_key . '-updates' == $_POST[ 'task' ] ) {
-				update_option( $this->wc_am_auto_update_key, 'on' );
-				wp_send_json_success( 'success' );
-			} else {
-				update_option( $this->wc_am_auto_update_key, 'off' );
-				wp_send_json_success( 'success' );
-			}
+			return false;
 		}
 
 		/**
 		 * Filter the auto-update message on the plugins page.
+		 *
+		 * Plugin updates stored in 'auto_update_plugins' array.
+		 *
+		 * @see   'wp-admin/includes/class-wp-plugins-list-table.php'
 		 *
 		 * @since 2.8
 		 *
@@ -317,60 +301,67 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 		 * @param string $plugin_file Plugin file.
 		 * @param array  $plugin_data Plugin details.
 		 *
-		 * @return string|void
+		 * @return mixed|string
 		 */
 		public function auto_update_message( $html, $plugin_file, $plugin_data ) {
 			if ( $this->wc_am_plugin_name == $plugin_file ) {
-				$no_update_message = esc_html__( 'Auto-updates unavailable.', $this->text_domain );
-				$api_key_active    = $this->get_api_key_status();
+				global $status, $page;
 
-				if ( ! $api_key_active || get_option( $this->wc_am_auto_update_key ) !== 'on' ) {
-					return $no_update_message;
+				// if ( ! $this->get_api_key_status( true ) || get_option( $this->wc_am_auto_update_key ) !== 'on' ) {
+				if ( ! $this->get_api_key_status() || ! $this->get_api_key_status( true ) ) {
+					return esc_html__( 'Auto-updates unavailable.', $this->text_domain );
 				}
 
-				if ( $this->get_val( $plugin_data, 'auto-update-forced' ) ) {
-					// auto-updates are enabled, so clicking on this will disable them.
-					$message = esc_html__( 'Disable auto-updates', $this->text_domain );
-					$action  = 'disable';
+				$auto_updates = (array) get_site_option( 'auto_update_plugins', array() );
+				$html         = array();
+
+				if ( ! empty( $plugin_data[ 'auto-update-forced' ] ) ) {
+					if ( $plugin_data[ 'auto-update-forced' ] ) {
+						// Forced on.
+						$text = __( 'Auto-updates enabled' );
+					} else {
+						$text = __( 'Auto-updates disabled' );
+					}
+
+					$action     = 'unavailable';
+					$time_class = ' hidden';
+				} elseif ( in_array( $plugin_file, $auto_updates, true ) ) {
+					$text       = __( 'Disable auto-updates' );
+					$action     = 'disable';
+					$time_class = '';
 				} else {
-					// auto-updates are disabled, so clicking on this will enable them.
-					$message = esc_html__( 'Enable auto-updates', $this->text_domain );
-					$action  = 'enable';
+					$text       = __( 'Enable auto-updates' );
+					$action     = 'enable';
+					$time_class = ' hidden';
 				}
 
-				$html = sprintf( '<a href="%s" class="wc_am_client-toggle-auto-update aria-button-if-js" data-' . $this->data_key . '-action="%s" data-nonce="%s"><span class="dashicons dashicons-update spin hidden wc_am_client-update-setting" aria-hidden="true"></span><span class="label wc_am_client-update-label">%s</span></a><div class="wc_am_client-auto-update-notice notice notice-error notice-alt inline hidden"><p></p></div>', esc_url( 'admin.php?page=' . $this->wc_am_activation_tab_key ), $action . '-' . $this->data_key . '-updates', wp_create_nonce( $this->data_key . '-updates' ), $message );
+				$query_args = array(
+					'action'        => "{$action}-auto-update",
+					'plugin'        => $plugin_file,
+					'paged'         => $page,
+					'plugin_status' => $status,
+				);
+
+				$url = add_query_arg( $query_args, 'plugins.php' );
+
+				if ( 'unavailable' === $action ) {
+					$html[] = '<span class="label">' . $text . '</span>';
+				} else {
+					$html[] = sprintf( '<a href="%s" class="toggle-auto-update aria-button-if-js" data-wp-action="%s">', wp_nonce_url( $url, 'updates' ), $action );
+
+					$html[] = '<span class="dashicons dashicons-update spin hidden" aria-hidden="true"></span>';
+					$html[] = '<span class="label">' . $text . '</span>';
+					$html[] = '</a>';
+				}
+
+				if ( ! empty( $plugin_data[ 'update' ] ) ) {
+					$html[] = sprintf( '<div class="auto-update-time%s">%s</div>', $time_class, wp_get_auto_update_message() );
+				}
+
+				$html = implode( '', $html );
 			}
 
 			return $html;
-		}
-
-		/**
-		 * Get a specific property of an array without needing to check if that property exists.
-		 *
-		 * Provide a default value if you want to return a specific value if the property is not set.
-		 *
-		 * @since  Unknown
-		 * @access public
-		 *
-		 * @param array  $array   Array from which the property's value should be retrieved.
-		 * @param string $prop    Name of the property to be retrieved.
-		 * @param string $default Optional. Value that should be returned if the property is not set or empty. Defaults to null.
-		 *
-		 * @return null|string|mixed The value
-		 */
-		public function get_val( $array, $prop, $default = null ) {
-
-			if ( ! is_array( $array ) && ! ( is_object( $array ) && $array instanceof ArrayAccess ) ) {
-				return $default;
-			}
-
-			if ( isset( $array[ $prop ] ) ) {
-				$value = $array[ $prop ];
-			} else {
-				$value = '';
-			}
-
-			return empty( $value ) && $default !== null ? $default : $value;
 		}
 
 		/**
@@ -561,13 +552,12 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 
 			/**
 			 * @since 2.8
-			 */
-			if ( version_compare( $wp_version, '5.5', '>=' ) ) {
-				add_settings_field( $this->wc_am_auto_update_key, esc_html__( 'Auto Plugin Updates', $this->text_domain ), array(
-					$this,
-					'wc_am_auto_update_radio'
-				), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
-			}
+			 */ //if ( version_compare( $wp_version, '5.5', '>=' ) ) {
+			//	add_settings_field( $this->wc_am_auto_update_key, esc_html__( 'Auto Plugin Updates', $this->text_domain ), array(
+			//		$this,
+			//		'wc_am_auto_update_radio'
+			//	), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
+			//}
 
 			add_settings_field( 'status', esc_html__( 'API Key Status', $this->text_domain ), array(
 				$this,
@@ -675,10 +665,10 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 		 *
 		 * @since 2.8
 		 */
-		public function wc_am_auto_update_radio() {
-			echo '<input type="radio" name="' . esc_attr( $this->wc_am_auto_update_key ) . '" value="on"' . checked( get_option( $this->wc_am_auto_update_key ), 'on', false ) . '>' . esc_html__( 'On', $this->text_domain ) . '<br /><br />';
-			echo '<input type="radio" name="' . esc_attr( $this->wc_am_auto_update_key ) . '" value="off"' . checked( get_option( $this->wc_am_auto_update_key ), 'off', false ) . '>' . esc_html__( 'Off', $this->text_domain );
-		}
+		//public function wc_am_auto_update_radio() {
+		//	echo '<input type="radio" name="' . esc_attr( $this->wc_am_auto_update_key ) . '" value="on"' . checked( get_option( $this->wc_am_auto_update_key ), 'on', false ) . '>' . esc_html__( 'On', $this->text_domain ) . '<br /><br />';
+		//	echo '<input type="radio" name="' . esc_attr( $this->wc_am_auto_update_key ) . '" value="off"' . checked( get_option( $this->wc_am_auto_update_key ), 'off', false ) . '>' . esc_html__( 'Off', $this->text_domain );
+		//}
 
 		/**
 		 * Sanitizes and validates all input and output for Dashboard
@@ -714,12 +704,11 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 			 * Toggle auto-updates.
 			 *
 			 * @since 2.8
-			 */
-			if ( ! empty( $_REQUEST[ $this->wc_am_auto_update_key ] ) && $_REQUEST[ $this->wc_am_auto_update_key ] == 'on' ) {
-				update_option( $this->wc_am_auto_update_key, 'on' );
-			} else {
-				update_option( $this->wc_am_auto_update_key, 'off' );
-			}
+			 */ //if ( ! empty( $_REQUEST[ $this->wc_am_auto_update_key ] ) && $_REQUEST[ $this->wc_am_auto_update_key ] == 'on' ) {
+			//	update_option( $this->wc_am_auto_update_key, 'on' );
+			//} else {
+			//	update_option( $this->wc_am_auto_update_key, 'off' );
+			//}
 
 			// Should match the settings_fields() value
 			if ( ! empty( $_REQUEST[ 'option_page' ] ) && $_REQUEST[ 'option_page' ] != $this->wc_am_deactivate_checkbox_key ) {
