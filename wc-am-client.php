@@ -8,7 +8,7 @@
  * but are not limited to, the working concept, function, and behavior of this software,
  * the logical code structure and expression as written.
  *
- * @version       2.8
+ * @version       2.8.1
  * @author        Todd Lahman LLC https://www.toddlahman.com/
  * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
  * @package       WooCommerce API Manager plugin and theme library
@@ -17,8 +17,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
-	class WC_AM_Client_2_8 {
+if ( ! class_exists( 'WC_AM_Client_2_8_1' ) ) {
+	class WC_AM_Client_2_8_1 {
 
 		/**
 		 * Class args
@@ -431,7 +431,7 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 		 */
 		public function license_key_deactivation() {
 			$activation_status = get_option( $this->wc_am_activated_key );
-			$api_key           = $this->data[ $this->wc_am_api_key_key ];
+			$api_key           = ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '';
 
 			$args = array(
 				'api_key' => $api_key,
@@ -686,7 +686,7 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 			$api_key                             = trim( $input[ $this->wc_am_api_key_key ] );
 			$activation_status                   = get_option( $this->wc_am_activated_key );
 			$checkbox_status                     = get_option( $this->wc_am_deactivate_checkbox_key );
-			$current_api_key                     = $this->data[ $this->wc_am_api_key_key ];
+			$current_api_key                     = ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '';
 
 			/**
 			 * @since 2.3
@@ -760,7 +760,7 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 			$options           = ( $input == 'on' ? 'on' : 'off' );
 
 			$args = array(
-				'api_key' => $this->data[ $this->wc_am_api_key_key ],
+				'api_key' => ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '',
 			);
 
 			if ( ! empty( $this->data[ $this->wc_am_api_key_key ] ) && $options == 'on' && $activation_status == 'Activated' ) {

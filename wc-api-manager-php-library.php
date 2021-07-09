@@ -4,7 +4,7 @@
  * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes
  * Plugin URI: https://toddlahman.com/shop/woocommerce-api-manager-php-library-for-plugins-and-themes/
  * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below after line 26.
- * Version: 2.8
+ * Version: 2.8.1
  * Author: Todd Lahman LLC
  * Author URI: https://www.toddlahman.com/
  * License: Copyright Todd Lahman LLC
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
  */
 
 // Load WC_AM_Client class if it exists.
-if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_8_1' ) ) {
 	/*
 	 * |---------------------------------------------------------------------
 	 * | This must be exactly the same for both plugins and themes.
@@ -39,7 +39,7 @@ if ( ! class_exists( 'WC_AM_Client_2_8' ) ) {
 }
 
 // Instantiate WC_AM_Client class object if the WC_AM_Client class is loaded.
-if ( class_exists( 'WC_AM_Client_2_8' ) ) {
+if ( class_exists( 'WC_AM_Client_2_8_1' ) ) {
 	/**
 	 * This file is only an example that includes a plugin header, and this code used to instantiate the client object. The variable $wcam_lib
 	 * can be used to access the public properties from the WC_AM_Client class, but $wcam_lib must have a unique name. To find data saved by
@@ -62,13 +62,16 @@ if ( class_exists( 'WC_AM_Client_2_8' ) ) {
 	 *
 	 * Example:
 	 *
-	 * $wcam_lib = new WC_AM_Client_2_8( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title );
+	 * $wcam_lib = new WC_AM_Client_2_8_1( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title );
 	 */
 
-	// Theme exacmple.
-	//$wcam_lib = new WC_AM_Client_2_8( __FILE__, 234, '1.0', 'theme', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	// Theme example.
+	//$wcam_lib = new WC_AM_Client_2_8_1( __FILE__, 234, '1.0', 'theme', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 
 	// Second argument must be the Product ID number if used. If left empty the client will need to enter it in the activation form.
 	// Plugin example. The $wcam_lib is optional, and must have a unique name if used to check if the API Key has been activated before allowing use of the plugin/theme.
-	$wcam_lib = new WC_AM_Client_2_8( __FILE__, 138828, '2.7.3', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	//$wcam_lib = new WC_AM_Client_2_8_1( __FILE__, 138828, '2.7.3', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+
+	//$wcam_lib = new WC_AM_Client_2_8_1( __FILE__, 32960, '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	$wcam_lib = new WC_AM_Client_2_8_1( __FILE__, '', '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 }
