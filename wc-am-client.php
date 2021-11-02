@@ -8,7 +8,7 @@
  * but are not limited to, the working concept, function, and behavior of this software,
  * the logical code structure and expression as written.
  *
- * @version       2.8.1
+ * @version       2.8.2
  * @author        Todd Lahman LLC https://www.toddlahman.com/
  * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
  * @package       WooCommerce API Manager plugin and theme library
@@ -17,8 +17,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_8_1' ) ) {
-	class WC_AM_Client_2_8_1 {
+if ( ! class_exists( 'WC_AM_Client_2_8_2' ) ) {
+	class WC_AM_Client_2_8_2 {
 
 		/**
 		 * Class args

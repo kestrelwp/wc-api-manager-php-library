@@ -1,5 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2021.10.22 - version 2.8.2
+ * Fix: Mispelled word in error message.
+
 2021.07.09 - version 2.8.1
  * Fix: Warning: Trying to access array offset on value of type bool. PHP warning fixed by checking if the API Key string is not empty before using the string to access the api_key element in an array.
 
