@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "15a2f398-c8a1-4fb9-9eae-4fbd2dc7bab7",
 		"name": "WC >= 2.0",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3311052"
 	},
 	"item": [
 		{
@@ -11,7 +12,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=activate&instance=p1uOusaNM5ub3&object=http://dev.toddlahman.com/&product_id=137890&version=1.0&api_key=9f9273c809979608220752449d55fec9fbe85c3e",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=activate&instance=p1uOusaNM5ub3&object=http://dev.wc.com&product_id=32960&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -34,11 +35,11 @@
 						},
 						{
 							"key": "object",
-							"value": "http://dev.toddlahman.com/"
+							"value": "http://dev.wc.com"
 						},
 						{
 							"key": "product_id",
-							"value": "137890"
+							"value": "32960"
 						},
 						{
 							"key": "version",
@@ -46,7 +47,7 @@
 						},
 						{
 							"key": "api_key",
-							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+							"value": "b9dc373c7983cda3897c1502574b1bf929e02a53"
 						}
 					]
 				}
@@ -59,7 +60,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=deactivate&instance=p1uOusaNM5ub3&product_id=137890&api_key=9f9273c809979608220752449d55fec9fbe85c3e",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=deactivate&instance=p1uOusaNM5ub3&product_id=32960&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -82,11 +83,11 @@
 						},
 						{
 							"key": "product_id",
-							"value": "137890"
+							"value": "32960"
 						},
 						{
 							"key": "api_key",
-							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+							"value": "b9dc373c7983cda3897c1502574b1bf929e02a53"
 						}
 					]
 				}
@@ -99,7 +100,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=status&instance=p1uOusaNM5ub3&product_id=137890&api_key=9f9273c809979608220752449d55fec9fbe85c3e",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=status&instance=p1uOusaNM5ub3&product_id=32960&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -122,11 +123,47 @@
 						},
 						{
 							"key": "product_id",
-							"value": "137890"
+							"value": "32960"
 						},
 						{
 							"key": "api_key",
-							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+							"value": "b9dc373c7983cda3897c1502574b1bf929e02a53"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product_list 2.4.6",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=product_list&instance=p1uOusaNM5ub3&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
+					"protocol": "http",
+					"host": [
+						"wc"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "wc-api",
+							"value": "wc-am-api"
+						},
+						{
+							"key": "wc_am_action",
+							"value": "product_list"
+						},
+						{
+							"key": "instance",
+							"value": "p1uOusaNM5ub3"
+						},
+						{
+							"key": "api_key",
+							"value": "b9dc373c7983cda3897c1502574b1bf929e02a53"
 						}
 					]
 				}
@@ -139,7 +176,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=information&instance=p1uOusaNM5ub3&product_id=137890&version=1.0&api_key=9f9273c809979608220752449d55fec9fbe85c3e&plugin_name=simple-comments/simple-comments.php",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=information&instance=p1uOusaNM5ub3&product_id=32960&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53&plugin_name=search-engine-ping/search-engine-ping.php",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -162,7 +199,7 @@
 						},
 						{
 							"key": "product_id",
-							"value": "137890"
+							"value": "32960"
 						},
 						{
 							"key": "version",
@@ -170,11 +207,11 @@
 						},
 						{
 							"key": "api_key",
-							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+							"value": "b9dc373c7983cda3897c1502574b1bf929e02a53"
 						},
 						{
 							"key": "plugin_name",
-							"value": "simple-comments/simple-comments.php"
+							"value": "search-engine-ping/search-engine-ping.php"
 						}
 					]
 				}
@@ -187,7 +224,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=update&instance=p1uOusaNM5ub3&product_id=137890&version=1.0&api_key=9f9273c809979608220752449d55fec9fbe85c3e&plugin_name=simple-comments",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=update&instance=p1uOusaNM5ub3&product_id=32960&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53&plugin_name=search-engine-ping",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -210,7 +247,7 @@
 						},
 						{
 							"key": "product_id",
-							"value": "137890"
+							"value": "32960"
 						},
 						{
 							"key": "version",
@@ -218,15 +255,15 @@
 						},
 						{
 							"key": "api_key",
-							"value": "9f9273c809979608220752449d55fec9fbe85c3e"
+							"value": "b9dc373c7983cda3897c1502574b1bf929e02a53"
 						},
 						{
 							"key": "plugin_name",
-							"value": "simple-comments"
+							"value": "search-engine-ping"
 						},
 						{
 							"key": "slug",
-							"value": "api-manager-php-library",
+							"value": "search-engine-ping",
 							"disabled": true
 						}
 					]
@@ -239,7 +276,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "abf60ea2-7527-488c-a97a-3f4eeb8b9fd7",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -249,7 +285,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "37707542-3069-4c8a-8d71-26882d5b1616",
 				"type": "text/javascript",
 				"exec": [
 					""
