@@ -4,7 +4,7 @@
  * New: Added ability to create custom menus and submenus for license/API key activation form.
  * New: Added activation stats, total activations, total purchased activations, total activations remaining.
  * New: Added activation error displayed from the store server during an unsuccessful activation attempt.
- * New: Added error message either from the store server or local server on the activatoin form to aid in troubelshooting.
+ * New: Added error message either from the store server or local server on the activation form to aid in troubleshooting.
 
 2022.12.19 - version 2.8.2
  * Fix: Mispelled word in error message.
