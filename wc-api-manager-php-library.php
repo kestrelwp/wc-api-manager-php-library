@@ -69,7 +69,7 @@ if ( class_exists( 'WC_AM_Client_2_9' ) ) {
 	//$wcam_lib = new WC_AM_Client_2_9( __FILE__, 234, '1.0', 'theme', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 
 	/*
-	 * Default menu Plugin example.
+	 * Default Menu Plugin example.
 	 *
 	 * Second argument must be the Product ID number if used. If left empty the client will need to enter it in the activation form.
 	 * The $wcam_lib is optional, and must have a unique name if used to check if the API Key has been activated before allowing use of the plugin/theme.
@@ -88,7 +88,7 @@ if ( class_exists( 'WC_AM_Client_2_9' ) ) {
 	/**
 	 * Custom men Plugin example.
 	 *
-	 * Last argument to the WC_AM_Client_2_9 class is to prevent the not activate yet admin message from being displayed, which may not be neccessary with a custom menu.
+	 * Last argument to the WC_AM_Client_2_9 class is to prevent the not activate yet admin message from being displayed, which may not be necessary with a custom menu.
 	 *
 	 * Example using add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null );
 	 *

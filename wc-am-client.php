@@ -703,6 +703,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 		public function wc_am_activation_info() {
 			$result_error = get_option( 'wc_am_' . $this->product_id . '_activate_error' );
 			$live_status    = json_decode( $this->status(), true );
+			$line_break = wp_kses_post( '<br>' );
 
 			if ( ! empty( $live_status ) && $live_status[ 'success' ] == false ) {
 				echo esc_html( 'Error: ' . $live_status[ 'data' ][ 'error' ] );
@@ -713,9 +714,9 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 
 				if ( ! empty( $live_status ) && $live_status[ 'status_check' ] == 'active'  ) {
 					echo esc_html( 'Activations purchased: ' . $live_status[ 'data' ][ 'total_activations_purchased' ] );
-					echo '<br>';
+					echo $line_break;
 					echo esc_html( 'Total Activations: ' . $live_status[ 'data' ][ 'total_activations' ] );
-					echo '<br>';
+					echo $line_break;
 					echo esc_html( 'Activations Remaining: ' . $live_status[ 'data' ][ 'activations_remaining' ] );
 				} elseif ( ! empty( $result_success ) ) {
 					echo esc_html( $result_success );
@@ -724,14 +725,14 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 				}
 			} elseif ( ! $this->get_api_key_status() && ! empty( $live_status ) && $live_status[ 'status_check' ] == 'inactive' ) {
 				echo esc_html( 'Activations purchased: ' . $live_status[ 'data' ][ 'total_activations_purchased' ] );
-				echo '<br>';
+				echo $line_break;
 				echo esc_html( 'Total Activations: ' . $live_status[ 'data' ][ 'total_activations' ] );
-				echo '<br>';
+				echo $line_break;
 				echo esc_html( 'Activations Remaining: ' . $live_status[ 'data' ][ 'activations_remaining' ] );
 			} elseif ( ! $this->get_api_key_status() && ! empty( $result_error ) ) {
 				echo esc_html__( 'Previous activation attempt errors:', $this->text_domain );
-				echo '<br>';
-				print_r( $result_error );
+				echo $line_break;
+				wp_kses_post( print_r( $result_error ) );
 			} else {
 				echo '';
 			}
