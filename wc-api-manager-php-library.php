@@ -86,15 +86,15 @@ if ( class_exists( 'WC_AM_Client_2_9' ) ) {
 	$wcam_lib = new WC_AM_Client_2_9( __FILE__, '', '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text' );
 
 	/**
-	 * Custom men Plugin example.
+	 * Custom top level or top level submenu.
 	 *
-	 * Last argument to the WC_AM_Client_2_9 class is to prevent the not activate yet admin message from being displayed, which may not be necessary with a custom menu.
+	 * Last argument to the WC_AM_Client_2_9 class is to prevent the not activated yet admin message from being displayed, which may not be necessary with a custom menu.
 	 *
 	 * Example using add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null );
 	 *
-	 * Arguments:
+	 * Argument must be passed as an array:
 	 *
-	 * $borderless_license_menu = array( 'menu_type' => 'add_submenu_page', 'parent_slug' => 'borderless.php', 'page_title' => '', 'menu_title' => '', 'capability' => '', 'menu_slug' => '', 'menu_slug' => '', 'callback' => '', 'position' => '' );
+	 *  $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '', $custom_menu = array(), $inactive_notice = true
 	 * Only arguments with values need to be provided.
 	 *
 	 * Custom menus allowed:
@@ -104,7 +104,8 @@ if ( class_exists( 'WC_AM_Client_2_9' ) ) {
 	 * add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $icon_url = '', $position = null );
 	 *
 	 */
-	// $license_menu = array( 'menu_type' => 'add_submenu_page', 'parent_slug' => 'borderless.php', 'page_title' => 'License Activation', 'menu_title' => 'License' );
 
-	// $license = new WC_AM_Client_2_9( __FILE__, 32960, '1.2', 'plugin', 'http://wc', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text', $license_menu, false );
+	// $wcam_lib_custom_menu = array( 'menu_type' => 'add_submenu_page', 'parent_slug' => 'my-plugin.php', 'page_title' => 'My Plugin License Activation', 'menu_title' => 'API Key' );
+
+	// $wcam_lib = new WC_AM_Client_2_9( __FILE__, 168804, '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text', $wcam_lib_custom_menu, false );
 }
