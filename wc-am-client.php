@@ -8,7 +8,7 @@
  * but are not limited to, the working concept, function, and behavior of this software,
  * the logical code structure and expression as written.
  *
- * @version       2.9
+ * @version       2.9.1
  * @author        Todd Lahman LLC https://www.toddlahman.com/
  * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
  * @package       WooCommerce API Manager plugin and theme library
@@ -17,8 +17,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
-	class WC_AM_Client_2_9 {
+if ( ! class_exists( 'WC_AM_Client_2_9_1' ) ) {
+	class WC_AM_Client_2_9_1 {
 
 		/**
 		 * Class args
@@ -77,7 +77,13 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 
 			if ( $this->no_product_id ) {
 				$this->identifier        = $this->plugin_or_theme == 'plugin' ? dirname( untrailingslashit( plugin_basename( $file ) ) ) : basename( dirname( plugin_basename( $file ) ) );
-				$product_id              = strtolower( str_ireplace( array( ' ', '_', '&', '?', '-' ), '_', $this->identifier ) );
+				$product_id              = strtolower( str_ireplace( array(
+					' ',
+					'_',
+					'&',
+					'?',
+					'-'
+				), '_', $this->identifier ) );
 				$this->wc_am_product_id  = 'wc_am_product_id_' . $product_id;
 				$this->product_id_chosen = get_option( $this->wc_am_product_id );
 			} else {
@@ -104,7 +110,13 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			/**
 			 * If the product_id is a pre 2.0 string, format it to be used as an option key, otherwise it will be an integer if >= 2.0.
 			 */
-			$this->data_key            = 'wc_am_client_' . strtolower( str_ireplace( array( ' ', '_', '&', '?', '-' ), '_', $product_id ) );
+			$this->data_key            = 'wc_am_client_' . strtolower( str_ireplace( array(
+					' ',
+					'_',
+					'&',
+					'?',
+					'-'
+				), '_', $product_id ) );
 			$this->wc_am_activated_key = $this->data_key . '_activated';
 
 			if ( is_admin() ) {
@@ -157,7 +169,10 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 				 *
 				 * $this->wc_am_domain = str_ireplace( array( 'http://', 'https://' ), '', home_url() ); // blog domain name
 				 */
-				$this->wc_am_domain           = str_ireplace( array( 'http://', 'https://' ), '', home_url() ); // blog domain name
+				$this->wc_am_domain           = str_ireplace( array(
+					'http://',
+					'https://'
+				), '', home_url() ); // blog domain name
 				$this->wc_am_software_version = $this->software_version; // The software version
 
 				/**
@@ -230,26 +245,23 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			$icon_url   = ! empty( $this->menu[ 'icon_url' ] ) ? $this->menu[ 'icon_url' ] : '';
 			$position   = ! empty( $this->menu[ 'position' ] ) ? $this->menu[ 'position' ] : null;
 
-			switch ( $this->menu[ 'menu_type' ] ) {
-				case 'add_submenu_page':
+			if ( is_array( $this->menu ) && ! empty( $this->menu[ 'menu_type' ] ) ) {
+				if ( $this->menu[ 'menu_type' ] == 'add_submenu_page' ) {
 					// add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null )
 					add_submenu_page( $this->menu[ 'parent_slug' ], $page_title, $menu_title, $capability, $menu_slug, $callback, $position );
-					break;
-				case 'add_options_page':
+				} elseif ( $this->menu[ 'menu_type' ] == 'add_options_page' ) {
 					// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null )
 					add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback, $position );
-					break;
-				case 'add_menu_page':
+				} elseif ( $this->menu[ 'menu_type' ] == 'add_menu_page' ) {
 					// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $icon_url = '', $position = null )
 					add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $callback, $icon_url, $position );
-					break;
-				default:
-					// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null )
-					add_options_page( sprintf( __( '%s', $this->text_domain ), $this->wc_am_settings_menu_title ), sprintf( __( '%s', $this->text_domain ), $this->wc_am_settings_menu_title ), 'manage_options', $this->wc_am_activation_tab_key, array(
-						$this,
-						'config_page'
-					) );
-					break;
+				}
+			} else {
+				// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null )
+				add_options_page( sprintf( __( '%s', $this->text_domain ), $this->wc_am_settings_menu_title ), sprintf( __( '%s', $this->text_domain ), $this->wc_am_settings_menu_title ), 'manage_options', $this->wc_am_activation_tab_key, array(
+					$this,
+					'config_page'
+				) );
 			}
 		}
 
@@ -519,9 +531,9 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 				<?php if ( isset( $_GET[ 'page' ] ) && $this->wc_am_activation_tab_key == $_GET[ 'page' ] ) {
 					return;
 				} ?>
-				<div class="notice notice-error">
-					<p><?php printf( __( 'The <strong>%s</strong> API Key has not been activated, so the %s is inactive! %sClick here%s to activate <strong>%s</strong>.', $this->text_domain ), esc_attr( $this->software_title ), esc_attr( $this->plugin_or_theme ), '<a href="' . esc_url( admin_url( 'options-general.php?page=' . $this->wc_am_activation_tab_key ) ) . '">', '</a>', esc_attr( $this->software_title ) ); ?></p>
-				</div>
+                <div class="notice notice-error">
+                    <p><?php printf( __( 'The <strong>%s</strong> API Key has not been activated, so the %s is inactive! %sClick here%s to activate <strong>%s</strong>.', $this->text_domain ), esc_attr( $this->software_title ), esc_attr( $this->plugin_or_theme ), '<a href="' . esc_url( admin_url( 'options-general.php?page=' . $this->wc_am_activation_tab_key ) ) . '">', '</a>', esc_attr( $this->software_title ) ); ?></p>
+                </div>
 			<?php }
 		}
 
@@ -536,9 +548,9 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 
 				if ( ! defined( 'WP_ACCESSIBLE_HOSTS' ) || stristr( WP_ACCESSIBLE_HOSTS, $host ) === false ) {
 					?>
-					<div class="notice notice-error">
-						<p><?php printf( __( '<b>Warning!</b> You\'re blocking external requests which means you won\'t be able to get %s updates. Please add %s to %s.', $this->text_domain ), $this->software_title, '<strong>' . $host . '</strong>', '<code>WP_ACCESSIBLE_HOSTS</code>' ); ?></p>
-					</div>
+                    <div class="notice notice-error">
+                        <p><?php printf( __( '<b>Warning!</b> You\'re blocking external requests which means you won\'t be able to get %s updates. Please add %s to %s.', $this->text_domain ), $this->software_title, '<strong>' . $host . '</strong>', '<code>WP_ACCESSIBLE_HOSTS</code>' ); ?></p>
+                    </div>
 					<?php
 				}
 			}
@@ -553,18 +565,18 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			$current_tab   = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->wc_am_activation_tab_key;
 			$tab           = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->wc_am_activation_tab_key;
 			?>
-			<div class='wrap'>
-				<h2><?php esc_html_e( $this->wc_am_settings_title, $this->text_domain ); ?></h2>
-				<h2 class="nav-tab-wrapper">
+            <div class='wrap'>
+                <h2><?php esc_html_e( $this->wc_am_settings_title, $this->text_domain ); ?></h2>
+                <h2 class="nav-tab-wrapper">
 					<?php
 					foreach ( $settings_tabs as $tab_page => $tab_name ) {
 						$active_tab = $current_tab == $tab_page ? 'nav-tab-active' : '';
 						echo '<a class="nav-tab ' . esc_attr( $active_tab ) . '" href="?page=' . esc_attr( $this->wc_am_activation_tab_key ) . '&tab=' . esc_attr( $tab_page ) . '">' . esc_attr( $tab_name ) . '</a>';
 					}
 					?>
-				</h2>
-				<form action='options.php' method='post'>
-					<div class="main">
+                </h2>
+                <form action='options.php' method='post'>
+                    <div class="main">
 						<?php
 						if ( $tab == $this->wc_am_activation_tab_key ) {
 							settings_fields( $this->data_key );
@@ -576,9 +588,9 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 							submit_button( esc_html__( 'Save Changes', $this->text_domain ) );
 						}
 						?>
-					</div>
-				</form>
-			</div>
+                    </div>
+                </form>
+            </div>
 			<?php
 		}
 
@@ -591,11 +603,11 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			add_settings_section( $this->wc_am_api_key_key, esc_html__( 'API Key Activation', $this->text_domain ), array(
 				$this,
 				'wc_am_api_key_text'
-			),                    $this->wc_am_activation_tab_key );
+			), $this->wc_am_activation_tab_key );
 			add_settings_field( $this->wc_am_api_key_key, esc_html__( 'API Key', $this->text_domain ), array(
 				$this,
 				'wc_am_api_key_field'
-			),                  $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
+			), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
 
 			/**
 			 * @since 2.3
@@ -604,7 +616,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 				add_settings_field( 'product_id', esc_html__( 'Product ID', $this->text_domain ), array(
 					$this,
 					'wc_am_product_id_field'
-				),                  $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
+				), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
 			}
 
 			/**
@@ -619,11 +631,11 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			add_settings_field( 'status', esc_html__( 'API Key Status', $this->text_domain ), array(
 				$this,
 				'wc_am_api_key_status'
-			),                  $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
+			), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
 			add_settings_field( 'info', esc_html__( 'Activation Info', $this->text_domain ), array(
 				$this,
 				'wc_am_activation_info'
-			),                  $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
+			), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key );
 			// Activation settings
 			register_setting( $this->wc_am_deactivate_checkbox_key, $this->wc_am_deactivate_checkbox_key, array(
 				$this,
@@ -632,15 +644,15 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			add_settings_section( 'deactivate_button', esc_html__( 'API Deactivation', $this->text_domain ), array(
 				$this,
 				'wc_am_deactivate_text'
-			),                    $this->wc_am_deactivation_tab_key );
+			), $this->wc_am_deactivation_tab_key );
 			add_settings_field( 'deactivate_button', esc_html__( 'Deactivate API Key', $this->text_domain ), array(
 				$this,
 				'wc_am_deactivate_textarea'
-			),                  $this->wc_am_deactivation_tab_key, 'deactivate_button' );
+			), $this->wc_am_deactivation_tab_key, 'deactivate_button' );
 		}
 
 		// Provides text for api key section
-		public function wc_am_api_key_text() { }
+		public function wc_am_api_key_text() {}
 
 		// Returns the API Key status from the WooCommerce API Manager on the server
 		public function wc_am_api_key_status() {
@@ -702,8 +714,8 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 		 */
 		public function wc_am_activation_info() {
 			$result_error = get_option( 'wc_am_' . $this->product_id . '_activate_error' );
-			$live_status    = json_decode( $this->status(), true );
-			$line_break = wp_kses_post( '<br>' );
+			$live_status  = json_decode( $this->status(), true );
+			$line_break   = wp_kses_post( '<br>' );
 
 			if ( ! empty( $live_status ) && $live_status[ 'success' ] == false ) {
 				echo esc_html( 'Error: ' . $live_status[ 'data' ][ 'error' ] );
@@ -712,7 +724,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			if ( $this->get_api_key_status() ) {
 				$result_success = get_option( 'wc_am_' . $this->product_id . '_activate_success' );
 
-				if ( ! empty( $live_status ) && $live_status[ 'status_check' ] == 'active'  ) {
+				if ( ! empty( $live_status ) && $live_status[ 'status_check' ] == 'active' ) {
 					echo esc_html( 'Activations purchased: ' . $live_status[ 'data' ][ 'total_activations_purchased' ] );
 					echo $line_break;
 					echo esc_html( 'Total Activations: ' . $live_status[ 'data' ][ 'total_activations' ] );
@@ -910,13 +922,14 @@ if ( ! class_exists( 'WC_AM_Client_2_9' ) ) {
 			$this->deactivate( $args );
 		}
 
-		public function wc_am_deactivate_text() { }
+		public function wc_am_deactivate_text() {}
 
 		public function wc_am_deactivate_textarea() {
 			echo '<input type="checkbox" id="' . esc_attr( $this->wc_am_deactivate_checkbox_key ) . '" name="' . esc_attr( $this->wc_am_deactivate_checkbox_key ) . '" value="on"';
 			echo checked( get_option( $this->wc_am_deactivate_checkbox_key ), 'on' );
 			echo '/>';
-			?><span class="description"><?php esc_html_e( 'Deactivates an API Key so it can be used on another blog.', $this->text_domain ); ?></span>
+			?>
+            <span class="description"><?php esc_html_e( 'Deactivates an API Key so it can be used on another blog.', $this->text_domain ); ?></span>
 			<?php
 		}
 
