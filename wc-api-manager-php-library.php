@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes Example plugin
+ * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes Example
  * Plugin URI: https://toddlahman.com/shop/woocommerce-api-manager-php-library-for-plugins-and-themes/
  * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below after line 26.
  * Version: 2.9.1
@@ -59,6 +59,7 @@ if ( class_exists( 'WC_AM_Client_2_9_1' ) ) {
 	 * @param string $plugin_or_theme  'plugin' or 'theme'
 	 * @param string $api_url          The URL to the site that is running the API Manager. Example: https://www.toddlahman.com/ Must be the root URL.
 	 * @param string $software_title   The name, or title, of the product. The title is not sent to the API Manager APIs, but is used for menu titles.
+	 * @param string $text             Text Domain.
 	 *
 	 * Example:
 	 *

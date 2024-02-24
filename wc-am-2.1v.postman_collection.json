@@ -12,7 +12,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=activate&instance=p1uOusaNM5ub3&object=http://dev.wc.com&product_id=32960&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=activate&instance=p1uOusaNM5ub3&object=http://dev.wc.com&product_id=141198&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -39,11 +39,43 @@
 						},
 						{
 							"key": "product_id",
-							"value": "32960"
+							"value": "141198"
 						},
 						{
 							"key": "version",
 							"value": "1.0"
+						},
+						{
+							"key": "api_key",
+							"value": "b9dc373c7983cda3897c1502574b1bf929e02a53"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify_api_key_is_active",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=verify_api_key_is_active&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
+					"protocol": "http",
+					"host": [
+						"wc"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "wc-api",
+							"value": "wc-am-api"
+						},
+						{
+							"key": "wc_am_action",
+							"value": "verify_api_key_is_active"
 						},
 						{
 							"key": "api_key",
@@ -60,7 +92,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=deactivate&instance=p1uOusaNM5ub3&product_id=32960&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=deactivate&instance=p1uOusaNM5ub3&product_id=141198&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -83,7 +115,7 @@
 						},
 						{
 							"key": "product_id",
-							"value": "32960"
+							"value": "141198"
 						},
 						{
 							"key": "api_key",
@@ -100,7 +132,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=status&instance=p1uOusaNM5ub3&product_id=32960&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=status&instance=p1uOusaNM5ub3&product_id=141198&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -123,7 +155,7 @@
 						},
 						{
 							"key": "product_id",
-							"value": "32960"
+							"value": "141198"
 						},
 						{
 							"key": "api_key",
@@ -176,7 +208,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=information&instance=p1uOusaNM5ub3&product_id=32960&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53&plugin_name=search-engine-ping/search-engine-ping.php",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=information&instance=p1uOusaNM5ub3&product_id=141198&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53&plugin_name=search-engine-ping/search-engine-ping.php",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -199,7 +231,7 @@
 						},
 						{
 							"key": "product_id",
-							"value": "32960"
+							"value": "141198"
 						},
 						{
 							"key": "version",
@@ -224,7 +256,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=update&instance=p1uOusaNM5ub3&product_id=32960&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53&plugin_name=search-engine-ping",
+					"raw": "http://wc/?wc-api=wc-am-api&wc_am_action=update&instance=p1uOusaNM5ub3&product_id=141198&version=1.0&api_key=b9dc373c7983cda3897c1502574b1bf929e02a53&plugin_name=search-engine-ping",
 					"protocol": "http",
 					"host": [
 						"wc"
@@ -247,7 +279,7 @@
 						},
 						{
 							"key": "product_id",
-							"value": "32960"
+							"value": "141198"
 						},
 						{
 							"key": "version",
