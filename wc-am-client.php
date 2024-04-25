@@ -877,6 +877,31 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 			return $options;
 		}
 
+		/**
+		 * Allow other actors to activate a new key programmatically
+		 *
+		 * @param $api_key
+		 *
+		 * @return void
+		 * @since 2.9.2
+		 */
+		public function activate_new_key( $api_key ) {
+			$result = $this->activate( [ 'api_key' => $api_key ] );
+			if ( ! empty( $result ) ) {
+				$result = json_decode( $result, true );
+				if ( $result['success'] === true && $result['activated'] === true ) {
+					update_option( 'wc_am_' . $this->product_id . '_activate_success', $result['message'] );
+					update_option( $this->wc_am_activated_key, 'Activated' );
+					update_option( $this->wc_am_deactivate_checkbox_key, 'off' );
+					update_option( $this->data_key, [ "{$this->data_key}_api_key" => $api_key ] );
+				} else {
+					wc_get_logger()->error( print_r( $result, true ),
+						array( 'source' => 'wc_product_sample' )
+					);
+				}
+			}
+		}
+
 		// Deactivates the API Key to allow key to be used on another blog
 		public function wc_am_license_key_deactivation( $input ) {
 			$activation_status = get_option( $this->wc_am_activated_key );
