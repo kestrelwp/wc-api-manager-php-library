@@ -1219,7 +1219,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
 		}
 
 		/**
-		 * API request for informatin.
+		 * API request for information.
 		 *
 		 * If `$action` is 'query_plugins' or 'plugin_information', an object MUST be passed.
 		 * If `$action` is 'hot_tags` or 'hot_categories', an array should be passed.
