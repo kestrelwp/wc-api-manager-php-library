@@ -1,18 +1,21 @@
 <?php
-
 /**
- * The WooCommerce API Manager PHP Client Library is designed to be droppped into a WordPress plugin or theme.
- * This version is designed to be used with the WooCommerce API Manager version 2.x.
+ * WooCommerce API Manager PHP Client Library
  *
- * Intellectual Property rights, and copyright, reserved by Todd Lahman, LLC as allowed by law include,
- * but are not limited to, the working concept, function, and behavior of this software,
- * the logical code structure and expression as written.
+ * Designed to be used with WooCommerce API Manager 2.x, and dropped into a WordPress plugin or theme.
  *
- * @version       2.9.3
- * @author        Todd Lahman LLC https://www.toddlahman.com/
- * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
- * @package       WooCommerce API Manager plugin and theme library
- * @license       Copyright Todd Lahman LLC
+ * This source file is subject to the GNU General Public License v3.0
+ * that is bundled with this plugin in the file license.txt
+ *
+ * Please do not modify this file if you want to upgrade the SDK to newer
+ * versions in the future. If you want to customize the SDK for your needs,
+ * please review our developer documentation at https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
+ * and join our developer program at https://kestrelwp.com/developers
+ *
+ * @version     2.9.3
+ * @author      Kestrel
+ * @copyright   Copyright (c) 2013-2024 Kestrel
+ * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
 defined( 'ABSPATH' ) || exit;
