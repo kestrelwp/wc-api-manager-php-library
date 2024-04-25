@@ -441,7 +441,8 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 
 			if ( get_option( $this->data_key ) === false || $instance_exists === false ) {
 				if ( $instance_exists === false ) {
-					update_option( $this->wc_am_instance_key, wp_generate_password( 12, false ) );
+					$this->wc_am_instance_id = wp_generate_password( 12, false );
+					update_option( $this->wc_am_instance_key, $this->wc_am_instance_id );
 				}
 
 				update_option( $this->wc_am_deactivate_checkbox_key, 'on' );
