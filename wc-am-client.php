@@ -753,8 +753,12 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 
 		// Returns API Key text field
 		public function wc_am_api_key_field() {
-			if ( ! empty( $this->data[ $this->wc_am_api_key_key ] ) ) {
-				echo "<input id='api_key' name='" . esc_attr( $this->data_key ) . "[" . esc_attr( $this->wc_am_api_key_key ) . "]' size='25' type='text' value='" . esc_attr( $this->data[ $this->wc_am_api_key_key ] ) . "' />";
+			$value = ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '';
+
+			// filter @since 2.9.2
+			$value = apply_filters( 'wc_am_api_key_field_value', $value, $this->data_key, $this->data );
+			if ( $value ) {
+				echo "<input id='api_key' name='" . esc_attr( $this->data_key ) . "[" . esc_attr( $this->wc_am_api_key_key ) . "]' size='25' type='text' value='" . esc_attr( $value ) . "' />";
 			} else {
 				echo "<input id='api_key' name='" . esc_attr( $this->data_key ) . "[" . esc_attr( $this->wc_am_api_key_key ) . "]' size='25' type='text' value='' />";
 			}
