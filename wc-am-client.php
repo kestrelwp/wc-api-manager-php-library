@@ -532,9 +532,9 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 				<?php if ( isset( $_GET[ 'page' ] ) && $this->wc_am_activation_tab_key == $_GET[ 'page' ] ) {
 					return;
 				} ?>
-                <div class="notice notice-error">
-                    <p><?php printf( __( 'The <strong>%s</strong> API Key has not been activated, so the %s is inactive! %sClick here%s to activate <strong>%s</strong>.', $this->text_domain ), esc_attr( $this->software_title ), esc_attr( $this->plugin_or_theme ), '<a href="' . esc_url( admin_url( 'options-general.php?page=' . $this->wc_am_activation_tab_key ) ) . '">', '</a>', esc_attr( $this->software_title ) ); ?></p>
-                </div>
+				<div class="notice notice-error">
+					<p><?php printf( __( 'The <strong>%s</strong> API Key has not been activated, so the %s is inactive! %sClick here%s to activate <strong>%s</strong>.', $this->text_domain ), esc_attr( $this->software_title ), esc_attr( $this->plugin_or_theme ), '<a href="' . esc_url( admin_url( 'options-general.php?page=' . $this->wc_am_activation_tab_key ) ) . '">', '</a>', esc_attr( $this->software_title ) ); ?></p>
+				</div>
 			<?php }
 		}
 
@@ -549,9 +549,9 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 
 				if ( ! defined( 'WP_ACCESSIBLE_HOSTS' ) || stristr( WP_ACCESSIBLE_HOSTS, $host ) === false ) {
 					?>
-                    <div class="notice notice-error">
-                        <p><?php printf( __( '<b>Warning!</b> You\'re blocking external requests which means you won\'t be able to get %s updates. Please add %s to %s.', $this->text_domain ), $this->software_title, '<strong>' . $host . '</strong>', '<code>WP_ACCESSIBLE_HOSTS</code>' ); ?></p>
-                    </div>
+					<div class="notice notice-error">
+						<p><?php printf( __( '<b>Warning!</b> You\'re blocking external requests which means you won\'t be able to get %s updates. Please add %s to %s.', $this->text_domain ), $this->software_title, '<strong>' . $host . '</strong>', '<code>WP_ACCESSIBLE_HOSTS</code>' ); ?></p>
+					</div>
 					<?php
 				}
 			}
@@ -566,18 +566,18 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 			$current_tab   = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->wc_am_activation_tab_key;
 			$tab           = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->wc_am_activation_tab_key;
 			?>
-            <div class='wrap'>
-                <h2><?php esc_html_e( $this->wc_am_settings_title, $this->text_domain ); ?></h2>
-                <h2 class="nav-tab-wrapper">
+			<div class='wrap'>
+				<h2><?php esc_html_e( $this->wc_am_settings_title, $this->text_domain ); ?></h2>
+				<h2 class="nav-tab-wrapper">
 					<?php
 					foreach ( $settings_tabs as $tab_page => $tab_name ) {
 						$active_tab = $current_tab == $tab_page ? 'nav-tab-active' : '';
 						echo '<a class="nav-tab ' . esc_attr( $active_tab ) . '" href="?page=' . esc_attr( $this->wc_am_activation_tab_key ) . '&tab=' . esc_attr( $tab_page ) . '">' . esc_attr( $tab_name ) . '</a>';
 					}
 					?>
-                </h2>
-                <form action='options.php' method='post'>
-                    <div class="main">
+				</h2>
+				<form action='options.php' method='post'>
+					<div class="main">
 						<?php
 						if ( $tab == $this->wc_am_activation_tab_key ) {
 							settings_fields( $this->data_key );
@@ -589,9 +589,9 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 							submit_button( esc_html__( 'Save Changes', $this->text_domain ) );
 						}
 						?>
-                    </div>
-                </form>
-            </div>
+					</div>
+				</form>
+			</div>
 			<?php
 		}
 
@@ -959,7 +959,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 			echo checked( get_option( $this->wc_am_deactivate_checkbox_key ), 'on' );
 			echo '/>';
 			?>
-            <span class="description"><?php esc_html_e( 'Deactivates an API Key so it can be used on another blog.', $this->text_domain ); ?></span>
+			<span class="description"><?php esc_html_e( 'Deactivates an API Key so it can be used on another blog.', $this->text_domain ); ?></span>
 			<?php
 		}
 
