@@ -1,6 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
 2024.04.26 - version 2.9.3
+* Tweak: Update brand to Kestrel
+* Fix: Fix PHP warnings for certain failed update checks
 
 2024.03.18 - version 2.9.2
 * Fix: Set instance ID property after generating it
