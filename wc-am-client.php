@@ -1,24 +1,27 @@
 <?php
-
 /**
- * The WooCommerce API Manager PHP Client Library is designed to be droppped into a WordPress plugin or theme.
- * This version is designed to be used with the WooCommerce API Manager version 2.x.
+ * WooCommerce API Manager PHP Client Library
  *
- * Intellectual Property rights, and copyright, reserved by Todd Lahman, LLC as allowed by law include,
- * but are not limited to, the working concept, function, and behavior of this software,
- * the logical code structure and expression as written.
+ * Designed to be used with WooCommerce API Manager 2.x, and dropped into a WordPress plugin or theme.
  *
- * @version       2.9.2
- * @author        Todd Lahman LLC https://www.toddlahman.com/
- * @copyright     Copyright (c) Todd Lahman LLC (support@toddlahman.com)
- * @package       WooCommerce API Manager plugin and theme library
- * @license       Copyright Todd Lahman LLC
+ * This source file is subject to the GNU General Public License v3.0
+ * that is bundled with this plugin in the file license.txt
+ *
+ * Please do not modify this file if you want to upgrade the SDK to newer
+ * versions in the future. If you want to customize the SDK for your needs,
+ * please review our developer documentation at https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
+ * and join our developer program at https://kestrelwp.com/developers
+ *
+ * @version     2.9.3
+ * @author      Kestrel
+ * @copyright   Copyright (c) 2013-2024 Kestrel
+ * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
-	class WC_AM_Client_2_9_2 {
+if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
+	class WC_AM_Client_2_9_3 {
 
 		/**
 		 * Class args
@@ -718,14 +721,14 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 			$live_status  = json_decode( $this->status(), true );
 			$line_break   = wp_kses_post( '<br>' );
 
-			if ( ! empty( $live_status ) && $live_status[ 'success' ] == false ) {
+			if ( ! empty( $live_status ) && isset( $live_status['success'] ) && $live_status[ 'success' ] == false ) {
 				echo esc_html( 'Error: ' . $live_status[ 'data' ][ 'error' ] );
 			}
 
 			if ( $this->get_api_key_status() ) {
 				$result_success = get_option( 'wc_am_' . $this->product_id . '_activate_success' );
 
-				if ( ! empty( $live_status ) && $live_status[ 'status_check' ] == 'active' ) {
+				if ( ! empty( $live_status ) && isset( $live_status['status_check'] ) && $live_status[ 'success' ] == 'active' ) {
 					echo esc_html( 'Activations purchased: ' . $live_status[ 'data' ][ 'total_activations_purchased' ] );
 					echo $line_break;
 					echo esc_html( 'Total Activations: ' . $live_status[ 'data' ][ 'total_activations' ] );
@@ -736,7 +739,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 				} else {
 					echo '';
 				}
-			} elseif ( ! $this->get_api_key_status() && ! empty( $live_status ) && $live_status[ 'status_check' ] == 'inactive' ) {
+			} elseif ( ! $this->get_api_key_status() && ! empty( $live_status ) && isset( $live_status['status_check'] ) && $live_status[ 'status_check' ] == 'inactive' ) {
 				echo esc_html( 'Activations purchased: ' . $live_status[ 'data' ][ 'total_activations_purchased' ] );
 				echo $line_break;
 				echo esc_html( 'Total Activations: ' . $live_status[ 'data' ][ 'total_activations' ] );
@@ -1181,7 +1184,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 				add_settings_error( 'wc_am_client_error_text', 'wc_am_client_error', "{$response['data']['error']}", 'error' );
 			}
 
-			if ( $response !== false && $response[ 'success' ] === true ) {
+			if ( $response !== false && isset( $response['success'] ) && $response['success'] === true ) {
 				// New plugin version from the API
 				$new_ver = (string) $response[ 'data' ][ 'package' ][ 'new_version' ];
 				// Current installed plugin version
@@ -1216,7 +1219,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_2' ) ) {
 		}
 
 		/**
-		 * API request for informatin.
+		 * API request for information.
 		 *
 		 * If `$action` is 'query_plugins' or 'plugin_information', an object MUST be passed.
 		 * If `$action` is 'hot_tags` or 'hot_categories', an array should be passed.
