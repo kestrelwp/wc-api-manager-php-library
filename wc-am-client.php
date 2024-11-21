@@ -143,7 +143,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
 				 */
 				$this->wc_am_api_key_key  = $this->data_key . '_api_key';
 				$this->wc_am_instance_key = $this->data_key . '_instance';
-                $this->status_transient_key = 'status_' . md5( $this->wc_am_instance_id . $this->product_id );
+                $this->status_transient_key = 'status_' . md5( $this->product_id );
 
 				/**
 				 * Set all admin menu data
