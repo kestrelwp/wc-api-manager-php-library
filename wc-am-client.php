@@ -68,6 +68,8 @@ if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
 		private $menu                              = array();
 		private $inactive_notice                   = true;
 
+        protected $status_transient_key;
+
 		public function __construct( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '', $custom_menu = array(), $inactive_notice = true ) {
 			/**
 			 * @since 2.9
@@ -141,6 +143,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
 				 */
 				$this->wc_am_api_key_key  = $this->data_key . '_api_key';
 				$this->wc_am_instance_key = $this->data_key . '_instance';
+                $this->status_transient_key = 'status_' . md5( $this->wc_am_instance_id . $this->product_id );
 
 				/**
 				 * Set all admin menu data
@@ -1062,19 +1065,14 @@ if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
                 return '';
             }
 
-            $transient_key = 'status_' . md5( $this->wc_am_instance_id . '_' . $this->product_id );
-
             // Check if the transient exists
-            $cached_status = get_transient( $transient_key );
+            $cached_status = get_transient( $this->status_transient_key );
 
             if ( $cached_status !== false ) {
                 return $cached_status;
             }
 
             $status = $this->get_live_status();
-
-            // Cache the response for 24 hours
-            set_transient( $transient_key, $status, DAY_IN_SECONDS );
 
             return $status;
         }
@@ -1105,7 +1103,12 @@ if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
                 return '';
             }
 
-            return wp_remote_retrieve_body( $request );
+            $status = wp_remote_retrieve_body( $request );
+
+            // Cache the response for 24 hours
+            set_transient( $this->status_transient_key, $status, DAY_IN_SECONDS );
+
+            return $status;
         }
 
 		/**
