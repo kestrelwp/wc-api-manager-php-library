@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
  */
 
 // Load WC_AM_Client class if it exists.
-if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
 	/*
 	 * |---------------------------------------------------------------------
 	 * | This must be exactly the same for both plugins and themes.
@@ -36,7 +36,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
 }
 
 // Instantiate WC_AM_Client class object if the WC_AM_Client class is loaded.
-if ( class_exists( 'WC_AM_Client_2_9_3' ) ) {
+if ( class_exists( 'WC_AM_Client_2_9_4' ) ) {
 	/**
 	 * This file is only an example that includes a plugin header, and this code used to instantiate the client object. The variable $wcam_lib
 	 * can be used to access the public properties from the WC_AM_Client class, but $wcam_lib must have a unique name. To find data saved by
@@ -81,7 +81,7 @@ if ( class_exists( 'WC_AM_Client_2_9_3' ) ) {
 	 */
 
 	//$wcam_lib = new WC_AM_Client_2_9_3( __FILE__, 32960, '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
-	$wcam_lib = new WC_AM_Client_2_9_3( __FILE__, '', '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text' );
+	$wcam_lib = new WC_AM_Client_2_9_4( __FILE__, '', '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text' );
 
 	/**
 	 * Custom top level or top level submenu.

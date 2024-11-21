@@ -20,8 +20,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
-	class WC_AM_Client_2_9_3 {
+if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
+	class WC_AM_Client_2_9_4 {
 
 		/**
 		 * Class args
@@ -1057,29 +1057,56 @@ if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
 		 *
 		 * @return bool|string
 		 */
-		public function status() {
-			if ( empty( $this->data[ $this->wc_am_api_key_key ] ) ) {
-				return '';
-			}
+        public function status() {
+            if ( empty( $this->data[ $this->wc_am_api_key_key ] ) ) {
+                return '';
+            }
 
-			$defaults = array(
-				'wc_am_action' => 'status',
-				'api_key'      => $this->data[ $this->wc_am_api_key_key ],
-				'product_id'   => $this->product_id,
-				'instance'     => $this->wc_am_instance_id,
-				'object'       => $this->wc_am_domain
-			);
+            $transient_key = 'status_' . md5( $this->wc_am_instance_id . '_' . $this->product_id );
 
-			$target_url = esc_url_raw( $this->create_software_api_url( $defaults ) );
-			$request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
+            // Check if the transient exists
+            $cached_status = get_transient( $transient_key );
 
-			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
-				// Request failed
-				return '';
-			}
+            if ( $cached_status !== false ) {
+                return $cached_status;
+            }
 
-			return wp_remote_retrieve_body( $request );
-		}
+            $status = $this->get_live_status();
+
+            // Cache the response for 24 hours
+            set_transient( $transient_key, $status, DAY_IN_SECONDS );
+
+            return $status;
+        }
+
+        /**
+         * Sends the status check request to the API Manager.
+         *
+         * @return bool|string
+         */
+        public function get_live_status() {
+            if ( empty( $this->data[ $this->wc_am_api_key_key ] ) ) {
+                return '';
+            }
+
+            $defaults = array(
+                'wc_am_action' => 'status',
+                'api_key'      => $this->data[ $this->wc_am_api_key_key ],
+                'product_id'   => $this->product_id,
+                'instance'     => $this->wc_am_instance_id,
+                'object'       => $this->wc_am_domain
+            );
+
+            $target_url = esc_url_raw( $this->create_software_api_url( $defaults ) );
+            $request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
+
+            if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
+                // Request failed
+                return '';
+            }
+
+            return wp_remote_retrieve_body( $request );
+        }
 
 		/**
 		 * Check for software updates.

@@ -1,5 +1,9 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2024.11.21 - version 2.9.4
+* New: Make status method cached by default using 24 hour transient
+* New: Add get_live_status method to handle server side status check
+
 2024.04.26 - version 2.9.3
 * Tweak: Update brand to Kestrel
 * Fix: Fix PHP warnings for certain failed update checks
