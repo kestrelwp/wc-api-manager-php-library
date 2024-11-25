@@ -12,7 +12,7 @@
  * please review our developer documentation at https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
  * and join our developer program at https://kestrelwp.com/developers
  *
- * @version     2.9.3
+ * @version     2.9.4
  * @author      Kestrel
  * @copyright   Copyright (c) 2013-2024 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -20,8 +20,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
-	class WC_AM_Client_2_9_3 {
+if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
+	class WC_AM_Client_2_9_4 {
 
 		/**
 		 * Class args

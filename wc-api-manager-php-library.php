@@ -4,7 +4,7 @@
  * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes Example
  * Plugin URI: https://kestrelwp.com/product/woocommerce-api-manager-php-library-for-plugins-and-themes/
  * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below after line 26.
- * Version: 2.9.3
+ * Version: 2.9.4
  * Author: Kestrel
  * Author URI: https://kestrelwp.com
  *
@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
  */
 
 // Load WC_AM_Client class if it exists.
-if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_9_4' ) ) {
 	/*
 	 * |---------------------------------------------------------------------
 	 * | This must be exactly the same for both plugins and themes.
@@ -36,7 +36,7 @@ if ( ! class_exists( 'WC_AM_Client_2_9_3' ) ) {
 }
 
 // Instantiate WC_AM_Client class object if the WC_AM_Client class is loaded.
-if ( class_exists( 'WC_AM_Client_2_9_3' ) ) {
+if ( class_exists( 'WC_AM_Client_2_9_4' ) ) {
 	/**
 	 * This file is only an example that includes a plugin header, and this code used to instantiate the client object. The variable $wcam_lib
 	 * can be used to access the public properties from the WC_AM_Client class, but $wcam_lib must have a unique name. To find data saved by
@@ -60,11 +60,11 @@ if ( class_exists( 'WC_AM_Client_2_9_3' ) ) {
 	 *
 	 * Example:
 	 *
-	 * $wcam_lib = new WC_AM_Client_2_9_3( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title );
+	 * $wcam_lib = new WC_AM_Client_2_9_4( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title );
 	 */
 
 	// Default menu Theme example.
-	//$wcam_lib = new WC_AM_Client_2_9_3( __FILE__, 234, '1.0', 'theme', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	//$wcam_lib = new WC_AM_Client_2_9_4( __FILE__, 234, '1.0', 'theme', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
 
 	/*
 	 * Default Menu Plugin example.
@@ -80,13 +80,13 @@ if ( class_exists( 'WC_AM_Client_2_9_3' ) ) {
 	 * with a different Product ID, then do not set the Product ID here.
 	 */
 
-	//$wcam_lib = new WC_AM_Client_2_9_3( __FILE__, 32960, '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
-	$wcam_lib = new WC_AM_Client_2_9_3( __FILE__, '', '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text' );
+	//$wcam_lib = new WC_AM_Client_2_9_4( __FILE__, 32960, '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes' );
+	$wcam_lib = new WC_AM_Client_2_9_4( __FILE__, '', '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text' );
 
 	/**
 	 * Custom top level or top level submenu.
 	 *
-	 * Last argument to the WC_AM_Client_2_9_3 class is to prevent the not activated yet admin message from being displayed, which may not be necessary with a custom menu.
+	 * Last argument to the WC_AM_Client_2_9_4 class is to prevent the not activated yet admin message from being displayed, which may not be necessary with a custom menu.
 	 *
 	 * Example using add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null );
 	 *
@@ -105,5 +105,5 @@ if ( class_exists( 'WC_AM_Client_2_9_3' ) ) {
 
 	// $wcam_lib_custom_menu = array( 'menu_type' => 'add_submenu_page', 'parent_slug' => 'my-plugin.php', 'page_title' => 'My Plugin License Activation', 'menu_title' => 'API Key' );
 
-	// $wcam_lib = new WC_AM_Client_2_9_3( __FILE__, 168804, '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text', $wcam_lib_custom_menu, false );
+	// $wcam_lib = new WC_AM_Client_2_9_4( __FILE__, 168804, '1.2', 'plugin', 'http://wc/', 'WooCommerce API Manager PHP Library for Plugins and Themes', 'wc-am-text', $wcam_lib_custom_menu, false );
 }
