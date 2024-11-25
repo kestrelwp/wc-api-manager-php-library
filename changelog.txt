@@ -1,5 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2024.04.26 - version 2.9.4
+* Tweak: Reduce the number of calls to the API server when loading activation settings pages
+
 2024.04.26 - version 2.9.3
 * Tweak: Update brand to Kestrel
 * Fix: Fix PHP warnings for certain failed update checks
