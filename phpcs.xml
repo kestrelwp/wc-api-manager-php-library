@@ -3,7 +3,6 @@
 
 	<file>./wc-am-client.php</file>
 
-	// skip yoda conditions
 	<rule ref="WordPress">
 		<exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="Squiz.Operators.ValidLogicalOperators.NotAllowed" />
