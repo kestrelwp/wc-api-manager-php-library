@@ -131,16 +131,16 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		/**
 		 * Client constructor.
 		 *
-		 * @param string $file
+		 * @param string $file the main plugin or theme __FILE__ path
 		 * @param int|string|null $product_id note that string value is a deprecated value and should be avoided
 		 * @param int|null $product_parent_id optional if the product is a variable product and the product ID is neither specified nor entered by the customer (not advised)
-		 * @param string $software_version
-		 * @param string<"plugin"|"theme"> $plugin_or_theme
-		 * @param string $api_url
-		 * @param string $software_title
-		 * @param string $text_domain
-		 * @param array<string, mixed> $custom_menu
-		 * @param bool $inactive_notice
+		 * @param string $software_version this should be a semantic version number
+		 * @param string<"plugin"|"theme"> $plugin_or_theme the type of product
+		 * @param string $api_url the URL to the site that is running the API Manager - must be the root URL
+		 * @param string $software_title the name of the product
+		 * @param string $text_domain the textdomain of the product
+		 * @param array<string, mixed> $custom_menu optional, default menu will be used when empty or not set
+		 * @param bool $inactive_notice optional, default true - use false to hide the inactive license notice
 		 */
 		public function __construct( $file, $product_id, $product_parent_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '', $custom_menu = array(), $inactive_notice = true ) {
 
