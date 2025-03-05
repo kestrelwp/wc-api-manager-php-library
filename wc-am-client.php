@@ -63,70 +63,70 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		private $data  = array();
 
 		/** @var string */
-		private $identifier                        = '';
+		private $identifier = '';
 
 		/** @var bool */
-		private $no_product_id                     = false;
+		private $no_product_id = false;
 
 		/** @var int */
-		private $product_id_chosen                 = 0;
+		private $product_id_chosen = 0;
 
 		/** @var string */
-		private $wc_am_activated_key               = '';
+		private $wc_am_activated_key = '';
 
 		/** @var string */
-		private $wc_am_activation_tab_key          = '';
+		private $wc_am_activation_tab_key = '';
 
 		/** @var string */
-		private $wc_am_api_key_key                 = '';
+		private $wc_am_api_key_key = '';
 
 		/** @var string */
-		private $wc_am_deactivate_checkbox_key     = '';
+		private $wc_am_deactivate_checkbox_key = '';
 
 		/** @var string */
-		private $wc_am_deactivation_tab_key        = '';
+		private $wc_am_deactivation_tab_key = '';
 
 		/** @var string */
-		private $wc_am_auto_update_key             = '';
+		private $wc_am_auto_update_key = '';
 
 		/** @var string */
-		private $wc_am_domain                      = '';
+		private $wc_am_domain = '';
 
 		/** @var string */
-		private $wc_am_instance_id                 = '';
+		private $wc_am_instance_id = '';
 
 		/** @var string */
-		private $wc_am_instance_key                = '';
+		private $wc_am_instance_key = '';
 
 		/** @var string */
-		private $wc_am_menu_tab_activation_title   = '';
+		private $wc_am_menu_tab_activation_title = '';
 
 		/** @var string */
 		private $wc_am_menu_tab_deactivation_title = '';
 
 		/** @var string */
-		private $wc_am_plugin_name                 = '';
+		private $wc_am_plugin_name = '';
 
 		/** @var string */
-		private $wc_am_product_id                  = '';
+		private $wc_am_product_id = '';
 
 		/** @var string */
-		private $wc_am_renew_license_url           = '';
+		private $wc_am_renew_license_url = '';
 
 		/** @var string */
-		private $wc_am_settings_menu_title         = '';
+		private $wc_am_settings_menu_title = '';
 
 		/** @var string */
-		private $wc_am_settings_title              = '';
+		private $wc_am_settings_title = '';
 
 		/** @var string */
-		private $wc_am_software_version            = '';
+		private $wc_am_software_version = '';
 
 		/** @var array */
-		private $menu                              = array();
+		private $menu = array();
 
 		/** @var bool */
-		private $inactive_notice                   = true;
+		private $inactive_notice = true;
 
 		/**
 		 * Client constructor.
