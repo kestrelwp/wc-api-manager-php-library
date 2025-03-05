@@ -133,7 +133,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		 *
 		 * @param string $file
 		 * @param int|string|null $product_id note that string value is a deprecated value and should be avoided
-		 * @param int|null $product_parent_id optional if the product is a variable product and the product ID is not used and (not advised)
+		 * @param int|null $product_parent_id optional if the product is a variable product and the product ID is neither specified nor entered by the customer (not advised)
 		 * @param string $software_version
 		 * @param string<"plugin"|"theme"> $plugin_or_theme
 		 * @param string $api_url
