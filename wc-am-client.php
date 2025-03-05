@@ -12,11 +12,7 @@
  * please review our developer documentation at https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
  * and join our developer program at https://kestrelwp.com/developers
  *
-<<<<<<< HEAD
  * @version     2.10.0
-=======
- * @version     2.9.4
->>>>>>> origin/transient-update-attempt-two
  * @author      Kestrel
  * @copyright   Copyright (c) 2013-2025 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
