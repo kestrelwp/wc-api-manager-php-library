@@ -39,7 +39,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		private $plugin_name = '';
 
 		/** @var string<"plugin"|"theme"> */
-		private $plugin_or_theme  = '';
+		private $plugin_or_theme = '';
 
 		/** @var int|null */
 		private $product_id = null;
@@ -48,19 +48,19 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		private $product_parent_id = null;
 
 		/** @var string */
-		private $slug             = '';
+		private $slug = '';
 
 		/** @var string */
-		private $software_title   = '';
+		private $software_title = '';
 
 		/** @var string */
 		private $software_version = '';
 
 		/** @var string */
-		private $text_domain      = '';
+		private $text_domain = '';
 
 		/** @var array */
-		private $data  = array();
+		private $data = array();
 
 		/** @var string */
 		private $identifier = '';
@@ -138,16 +138,16 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		/**
 		 * Client constructor.
 		 *
-		 * @param string $file the main plugin or theme __FILE__ path
-		 * @param int|string|null $product_id note that string value is a deprecated value and should be avoided
-		 * @param int|null $product_parent_id optional if the product is a variable product and the product ID is neither specified nor entered by the customer (not advised)
-		 * @param string $software_version this should be a semantic version number
+		 * @param string                   $file the main plugin or theme __FILE__ path
+		 * @param int|string|null          $product_id note that string value is a deprecated value and should be avoided
+		 * @param int|null                 $product_parent_id optional if the product is a variable product and the product ID is neither specified nor entered by the customer (not advised)
+		 * @param string                   $software_version this should be a semantic version number
 		 * @param string<"plugin"|"theme"> $plugin_or_theme the type of product
-		 * @param string $api_url the URL to the site that is running the API Manager - must be the root URL
-		 * @param string $software_title the name of the product
-		 * @param string $text_domain the textdomain of the product
-		 * @param array<string, mixed> $custom_menu optional, default menu will be used when empty or not set
-		 * @param bool $inactive_notice optional, default true - use false to hide the inactive license notice
+		 * @param string                   $api_url the URL to the site that is running the API Manager - must be the root URL
+		 * @param string                   $software_title the name of the product
+		 * @param string                   $text_domain the textdomain of the product
+		 * @param array<string, mixed>     $custom_menu optional, default menu will be used when empty or not set
+		 * @param bool                     $inactive_notice optional, default true - use false to hide the inactive license notice
 		 */
 		public function __construct( $file, $product_id, $product_parent_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '', $custom_menu = array(), $inactive_notice = true ) {
 
@@ -163,17 +163,15 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				$product_id              = strtolower( str_ireplace( array( ' ', '_', '&', '?', '-' ), '_', $this->identifier ) );
 				$this->wc_am_product_id  = 'wc_am_product_id_' . $product_id;
 				$this->product_id_chosen = get_option( $this->wc_am_product_id );
-			} else {
-				if ( ! empty( $product_id ) && is_numeric( $product_id ) ) {
+			} elseif ( ! empty( $product_id ) && is_numeric( $product_id ) ) {
 					$this->product_id = absint( $product_id );
-				} elseif ( ! empty( $product_id ) && is_string( $product_id ) ) {
-					/**
-					 * Preserve the value of $product_id to use for API requests. Pre 2.0 product_id is a string, and >= 2.0 is an integer.
-					 */
-					$this->product_id = esc_attr( $product_id );
-				} elseif ( ! empty( $product_parent_id ) && is_numeric( $product_parent_id ) ) {
-					$this->product_id = absint( $product_parent_id );
-				}
+			} elseif ( ! empty( $product_id ) && is_string( $product_id ) ) {
+				/**
+				 * Preserve the value of $product_id to use for API requests. Pre 2.0 product_id is a string, and >= 2.0 is an integer.
+				 */
+				$this->product_id = esc_attr( $product_id );
+			} elseif ( ! empty( $product_parent_id ) && is_numeric( $product_parent_id ) ) {
+				$this->product_id = absint( $product_parent_id );
 			}
 
 			// If the product_id was not provided, but was saved by the customer, used the saved product_id from the customer.
@@ -1004,7 +1002,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				'product_parent_id' => $this->product_parent_id,
 				'instance'          => $this->wc_am_instance_id,
 				'object'            => $this->wc_am_domain,
-				'software_version'  => $this->wc_am_software_version
+				'software_version'  => $this->wc_am_software_version,
 			);
 
 			$args       = wp_parse_args( $defaults, $args );
@@ -1046,7 +1044,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				'product_id'        => $this->product_id,
 				'product_parent_id' => $this->product_parent_id,
 				'instance'          => $this->wc_am_instance_id,
-				'object'            => $this->wc_am_domain
+				'object'            => $this->wc_am_domain,
 			);
 
 			$args       = wp_parse_args( $defaults, $args );
@@ -1082,7 +1080,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				'product_id'        => $this->product_id,
 				'product_parent_id' => $this->product_parent_id,
 				'instance'          => $this->wc_am_instance_id,
-				'object'            => $this->wc_am_domain
+				'object'            => $this->wc_am_domain,
 			);
 
 			$target_url = esc_url_raw( $this->create_software_api_url( $defaults ) );
