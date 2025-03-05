@@ -1,7 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
-2024.04.26 - version 2.9.4
+2025.nn.nn - version 2.10.0
 * Tweak: Reduce the number of calls to the API server when loading activation settings pages
+* Tweak: Allow passing the parent product ID to the client constructor (breaking change)
 
 2024.04.26 - version 2.9.3
 * Tweak: Update brand to Kestrel
@@ -22,7 +23,7 @@
  * New: Added error message either from the store server or local server on the activation form to aid in troubleshooting.
 
 2022.12.19 - version 2.8.2
- * Fix: Mispelled word in error message.
+ * Fix: Misspelled word in error message.
  * Tweak: Updated API endpoint query example Postman collection to include new product_list API endpoint.
 
 2021.07.09 - version 2.8.1
