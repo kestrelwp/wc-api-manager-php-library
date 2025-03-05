@@ -235,10 +235,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				 *
 				 * $this->wc_am_domain = str_ireplace( array( 'http://', 'https://' ), '', home_url() ); // blog domain name
 				 */
-				$this->wc_am_domain           = str_ireplace( array(
-					'http://',
-					'https://'
-				), '', home_url() ); // blog domain name
+				$this->wc_am_domain           = str_ireplace( array( 'http://', 'https://' ), '', home_url() ); // blog domain name
 				$this->wc_am_software_version = $this->software_version; // The software version
 
 				/**
