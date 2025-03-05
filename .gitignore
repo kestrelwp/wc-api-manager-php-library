@@ -21,3 +21,6 @@ Thumbs.db
 # Caches
 *.cache
 cache/
+
+# Composer
+vendor

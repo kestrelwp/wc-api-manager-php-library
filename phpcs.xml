@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress PHP Coding Standards">
+
+	<file>./wc-am-client.php</file>
+
+	<rule ref="WordPress" />
+
+</ruleset>
