@@ -1,5 +1,7 @@
 /.*                   export-ignore
+/examples             export-ignore
 /node_modules         export-ignore
+/resources            export-ignore
 /sync                 export-ignore
 /tests                export-ignore
 CODEOWNERS            export-ignore
