@@ -3,6 +3,13 @@
 
 	<file>./wc-am-client.php</file>
 
+	<rule ref="WordPress">
+		<exclude name="WordPress.PHP.YodaConditions"/>
+		<exclude name="Squiz.Operators.ValidLogicalOperators.NotAllowed" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+
 	<rule ref="WordPress" />
 
 </ruleset>
