@@ -21,86 +21,155 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
+	/**
+	 * WooCommerce API Manager client class.
+	 */
 	class WC_AM_Client_2_10_0 {
 
-		/**
-		 * Class args
-		 *
-		 * @var string
-		 */
-		private $api_url          = '';
-		private $data_key         = '';
-		private $file             = '';
-		private $plugin_name      = '';
-		private $plugin_or_theme  = '';
-		private $product_id       = '';
-		private $slug             = '';
-		private $software_title   = '';
-		private $software_version = '';
-		private $text_domain      = ''; // For language translation.
+		/** @var string */
+		private $api_url = '';
 
-		/**
-		 * Class properties.
-		 *
-		 * @var string
-		 */
-		private $data                              = array();
+		/** @var string */
+		private $data_key = '';
+
+		/** @var string file path */
+		private $file = '';
+
+		/** @var string */
+		private $plugin_name = '';
+
+		/** @var string<"plugin"|"theme"> */
+		private $plugin_or_theme  = '';
+
+		/** @var int|null */
+		private $product_id = null;
+
+		/** @var int|null */
+		private $product_parent_id = null;
+
+		/** @var string */
+		private $slug             = '';
+
+		/** @var string */
+		private $software_title   = '';
+
+		/** @var string */
+		private $software_version = '';
+
+		/** @var string */
+		private $text_domain      = '';
+
+		/** @var array */
+		private $data  = array();
+
+		/** @var string */
 		private $identifier                        = '';
+
+		/** @var bool */
 		private $no_product_id                     = false;
+
+		/** @var int */
 		private $product_id_chosen                 = 0;
+
+		/** @var string */
 		private $wc_am_activated_key               = '';
+
+		/** @var string */
 		private $wc_am_activation_tab_key          = '';
+
+		/** @var string */
 		private $wc_am_api_key_key                 = '';
+
+		/** @var string */
 		private $wc_am_deactivate_checkbox_key     = '';
+
+		/** @var string */
 		private $wc_am_deactivation_tab_key        = '';
+
+		/** @var string */
 		private $wc_am_auto_update_key             = '';
+
+		/** @var string */
 		private $wc_am_domain                      = '';
+
+		/** @var string */
 		private $wc_am_instance_id                 = '';
+
+		/** @var string */
 		private $wc_am_instance_key                = '';
+
+		/** @var string */
 		private $wc_am_menu_tab_activation_title   = '';
+
+		/** @var string */
 		private $wc_am_menu_tab_deactivation_title = '';
+
+		/** @var string */
 		private $wc_am_plugin_name                 = '';
+
+		/** @var string */
 		private $wc_am_product_id                  = '';
+
+		/** @var string */
 		private $wc_am_renew_license_url           = '';
+
+		/** @var string */
 		private $wc_am_settings_menu_title         = '';
+
+		/** @var string */
 		private $wc_am_settings_title              = '';
+
+		/** @var string */
 		private $wc_am_software_version            = '';
+
+		/** @var array */
 		private $menu                              = array();
+
+		/** @var bool */
 		private $inactive_notice                   = true;
 
-		public function __construct( $file, $product_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '', $custom_menu = array(), $inactive_notice = true ) {
-			/**
-			 * @since 2.9
-			 */
+		/**
+		 * Client constructor.
+		 *
+		 * @param string $file
+		 * @param int|string|null $product_id note that string value is a deprecated value and should be avoided
+		 * @param int|null $product_parent_id optional if the product is a variable product and the product ID is not used and (not advised)
+		 * @param string $software_version
+		 * @param string<"plugin"|"theme"> $plugin_or_theme
+		 * @param string $api_url
+		 * @param string $software_title
+		 * @param string $text_domain
+		 * @param array<string, mixed> $custom_menu
+		 * @param bool $inactive_notice
+		 */
+		public function __construct( $file, $product_id, $product_parent_id, $software_version, $plugin_or_theme, $api_url, $software_title = '', $text_domain = '', $custom_menu = array(), $inactive_notice = true ) {
+
 			$this->menu            = $this->clean( $custom_menu );
 			$this->inactive_notice = $inactive_notice;
 
-			$this->no_product_id   = empty( $product_id );
-			$this->plugin_or_theme = esc_attr( strtolower( $plugin_or_theme ) );
+			$this->product_parent_id = $product_parent_id;
+			$this->no_product_id     = empty( $product_id ) && empty( $product_parent_id );
+			$this->plugin_or_theme   = esc_attr( strtolower( $plugin_or_theme ) );
 
 			if ( $this->no_product_id ) {
 				$this->identifier        = $this->plugin_or_theme == 'plugin' ? dirname( untrailingslashit( plugin_basename( $file ) ) ) : basename( dirname( plugin_basename( $file ) ) );
-				$product_id              = strtolower( str_ireplace( array(
-					' ',
-					'_',
-					'&',
-					'?',
-					'-'
-				), '_', $this->identifier ) );
+				$product_id              = strtolower( str_ireplace( array( ' ', '_', '&', '?', '-' ), '_', $this->identifier ) );
 				$this->wc_am_product_id  = 'wc_am_product_id_' . $product_id;
 				$this->product_id_chosen = get_option( $this->wc_am_product_id );
 			} else {
-				/**
-				 * Preserve the value of $product_id to use for API requests. Pre 2.0 product_id is a string, and >= 2.0 is an integer.
-				 */
-				if ( is_int( $product_id ) ) {
+				if ( ! empty( $product_id ) && is_numeric( $product_id ) ) {
 					$this->product_id = absint( $product_id );
-				} else {
+				} elseif ( ! empty( $product_id ) && is_string( $product_id ) ) {
+					/**
+					 * Preserve the value of $product_id to use for API requests. Pre 2.0 product_id is a string, and >= 2.0 is an integer.
+					 */
 					$this->product_id = esc_attr( $product_id );
+				} elseif ( ! empty( $product_parent_id ) && is_numeric( $product_parent_id ) ) {
+					$this->product_id = absint( $product_parent_id );
 				}
 			}
 
-			// If the product_id was not provided, but was saved by the customer, used the saved product_id.
+			// If the product_id was not provided, but was saved by the customer, used the saved product_id from the customer.
 			if ( empty( $this->product_id ) && ! empty( $this->product_id_chosen ) ) {
 				$this->product_id = $this->product_id_chosen;
 			}
@@ -113,13 +182,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 			/**
 			 * If the product_id is a pre 2.0 string, format it to be used as an option key, otherwise it will be an integer if >= 2.0.
 			 */
-			$this->data_key            = 'wc_am_client_' . strtolower( str_ireplace( array(
-					' ',
-					'_',
-					'&',
-					'?',
-					'-'
-				), '_', $product_id ) );
+			$this->data_key            = 'wc_am_client_' . strtolower( str_ireplace( array( ' ', '_', '&', '?', '-' ), '_', $product_id ) );
 			$this->wc_am_activated_key = $this->data_key . '_activated';
 
 			if ( is_admin() ) {
