@@ -1,0 +1,13 @@
+/.*                   export-ignore
+/node_modules         export-ignore
+/sync                 export-ignore
+/tests                export-ignore
+CODEOWNERS            export-ignore
+lefthook.yml          export-ignore
+package.json          export-ignore
+package-lock.json     export-ignore
+phpcs.*               export-ignore
+phpstan.*             export-ignore
+phpstan-baseline.neon export-ignore
+phpunit.*             export-ignore
+pnpm-lock.yaml        export-ignore
