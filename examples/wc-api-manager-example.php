@@ -51,7 +51,7 @@ if ( class_exists( 'WC_AM_Client_2_10_0' ) ) {
 	 *
 	 * @param string   $file             Must be __FILE__ from the root plugin file, or theme functions, file locations.
 	 * @param int|null $product_id       Should match the Product ID number (integer) in the product.
-	 * @param int|null $parent_id        The parent ID of the product. This is used to check if the product is a variable product.
+	 * @param int|null $product_arent_id The parent ID of the product. This is used to check if the product is a variable product (optional, do not set if using $product_id or letting the customer enter it).
 	 * @param string   $software_version This product's current software version.
 	 * @param string   $plugin_or_theme  One of 'plugin' or 'theme'.
 	 * @param string   $api_url          The URL to the site that is running the API Manager. Example: https://kestrelwp.com/. Must be the root URL.
