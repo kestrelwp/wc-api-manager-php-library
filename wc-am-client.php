@@ -154,7 +154,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 			$this->menu            = $this->clean( $custom_menu );
 			$this->inactive_notice = $inactive_notice;
 
-			$this->product_parent_id = $product_parent_id;
+			$this->product_parent_id = is_numeric( $product_parent_id ) ? absint( $product_parent_id ) : null;
 			$this->no_product_id     = empty( $product_id ) && empty( $product_parent_id );
 			$this->plugin_or_theme   = esc_attr( strtolower( $plugin_or_theme ) );
 
