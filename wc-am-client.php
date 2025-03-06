@@ -1179,7 +1179,17 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 			$response = json_decode( $this->send_query( $args ), true );
 
 			if ( isset( $response['data']['error_code'] ) ) {
-				add_settings_error( 'wc_am_client_error_text', 'wc_am_client_error', "{$response['data']['error']}", 'error' );
+				if ( isset( $response['data']['error'] ) ) {
+					$error_message = $response['data']['error'];
+				} elseif ( isset( $response['data']['message'] ) ) {
+					$error_message = $response['data']['message'];
+				} else {
+					$error_message = null;
+				}
+
+				if ( $error_message ) {
+					add_settings_error( 'wc_am_client_error_text', 'wc_am_client_error', $error_message, 'error' );
+				}
 			}
 
 			if ( $response !== false && isset( $response['success'] ) && $response['success'] === true ) {
