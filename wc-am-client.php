@@ -170,8 +170,6 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				 * Preserve the value of $product_id to use for API requests. Pre 2.0 product_id is a string, and >= 2.0 is an integer.
 				 */
 				$this->product_id = esc_attr( $product_id );
-			} elseif ( ! empty( $product_parent_id ) && is_numeric( $product_parent_id ) ) {
-				$this->product_id = absint( $product_parent_id );
 			}
 
 			// If the product_id was not provided, but was saved by the customer, used the saved product_id from the customer.
