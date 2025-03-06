@@ -84,7 +84,7 @@ if ( class_exists( 'WC_AM_Client_2_10_0' ) ) {
 	// Setting the Product ID below will eliminate the required form field for the customer to enter the Product ID, so the customer will only be required to enter the API Key.
 	$wcam_lib = new WC_AM_Client_2_10_0( __FILE__, 456, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
-	// If you offer the product as a variable product where the customer can switch to another product with a different Product ID, then do not set the Product ID here, but you may pass a product parent ID instead (not recommended).
+	// If you offer the product as a variable product where the customer can switch to another product with a different Product ID, then do not set the Product ID here, but you may pass a product parent ID instead (generally not recommended unless you are using subscription switches and not setting a product ID or letting the customer enter it).
 	$wcam_lib = new WC_AM_Client_2_10_0( __FILE__, null, 789, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	/**
