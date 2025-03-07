@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes Example
  * Plugin URI: https://kestrelwp.com/product/woocommerce-api-manager-php-library-for-plugins-and-themes/
