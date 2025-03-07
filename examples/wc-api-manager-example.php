@@ -20,19 +20,21 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * @IMPORTANT
+ * Documentation: https://woocommerce.com/document/woocommerce-api-manager/.
  *
- * Use the code below at the top of a plugin file below the plugin header, or at the top of a theme functions file.
+ * @IMPORTANT Use the code below at the top of a plugin file below the plugin header, or at the top of a theme functions file.
  */
 
 // Load the WC_AM_Client client class if it exists.
 if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 	/**
+	 * This library does not use Composer autoloading to support a wider range of WordPress installations.
+	 *
 	 * @IMPORTANT This must be exactly the same for both plugins and themes.
 	 *
 	 * Adjust this depending on the location of the wc-am-client.php file. Ensure the file name is correct.
 	 */
-	require_once plugin_dir_path(__FILE__ ) . 'wc-am-client.php';
+	require_once plugin_dir_path( __FILE__ ) . 'wc-am-client.php';
 }
 
 // Instantiate the WC_AM_Client class object if the WC_AM_Client class is loaded.
@@ -102,10 +104,10 @@ if ( class_exists( 'WC_AM_Client_2_10_0' ) ) {
 	 */
 
 	$wcam_lib_custom_menu = array(
-		'menu_type'   => 'add_submenu_page', // note this could be any of the allowed menu types as shown above
+		'menu_type'   => 'add_submenu_page', // Note this could be any of the allowed menu types as shown above.
 		'parent_slug' => 'my-plugin.php',
 		'page_title'  => __( 'Example Plugin License Activation', 'example-textdomain' ),
-		'menu_title'  => __( 'Example API Key', 'example-textdomain' )
+		'menu_title'  => __( 'Example API Key', 'example-textdomain' ),
 	);
 
 	$wcam_lib = new WC_AM_Client_2_10_0( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', $wcam_lib_custom_menu );
