@@ -1,6 +1,7 @@
 /.*                   export-ignore
+/examples             export-ignore
 /node_modules         export-ignore
-/sync                 export-ignore
+/resources            export-ignore
 /tests                export-ignore
 CODEOWNERS            export-ignore
 lefthook.yml          export-ignore
