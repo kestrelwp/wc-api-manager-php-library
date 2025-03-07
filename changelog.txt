@@ -5,6 +5,7 @@
 * Tweak: Allow passing the parent product ID to the client constructor (breaking change)
 * Fix: Ensure not to call a WooCommerce-only function in the library
 * Dev: Allow activation handling also on `plugins_loaded` rather than registration hook only
+* Misc: Client library adheres to WordPress config standards
 
 2024.04.26 - version 2.9.3
 * Tweak: Update brand to Kestrel
