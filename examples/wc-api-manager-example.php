@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) || exit;
 // Load the WC_AM_Client client class if it exists.
 if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 	/**
-	 * This library does not use Composer autoloading to support a wider range of WordPress installations.
+	 * This library does not use Composer autoloading to support a wider range of implementations.
 	 *
 	 * @IMPORTANT This must be exactly the same for both plugins and themes.
 	 *
