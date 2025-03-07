@@ -194,7 +194,11 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				}
 
 				if ( ! empty( $this->plugin_or_theme ) && $this->plugin_or_theme === 'plugin' ) {
-					register_activation_hook( $this->file, array( $this, 'activation' ) );
+					if ( did_action( 'plugins_loaded' ) || doing_action( 'plugins_loaded' ) || 'plugins_loaded' === current_action() ) {
+						add_action( 'admin_init', array( $this, 'activation' ) );
+					} else {
+						register_activation_hook( $this->file, array( $this, 'activation' ) );
+					}
 				}
 
 				add_action( 'admin_menu', array( $this, 'register_menu' ) );
