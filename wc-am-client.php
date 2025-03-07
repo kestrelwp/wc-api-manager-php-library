@@ -952,6 +952,8 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 					update_option( $this->data_key, array( "{$this->data_key}_api_key" => $api_key ) );
 				} elseif ( function_exists( 'wc_get_logger' ) ) {
 					wc_get_logger()->error( print_r( $result, true ), array( 'source' => 'wc_product_sample' ) ); // phpcs:ignore
+				} else {
+					error_log( print_r( $result, true ) ); // phpcs:ignore
 				}
 			}
 		}

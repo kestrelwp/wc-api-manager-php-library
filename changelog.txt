@@ -3,6 +3,7 @@
 2025.nn.nn - version 2.10.0
 * Tweak: Reduce the number of calls to the API server when loading activation settings pages
 * Tweak: Allow passing the parent product ID to the client constructor (breaking change)
+* Fix: Ensure not to call a WooCommerce-only function in the library
 
 2024.04.26 - version 2.9.3
 * Tweak: Update brand to Kestrel
