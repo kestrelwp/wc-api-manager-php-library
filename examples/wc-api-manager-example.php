@@ -3,7 +3,7 @@
 /**
  * Plugin Name: WooCommerce API Manager PHP Library for Plugins and Themes Example
  * Plugin URI: https://kestrelwp.com/product/woocommerce-api-manager-php-library-for-plugins-and-themes/
- * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below after line 26.
+ * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below this comment block following carefully the instructions and the documentation.
  * Version: 2.10.0
  * Author: Kestrel
  * Author URI: https://kestrelwp.com
