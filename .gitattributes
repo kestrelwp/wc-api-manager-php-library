@@ -1,9 +1,12 @@
+.*                    export-ignore
 /.*                   export-ignore
 /examples             export-ignore
 /node_modules         export-ignore
 /resources            export-ignore
 /tests                export-ignore
 CODEOWNERS            export-ignore
+changelog.txt         export-ignore
+composer.*            export-ignore
 lefthook.yml          export-ignore
 package.json          export-ignore
 package-lock.json     export-ignore
@@ -12,3 +15,4 @@ phpstan.*             export-ignore
 phpstan-baseline.neon export-ignore
 phpunit.*             export-ignore
 pnpm-lock.yaml        export-ignore
+readme.txt            export-ignore
