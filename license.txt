@@ -1,5 +1,5 @@
 
-WooCommerce API Manager PHP client library
+API Manager for WooCommerce PHP client library
 
 Copyright © Kestrel Commerce LLC
 
