@@ -1,8 +1,8 @@
 <?php
 /**
- * WooCommerce API Manager PHP Client Library
+ * Kestrel API Manager for WooCommerce PHP Client Library
  *
- * Designed to be used with WooCommerce API Manager 2.x, and dropped into a WordPress plugin or theme.
+ * Designed to be used with Kestrel API Manager for WooCommerce, and dropped into a WordPress plugin or theme.
  *
  * This source file is subject to the GNU General Public License v3.0
  * that is bundled with this plugin in the file license.txt
@@ -12,7 +12,7 @@
  * please review our developer documentation at https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
  * and join our developer program at https://kestrelwp.com/developers
  *
- * @version     2.10.0
+ * @version     2.11.0
  * @author      Kestrel
  * @copyright   Copyright (c) 2013-2025 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -21,11 +21,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_11_0' ) ) {
 	/**
-	 * WooCommerce API Manager client class.
+	 * API Manager for WooCommerce client class.
+	 *
+	 * @since 1.0.0
 	 */
-	class WC_AM_Client_2_10_0 {
+	class WC_AM_Client_2_11_0 {
 
 		/** @var string API URL. */
 		private $api_url = '';
