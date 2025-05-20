@@ -1,5 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2025.05.22 - version 2.11.0
+* New: Updates terminology in labels and text matching the latest API Manager version
+
 2025.03.17 - version 2.10.0
 * Tweak: Reduce the number of calls to the API server when loading activation settings pages
 * Tweak: Allow passing the parent product ID to the client constructor (breaking change)
