@@ -2,21 +2,25 @@
 /**
  * Kestrel API Manager for WooCommerce PHP Client Library
  *
- * Designed to be used with Kestrel API Manager for WooCommerce, and dropped into a WordPress plugin or theme.
+ * Designed to be used with Kestrel API Manager for WooCommerce, to be initialized and loaded from a WordPress plugin or theme.
+ * Look into the `./examples` directory for examples of how to use this library.
  *
- * This source file is subject to the GNU General Public License v3.0
- * that is bundled with this plugin in the file license.txt
+ * This source file is subject to the GNU General Public License v3.0 that is bundled with this plugin in the file license.txt.
  *
- * Please do not modify this file if you want to upgrade the SDK to newer
- * versions in the future. If you want to customize the SDK for your needs,
- * please review our developer documentation at https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
- * and join our developer program at https://kestrelwp.com/developers
+ * Please do not modify this file if you want to upgrade the SDK to newer versions in the future.
+ * If you want to customize the SDK for your needs, please review our developer documentation at:
+ *
+ * @link https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
+ *
+ * You can join our developer program at:
+ *
+ * @link https://kestrelwp.com/developers
  *
  * @version     2.11.0
  * @author      Kestrel
  * @copyright   Copyright (c) 2013-2025 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
- * @package     WooCommerce API Manager
+ * @package     Kestrel API Manager for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
