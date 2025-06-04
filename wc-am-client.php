@@ -1,31 +1,37 @@
 <?php
 /**
- * WooCommerce API Manager PHP Client Library
+ * Kestrel API Manager for WooCommerce PHP Client Library
  *
- * Designed to be used with WooCommerce API Manager 2.x, and dropped into a WordPress plugin or theme.
+ * Designed to be used with Kestrel API Manager for WooCommerce, to be initialized and loaded from a WordPress plugin or theme.
+ * Look into the `./examples` directory for examples of how to use this library.
  *
- * This source file is subject to the GNU General Public License v3.0
- * that is bundled with this plugin in the file license.txt
+ * This source file is subject to the GNU General Public License v3.0 that is bundled with this plugin in the file license.txt.
  *
- * Please do not modify this file if you want to upgrade the SDK to newer
- * versions in the future. If you want to customize the SDK for your needs,
- * please review our developer documentation at https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
- * and join our developer program at https://kestrelwp.com/developers
+ * Please do not modify this file if you want to upgrade the SDK to newer versions in the future.
+ * If you want to customize the SDK for your needs, please review our developer documentation at:
  *
- * @version     2.10.0
+ * @link https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/
+ *
+ * You can join our developer program at:
+ *
+ * @link https://kestrelwp.com/developers
+ *
+ * @version     2.11.0
  * @author      Kestrel
  * @copyright   Copyright (c) 2013-2025 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
- * @package     WooCommerce API Manager
+ * @package     Kestrel API Manager for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_11_0' ) ) {
 	/**
-	 * WooCommerce API Manager client class.
+	 * API Manager for WooCommerce client class.
+	 *
+	 * @since 1.0.0
 	 */
-	class WC_AM_Client_2_10_0 {
+	class WC_AM_Client_2_11_0 {
 
 		/** @var string API URL. */
 		private $api_url = '';
@@ -219,10 +225,10 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				$this->wc_am_activation_tab_key          = $this->data_key . '_dashboard';
 				$this->wc_am_deactivation_tab_key        = $this->data_key . '_deactivation';
 				$this->wc_am_auto_update_key             = $this->data_key . '_auto_update';
-				$this->wc_am_settings_title              = sprintf( __( '%s', $this->text_domain ), ! empty( $this->menu['page_title'] ) ? $this->menu['page_title'] : $this->software_title . ' API Key Activation', $this->text_domain ); // phpcs:ignore
-				$this->wc_am_settings_menu_title         = sprintf( __( '%s', $this->text_domain ), ! empty( $this->menu['menu_title'] ) ? $this->menu['menu_title'] : $this->software_title . ' Activation', $this->text_domain ); // phpcs:ignore
-				$this->wc_am_menu_tab_activation_title   = esc_html__( 'API Key Activation', $this->text_domain ); // phpcs:ignore
-				$this->wc_am_menu_tab_deactivation_title = esc_html__( 'API Key Deactivation', $this->text_domain ); // phpcs:ignore
+				$this->wc_am_settings_title              = sprintf( __( '%s', $this->text_domain ), ! empty( $this->menu['page_title'] ) ? $this->menu['page_title'] : $this->software_title . ' license key activation', $this->text_domain ); // phpcs:ignore
+				$this->wc_am_settings_menu_title         = sprintf( __( '%s', $this->text_domain ), ! empty( $this->menu['menu_title'] ) ? $this->menu['menu_title'] : $this->software_title . ' activation', $this->text_domain ); // phpcs:ignore
+				$this->wc_am_menu_tab_activation_title   = esc_html__( 'License key activation', $this->text_domain ); // phpcs:ignore
+				$this->wc_am_menu_tab_deactivation_title = esc_html__( 'License key deactivation', $this->text_domain ); // phpcs:ignore
 
 				/**
 				 * Set all software update data here.
@@ -591,7 +597,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				}
 				?>
 				<div class="notice notice-error">
-					<p><?php printf( __( 'The <strong>%1$s</strong> API Key has not been activated, so the %2$s is inactive! %3$sClick here%4$s to activate <strong>%5$s</strong>.', $this->text_domain ), esc_attr( $this->software_title ), esc_attr( $this->plugin_or_theme ), '<a href="' . esc_url( admin_url( 'options-general.php?page=' . $this->wc_am_activation_tab_key ) ) . '">', '</a>', esc_attr( $this->software_title ) ); // phpcs:ignore ?></p>
+					<p><?php printf( __( 'The <strong>%1$s</strong> license key has not been activated, so %2$s is inactive! %3$sClick here%4$s to activate <strong>%5$s</strong>.', $this->text_domain ), esc_attr( $this->software_title ), esc_attr( $this->plugin_or_theme ), '<a href="' . esc_url( admin_url( 'options-general.php?page=' . $this->wc_am_activation_tab_key ) ) . '">', '</a>', esc_attr( $this->software_title ) ); // phpcs:ignore ?></p>
 				</div>
 				<?php
 			}
@@ -650,11 +656,11 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 						if ( $tab === $this->wc_am_activation_tab_key ) {
 							settings_fields( $this->data_key );
 							do_settings_sections( $this->wc_am_activation_tab_key );
-							submit_button( esc_html__( 'Save Changes', $this->text_domain ) ); // phpcs:ignore
+							submit_button( esc_html__( 'Save changes', $this->text_domain ) ); // phpcs:ignore
 						} else {
 							settings_fields( $this->wc_am_deactivate_checkbox_key );
 							do_settings_sections( $this->wc_am_deactivation_tab_key );
-							submit_button( esc_html__( 'Save Changes', $this->text_domain ) ); // phpcs:ignore
+							submit_button( esc_html__( 'Save changes', $this->text_domain ) ); // phpcs:ignore
 						}
 						?>
 					</div>
@@ -674,21 +680,21 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 			register_setting( $this->data_key, $this->data_key, array( $this, 'validate_options' ) );
 
 			// API Key.
-			add_settings_section( $this->wc_am_api_key_key, esc_html__( 'API Key Activation', $this->text_domain ), array( $this, 'wc_am_api_key_text' ), $this->wc_am_activation_tab_key ); // phpcs:ignore
-			add_settings_field( $this->wc_am_api_key_key, esc_html__( 'API Key', $this->text_domain ), array( $this, 'wc_am_api_key_field' ), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key ); // phpcs:ignore
+			add_settings_section( $this->wc_am_api_key_key, esc_html__( 'License key activation', $this->text_domain ), array( $this, 'wc_am_api_key_text' ), $this->wc_am_activation_tab_key ); // phpcs:ignore
+			add_settings_field( $this->wc_am_api_key_key, esc_html__( 'License key', $this->text_domain ), array( $this, 'wc_am_api_key_field' ), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key ); // phpcs:ignore
 
 			if ( $this->no_product_id ) {
 				add_settings_field( 'product_id', esc_html__( 'Product ID', $this->text_domain ), array( $this, 'wc_am_product_id_field' ), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key ); // phpcs:ignore
 			}
 
-			add_settings_field( 'status', esc_html__( 'API Key Status', $this->text_domain ), array( $this, 'wc_am_api_key_status' ), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key ); // phpcs:ignore
-			add_settings_field( 'info', esc_html__( 'Activation Info', $this->text_domain ), array( $this, 'wc_am_activation_info' ), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key ); // phpcs:ignore
+			add_settings_field( 'status', esc_html__( 'License key status', $this->text_domain ), array( $this, 'wc_am_api_key_status' ), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key ); // phpcs:ignore
+			add_settings_field( 'info', esc_html__( 'Activation info', $this->text_domain ), array( $this, 'wc_am_activation_info' ), $this->wc_am_activation_tab_key, $this->wc_am_api_key_key ); // phpcs:ignore
 
 			// Activation settings.
 			register_setting( $this->wc_am_deactivate_checkbox_key, $this->wc_am_deactivate_checkbox_key, array( $this, 'wc_am_license_key_deactivation' ) );
 
-			add_settings_section( 'deactivate_button', esc_html__( 'API Deactivation', $this->text_domain ), array( $this, 'wc_am_deactivate_text' ), $this->wc_am_deactivation_tab_key ); //  phpcs:ignore
-			add_settings_field( 'deactivate_button', esc_html__( 'Deactivate API Key', $this->text_domain ), array( $this, 'wc_am_deactivate_textarea' ), $this->wc_am_deactivation_tab_key, 'deactivate_button' ); // phpcs:ignore
+			add_settings_section( 'deactivate_button', esc_html__( 'License deactivation', $this->text_domain ), array( $this, 'wc_am_deactivate_text' ), $this->wc_am_deactivation_tab_key ); //  phpcs:ignore
+			add_settings_field( 'deactivate_button', esc_html__( 'Deactivate license key', $this->text_domain ), array( $this, 'wc_am_deactivate_textarea' ), $this->wc_am_deactivation_tab_key, 'deactivate_button' ); // phpcs:ignore
 		}
 
 		/**
@@ -786,9 +792,9 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 				if ( ! empty( $live_status ) && isset( $live_status['status_check'] ) && $live_status['success'] === 'active' ) {
 					echo esc_html( 'Activations purchased: ' . $live_status['data']['total_activations_purchased'], $this->text_domain ); // phpcs:ignore
 					echo $line_break; // phpcs:ignore
-					echo esc_html( 'Total Activations: ' . $live_status['data']['total_activations'], $this->text_domain ); // phpcs:ignore
+					echo esc_html( 'Total activations: ' . $live_status['data']['total_activations'], $this->text_domain ); // phpcs:ignore
 					echo $line_break; // phpcs:ignore
-					echo esc_html( 'Activations Remaining: ' . $live_status['data']['activations_remaining'], $this->text_domain ); // phpcs:ignore
+					echo esc_html( 'Activations remaining: ' . $live_status['data']['activations_remaining'], $this->text_domain ); // phpcs:ignore
 				} elseif ( ! empty( $result_success ) ) {
 					echo esc_html( $result_success );
 				} else {
@@ -798,9 +804,9 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 
 				echo esc_html( 'Activations purchased: ' . $live_status['data']['total_activations_purchased'], $this->text_domain ); // phpcs:ignore
 				echo $line_break; // phpcs:ignore
-				echo esc_html( 'Total Activations: ' . $live_status['data']['total_activations'], $this->text_domain ); // phpcs:ignore
+				echo esc_html( 'Total activations: ' . $live_status['data']['total_activations'], $this->text_domain ); // phpcs:ignore
 				echo $line_break; // phpcs:ignore
-				echo esc_html( 'Activations Remaining: ' . $live_status['data']['activations_remaining'], $this->text_domain ); // phpcs:ignore
+				echo esc_html( 'Activations remaining: ' . $live_status['data']['activations_remaining'], $this->text_domain ); // phpcs:ignore
 			} elseif ( ! $this->get_api_key_status() && ! empty( $result_error ) ) {
 				echo esc_html__( 'Previous activation attempt errors:', $this->text_domain ); // phpcs:ignore
 				echo $line_break; // phpcs:ignore
@@ -915,7 +921,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 
 						if ( $activate_results === false && ! empty( $this->data ) && ! empty( $this->wc_am_activated_key ) ) {
 
-							add_settings_error( 'api_key_check_text', 'api_key_check_error', esc_html__( 'Connection failed to the License Key API server. See the Activation Error section below for details. There may be a problem on your server preventing outgoing requests, or the store is blocking your request to activate the plugin/theme.', $this->text_domain ), 'error' ); // phpcs:ignore
+							add_settings_error( 'api_key_check_text', 'api_key_check_error', esc_html__( 'Connection failed to the licensing server. See the "Activation error" section below for details. There may be a problem on your server preventing outgoing requests, or the store is blocking your request to activate the plugin/theme.', $this->text_domain ), 'error' ); // phpcs:ignore
 
 							update_option( $this->wc_am_activated_key, 'Deactivated' );
 						}
@@ -925,7 +931,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 							update_option( $this->wc_am_activated_key, 'Deactivated' );
 						}
 					} else {
-						add_settings_error( 'not_activated_empty_response_text', 'not_activated_empty_response_error', esc_html__( 'The API Key activation could not be completed due to an error on the store server or your server. See the Activation Error section below for details. The activation results were empty.', $this->text_domain ), 'updated' ); // phpcs:ignore
+						add_settings_error( 'not_activated_empty_response_text', 'not_activated_empty_response_error', esc_html__( 'The license key activation could not be completed due to an error on the store server or your server. See the "Activation error" section below for details. The activation results were empty.', $this->text_domain ), 'updated' ); // phpcs:ignore
 					}
 				}
 			}
@@ -992,7 +998,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 
 							update_option( $this->wc_am_activated_key, 'Deactivated' );
 
-							add_settings_error( 'wc_am_deactivate_text', 'deactivate_msg', esc_html__( 'API Key deactivated. ', $this->text_domain ) . esc_attr( "{$activate_results['activations_remaining']}." ), 'updated' ); // phpcs:ignore
+							add_settings_error( 'wc_am_deactivate_text', 'deactivate_msg', esc_html__( 'License key deactivated. ', $this->text_domain ) . esc_attr( "{$activate_results['activations_remaining']}." ), 'updated' ); // phpcs:ignore
 						}
 
 						return $options;
@@ -1006,7 +1012,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 					}
 				} else {
 
-					add_settings_error( 'not_deactivated_empty_response_text', 'not_deactivated_empty_response_error', esc_html__( 'The API Key activation could not be completed due to an unknown error possibly on the store server The activation results were empty.', $this->text_domain ), 'updated' ); // phpcs:ignore
+					add_settings_error( 'not_deactivated_empty_response_text', 'not_deactivated_empty_response_error', esc_html__( 'The license key activation could not be completed due to an unknown error possibly on the store server The activation results were empty.', $this->text_domain ), 'updated' ); // phpcs:ignore
 				}
 			}
 
@@ -1048,7 +1054,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 			echo checked( get_option( $this->wc_am_deactivate_checkbox_key ), 'on' );
 			echo '/>';
 			?>
-			<span class="description"><?php esc_html_e( 'Deactivates an API Key so it can be used on another blog.', $this->text_domain ); // phpcs:ignore ?></span>
+			<span class="description"><?php esc_html_e( 'Deactivates a license key so it can be used on another site.', $this->text_domain ); // phpcs:ignore ?></span>
 			<?php
 		}
 
@@ -1071,7 +1077,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		public function activate( $args ) {
 
 			if ( empty( $args ) ) {
-				add_settings_error( 'not_activated_text', 'not_activated_error', esc_html__( 'The API Key is missing from the deactivation request.', $this->text_domain ), 'updated' ); // phpcs:ignore
+				add_settings_error( 'not_activated_text', 'not_activated_error', esc_html__( 'The license key is missing from the deactivation request.', $this->text_domain ), 'updated' ); // phpcs:ignore
 
 				return '';
 			}
@@ -1114,7 +1120,7 @@ if ( ! class_exists( 'WC_AM_Client_2_10_0' ) ) {
 		public function deactivate( $args ) {
 
 			if ( empty( $args ) ) {
-				add_settings_error( 'not_deactivated_text', 'not_deactivated_error', esc_html__( 'The API Key is missing from the deactivation request.', $this->text_domain ), 'updated' ); // phpcs:ignore
+				add_settings_error( 'not_deactivated_text', 'not_deactivated_error', esc_html__( 'The license key is missing from the deactivation request.', $this->text_domain ), 'updated' ); // phpcs:ignore
 
 				return '';
 			}
