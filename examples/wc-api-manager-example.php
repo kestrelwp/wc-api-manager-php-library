@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
  */
 
 // Load the WC_AM_Client client class if it exists.
-if ( ! class_exists( 'WC_AM_Client_2_11_0' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 	/**
 	 * This library does not use Composer autoloading to support a wider range of implementations.
 	 *
@@ -37,7 +37,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_0' ) ) {
 }
 
 // Instantiate the WC_AM_Client class object if the WC_AM_Client class is loaded.
-if ( class_exists( 'WC_AM_Client_2_11_0' ) ) {
+if ( class_exists( 'WC_AM_Client_2_11_1' ) ) {
 	/**
 	 * This file is only an example that includes a plugin header, and this code is used to instantiate the client object.
 	 *
@@ -69,7 +69,7 @@ if ( class_exists( 'WC_AM_Client_2_11_0' ) ) {
 	 *
 	 * @NOTE Replace the dummy values with your own.
 	 */
-	$wcam_lib = new WC_AM_Client_2_11_0( __FILE__, 123, null, '1.0', 'theme', 'https://example.org/example-theme', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_11_1( __FILE__, 123, null, '1.0', 'theme', 'https://example.org/example-theme', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	/**
 	 * Plugin example (default menu).
@@ -80,13 +80,13 @@ if ( class_exists( 'WC_AM_Client_2_11_0' ) ) {
 	 */
 
 	// If the Product ID is not set the customer will see a form field when activating the API Key that requires the Product ID along with a form field for the API Key.
-	$wcam_lib = new WC_AM_Client_2_11_0( __FILE__, '', null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_11_1( __FILE__, '', null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	// Setting the Product ID below will eliminate the required form field for the customer to enter the Product ID, so the customer will only be required to enter the API Key.
-	$wcam_lib = new WC_AM_Client_2_11_0( __FILE__, 456, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_11_1( __FILE__, 456, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	// If you offer the product as a variable product where the customer can switch to another product with a different Product ID, then do not set the Product ID here, but you may pass a product parent ID instead (generally not recommended unless you are using subscription switches and not setting a product ID or letting the customer enter it).
-	$wcam_lib = new WC_AM_Client_2_11_0( __FILE__, null, 789, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_11_1( __FILE__, null, 789, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	/**
 	 * Custom top level or top level submenu.
@@ -99,7 +99,7 @@ if ( class_exists( 'WC_AM_Client_2_11_0' ) ) {
 	 * @see add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null );
 	 * @see add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $icon_url = '', $position = null );
 	 *
-	 * Then pass the custom menu settings as an array to the WC_AM_Client_2_11_0 class as shown in the example below.
+	 * Then pass the custom menu settings as an array to the WC_AM_Client_2_11_1 class as shown in the example below.
 	 */
 
 	$wcam_lib_custom_menu = array(
@@ -109,13 +109,13 @@ if ( class_exists( 'WC_AM_Client_2_11_0' ) ) {
 		'menu_title'  => __( 'Example API Key', 'example-textdomain' ),
 	);
 
-	$wcam_lib = new WC_AM_Client_2_11_0( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', $wcam_lib_custom_menu );
+	$wcam_lib = new WC_AM_Client_2_11_1( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', $wcam_lib_custom_menu );
 
 	/**
 	 * Suppress the inactive notice.
 	 *
-	 * When your plugin or theme is activated, the WC_AM_Client_2_11_0 class will display a notice in the admin area if the plugin or theme has not been activated.
+	 * When your plugin or theme is activated, the WC_AM_Client_2_11_1 class will display a notice in the admin area if the plugin or theme has not been activated.
 	 * You can disable this by setting the last argument passed to the client constructor to false.
 	 */
-	$wcam_lib = new WC_AM_Client_2_11_0( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', null, false );
+	$wcam_lib = new WC_AM_Client_2_11_1( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/example-plugin', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', null, false );
 }

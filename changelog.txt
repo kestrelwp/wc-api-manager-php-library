@@ -1,5 +1,9 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2025.06.09 - version 2.11.1
+* Fix: Correctly output HTML links in API error messages
+* Fix: Improve translatable activation information output
+
 2025.06.04 - version 2.11.0
 * New: Update the terminology in labels and text matching the latest API Manager version
 

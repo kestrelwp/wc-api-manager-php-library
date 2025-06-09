@@ -16,7 +16,7 @@
  *
  * @link https://kestrelwp.com/developers
  *
- * @version     2.11.0
+ * @version     2.11.1
  * @author      Kestrel
  * @copyright   Copyright (c) 2013-2025 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -25,13 +25,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_11_0' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 	/**
 	 * API Manager for WooCommerce client class.
 	 *
 	 * @since 1.0.0
 	 */
-	class WC_AM_Client_2_11_0 {
+	class WC_AM_Client_2_11_1 {
 
 		/** @var string API URL. */
 		private $api_url = '';
@@ -439,13 +439,14 @@ if ( ! class_exists( 'WC_AM_Client_2_11_0' ) ) {
 			if ( $this->wc_am_plugin_name === $plugin_file ) {
 
 				if ( ! $this->get_api_key_status() || ! $this->get_api_key_status( true ) ) {
+					/* translators: Context: Software product (eg. WordPress plugin or theme) auto-updates are unavailable. */
 					return esc_html__( 'Auto-updates unavailable.', $this->text_domain ); // phpcs:ignore
 				}
 
 				$auto_updates = (array) get_site_option( 'auto_update_plugins', array() );
 				$html         = array();
 
-				if ( ! empty( $plugin_data['auto-update-forced'] ) ) {
+				if ( isset( $plugin_data['auto-update-forced'] ) ) {
 					if ( $plugin_data['auto-update-forced'] ) {
 						// Forced on.
 						$text = __( 'Auto-updates enabled', $this->text_domain ); // phpcs:ignore
@@ -772,47 +773,47 @@ if ( ! class_exists( 'WC_AM_Client_2_11_0' ) ) {
 		}
 
 		/**
-		 * Display activation error returned by shop or local server.
+		 * Displays activation data returned by shop or local server.
 		 *
 		 * @since 2.9
+		 * @internal
+		 *
+		 * @return void
 		 */
 		public function wc_am_activation_info() {
 
 			$result_error = get_option( 'wc_am_' . $this->product_id . '_activate_error' );
 			$live_status  = $this->license_key_status();
-			$line_break   = wp_kses_post( '<br>' );
 
-			if ( ! empty( $live_status ) && isset( $live_status['success'] ) && $live_status['success'] === false ) {
-				echo esc_html( 'Error: ' . $live_status['data']['error'] );
+			if ( ! empty( $live_status ) && isset( $live_status['success'], $live_status['data']['error'] ) && $live_status['success'] === false ) {
+				/* translators: Placeholder: %1$s - Opening <strong> HTML tag, %2$s - Closing </strong> HTML link tag, %3$s - Error message */
+				echo wp_kses_post( sprintf( __( '%1$sError:%2$s %3$s', $this->text_domain ), '<strong style="color:#b32d2e;">', '</strong>', $live_status['data']['error'] ) ) . '<br><br>'; // phpcs:ignore
 			}
 
 			if ( $this->get_api_key_status() ) {
 				$result_success = get_option( 'wc_am_' . $this->product_id . '_activate_success' );
 
 				if ( ! empty( $live_status ) && isset( $live_status['status_check'] ) && $live_status['success'] === 'active' ) {
-					echo esc_html( 'Activations purchased: ' . $live_status['data']['total_activations_purchased'], $this->text_domain ); // phpcs:ignore
-					echo $line_break; // phpcs:ignore
-					echo esc_html( 'Total activations: ' . $live_status['data']['total_activations'], $this->text_domain ); // phpcs:ignore
-					echo $line_break; // phpcs:ignore
-					echo esc_html( 'Activations remaining: ' . $live_status['data']['activations_remaining'], $this->text_domain ); // phpcs:ignore
+					/* translators: Placeholder: %s - license activations purchased count */
+					echo esc_html( sprintf( __( 'Activations purchased: %s', $this->text_domain ), $live_status['data']['total_activations_purchased'] ) ); // phpcs:ignore
+					/* translators: Placeholder: %s - total license activations count */
+					echo esc_html( sprintf( __( 'Total activations: %s', $this->text_domain ), $live_status['data']['total_activations'] ) ); // phpcs:ignore
+					/* translators: Placeholder: %s - total license activations remaining count */
+					echo esc_html( sprintf( __( 'Activations remaining: %s', $this->text_domain ), $live_status['data']['activations_remaining'] ) ); // phpcs:ignore
 				} elseif ( ! empty( $result_success ) ) {
-					echo esc_html( $result_success );
-				} else {
-					echo '';
+					echo esc_html( $result_success ) . '<br>';
 				}
 			} elseif ( ! $this->get_api_key_status() && ! empty( $live_status ) && isset( $live_status['status_check'] ) && $live_status['status_check'] === 'inactive' ) {
-
-				echo esc_html( 'Activations purchased: ' . $live_status['data']['total_activations_purchased'], $this->text_domain ); // phpcs:ignore
-				echo $line_break; // phpcs:ignore
-				echo esc_html( 'Total activations: ' . $live_status['data']['total_activations'], $this->text_domain ); // phpcs:ignore
-				echo $line_break; // phpcs:ignore
-				echo esc_html( 'Activations remaining: ' . $live_status['data']['activations_remaining'], $this->text_domain ); // phpcs:ignore
+				/* translators: Placeholder: %s - total license activations purchased count */
+				echo esc_html( sprintf( __( 'Activations purchased: %s', $this->text_domain ), $live_status['data']['total_activations_purchased'] ) ) . '<br>'; // phpcs:ignore
+				/* translators: Placeholder: %s - total license activations count */
+				echo esc_html( sprintf( __( 'Total activations: %s', $this->text_domain ), $live_status['data']['total_activations'] ) ) . '<br>'; // phpcs:ignore
+				/* translators: Placeholder: %s - total license activations remaining count */
+				echo esc_html( sprintf( __( 'Activations remaining: %s', $this->text_domain ), $live_status['data']['activations_remaining'] ) ) . '<br>'; // phpcs:ignore
 			} elseif ( ! $this->get_api_key_status() && ! empty( $result_error ) ) {
-				echo esc_html__( 'Previous activation attempt errors:', $this->text_domain ); // phpcs:ignore
-				echo $line_break; // phpcs:ignore
-				wp_kses_post( print_r( $result_error ) ); // phpcs:ignore
-			} else {
-				echo '';
+				/* translators: Context: List of errors for a license activation failure */
+				echo esc_html__( 'Previous activation attempt errors:', $this->text_domain ) . '<br>'; // phpcs:ignore
+				echo wp_kses_post( print_r( $result_error, true ) ); // phpcs:ignore
 			}
 		}
 
