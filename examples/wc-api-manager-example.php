@@ -21,7 +21,8 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Documentation: https://woocommerce.com/document/woocommerce-api-manager/.
  *
- * @IMPORTANT Use the code below at the top of a plugin file below the plugin header, or at the top of a theme functions file.
+ * Adapt the applicable code from the example(s) below at the top of a plugin file below the plugin header, or at the top of a theme functions file (recommended).
+ * Alternatively, you may also place your logic inside e a custom class in your project (more advanced), as long as the code is initialized early enough (e.g., `plugins_loaded`).
  */
 
 // Load the WC_AM_Client client class if it exists.
