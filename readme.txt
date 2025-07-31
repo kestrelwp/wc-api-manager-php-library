@@ -15,4 +15,5 @@ This PHP library connects your WordPress plugin or theme to your WooCommerce sto
 
 1. [Buy the WooCommerce API Manager](https://woocommerce.com/products/woocommerce-api-manager/)
 2. [Read the integration docs](https://kestrelwp.com/docs/woocommerce-api-manager-php-library-for-plugins-and-themes-documentation/)
-3. [Get support if needed](https://kestrelwp.com/product/woocommerce-api-manager-php-library-for-plugins-and-themes/)
+3. [Read more on what you're expected to send with your API requests[(https://woocommerce.com/document/api-documentation/)
+4. [Get support if needed](https://kestrelwp.com/product/woocommerce-api-manager-php-library-for-plugins-and-themes/)
