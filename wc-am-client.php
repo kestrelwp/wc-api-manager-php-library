@@ -1334,7 +1334,6 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 		 */
 		public function send_query( $args ) {
 
-			// Always include the site URL for staging verification on the licensing server.
 			if ( ! isset( $args['site_url'] ) ) {
 				$args['site_url'] = home_url();
 			}
