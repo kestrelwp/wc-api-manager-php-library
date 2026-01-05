@@ -1371,7 +1371,6 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 				'version'           => $this->wc_am_software_version,
 				'product_id'        => $this->product_id,
 				'product_parent_id' => $this->product_parent_id,
-				// API key may be empty on staging sites, which is allowed for updates.
 				'api_key'           => ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '',
 				'instance'          => $this->wc_am_instance_id,
 			);
