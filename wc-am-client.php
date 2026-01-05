@@ -135,6 +135,9 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/** @var bool */
 		private $inactive_notice = true;
 
+		/** @var bool|null */
+		private $is_staging = null;
+
 		/**
 		 * Cache for the status result to prevent multiple API calls.
 		 *
@@ -281,6 +284,96 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 				// phpcs:ignore
 				// add_action( 'switch_theme', array( $this, 'uninstall' ) );
 			}
+		}
+
+		/**
+		 * Determines if the current site is in a staging or development environment.
+		 *
+		 * This checks the host against known staging subdomains and TLDs.
+		 *
+		 * @since 2.12.0
+		 *
+		 * @return bool
+		 */
+		private function is_staging() {
+
+			if ( is_bool( $this->is_staging ) ) {
+				return $this->is_staging;
+			}
+
+			$this->is_staging = false;
+
+			$url  = wp_parse_url( (string) home_url() );
+			$host = strtolower( isset( $url->host ) ? $url->host : '' );
+
+			if ( $host && trim( $host ) !== '' ) {
+
+				// List of known dev/staging subdomains and wildcard domains.
+				$staging_subdomains = array(
+					'*.aubrie-app.fndr-infra.de',
+					'*.closte.com',
+					'*.cloudwaysapps.com',
+					'*.ddev.site',
+					'*.flywheelsites.com',
+					'*.flywheelstaging.com',
+					'*.instawp.xyz',
+					'*.kinsta.cloud',
+					'*.myftpupload.com',
+					'*.pantheonsite.io',
+					'*.sg-host.com',
+					'*.sozowebdesign.co.uk',
+					'*.staging.',
+					'*.templweb.com',
+					'*.test.',
+					'*.wordifysites.com',
+					'*.wpcomstaging.com',
+					'*.wpdns.site',
+					'*.wpengine.com',
+					'*.wpstage.net',
+					'dev.',
+					'dev.nfs.health',
+					'stage.',
+					'staging.',
+					'staging-*.',
+				);
+
+				// List of TLDs that usually indicate local or dev environments.
+				$dev_tlds = array(
+					'.dev',
+					'.local',
+					'.test',
+				);
+
+				foreach ( $dev_tlds as $dev_tld ) {
+					if ( substr( $host, -strlen( $dev_tld ) ) === $dev_tld ) {
+						$this->is_staging = true;
+						break;
+					}
+				}
+
+				foreach ( $staging_subdomains as $staging_pattern ) {
+					if ( substr( $staging_pattern, 0, 1 ) === '*' ) {
+						$needle = substr( $staging_pattern, 2 );
+
+						if ( substr( $host, -strlen( $needle ) ) === $needle ) {
+							$this->is_staging = true;
+							break;
+						}
+					} elseif ( substr( $staging_pattern, -1 ) === '.' || substr( $staging_pattern, -2 ) === '-.' ) {
+						$trimmed_pattern = rtrim( $staging_pattern, '.' );
+
+						if ( substr( $host, 0, strlen( $trimmed_pattern ) ) === $trimmed_pattern ) {
+							$this->is_staging = true;
+							break;
+						}
+					} elseif ( $host === $staging_pattern ) {
+						$this->is_staging = true;
+						break;
+					}
+				}
+			}
+
+			return $this->is_staging;
 		}
 
 		/**
