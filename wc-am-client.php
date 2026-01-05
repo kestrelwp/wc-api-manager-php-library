@@ -16,22 +16,22 @@
  *
  * @link https://kestrelwp.com/developers
  *
- * @version     2.11.1
+ * @version     2.12.0
  * @author      Kestrel
- * @copyright   Copyright (c) 2013-2025 Kestrel
+ * @copyright   Copyright (c) 2013-2026 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  * @package     Kestrel API Manager for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 	/**
 	 * API Manager for WooCommerce client class.
 	 *
 	 * @since 1.0.0
 	 */
-	class WC_AM_Client_2_11_1 {
+	class WC_AM_Client_2_12_0 {
 
 		/** @var string API URL. */
 		private $api_url = '';
@@ -147,6 +147,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Client constructor.
+		 *
+		 * @since 1.0.0
 		 *
 		 * @param string                   $file The main plugin or theme __FILE__ path.
 		 * @param int|null                 $product_id The product ID. If null, it should be provided by the customer in the API settings.
@@ -383,7 +385,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		 *
 		 * Non-scalar values are ignored.
 		 *
-		 * @since 2.9
+		 * @since 2.9.0
 		 *
 		 * @param string|array $item Data to sanitize.
 		 * @return string|array
@@ -399,7 +401,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 * Register a menu or submenu specific to this product.
 		 *
-		 * @updated 2.9
+		 * @return void
 		 */
 		public function register_menu() {
 
@@ -427,7 +429,9 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 *  Tries auto updates.
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
+		 *
+		 * @return void
 		 */
 		public function try_automatic_updates() {
 			global $wp_version;
@@ -444,7 +448,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 * Tries to set auto updates.
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
 		 *
 		 * @param bool|null $update Whether to update.
 		 * @param object    $item   The item to update.
@@ -476,7 +480,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 * Checks if auto updates are disabled.
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
 		 *
 		 * @return bool
 		 */
@@ -518,9 +522,9 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		 *
 		 * Plugin updates stored in 'auto_update_plugins' array.
 		 *
-		 * @see   'wp-admin/includes/class-wp-plugins-list-table.php'
+		 * @see `wp-admin/includes/class-wp-plugins-list-table.php`
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
 		 *
 		 * @param string $html        HTML of the auto-update message.
 		 * @param string $plugin_file Plugin file.
@@ -591,6 +595,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Generate the default data.
+		 *
+		 * @reurn void
 		 */
 		public function activation() {
 			$instance_exists = get_option( $this->wc_am_instance_key );
@@ -653,6 +659,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Deactivates the license on the API server.
+		 *
+		 * @Since 1.0.0
 		 */
 		public function license_key_deactivation() {
 			$activation_status = get_option( $this->wc_am_activated_key );
@@ -671,8 +679,11 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Displays an inactive notice when the software is inactive.
+		 *
+		 * @return void
 		 */
 		public function inactive_notice() {
+
 			/**
 			 * Filters the inactive notice.
 			 *
@@ -685,6 +696,10 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 			 */
 			if ( apply_filters( 'wc_am_client_inactive_notice_override', true ) ) {
 				if ( ! current_user_can( 'manage_options' ) ) {
+					return;
+				}
+				// Do not show activation notice on staging/development sites.
+				if ( $this->is_staging() ) {
 					return;
 				}
 				// phpcs:ignore
@@ -701,6 +716,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Check for external blocking contstant.
+		 *
+		 * @return void
 		 */
 		public function check_external_blocking() {
 
@@ -1283,6 +1300,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Check for software updates.
+		 *
+		 * @return void
 		 */
 		public function check_for_update() {
 			$this->plugin_name = $this->wc_am_plugin_name;
@@ -1314,6 +1333,11 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		 * @return bool|string $response
 		 */
 		public function send_query( $args ) {
+
+			// Always include the site URL for staging verification on the licensing server.
+			if ( ! isset( $args['site_url'] ) ) {
+				$args['site_url'] = home_url();
+			}
 
 			$target_url = esc_url_raw( add_query_arg( 'wc-api', 'wc-am-api', $this->api_url ) . '&' . http_build_query( $args ) );
 			$request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
@@ -1348,6 +1372,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 				'version'           => $this->wc_am_software_version,
 				'product_id'        => $this->product_id,
 				'product_parent_id' => $this->product_parent_id,
+				// API key may be empty on staging sites, which is allowed for updates.
 				'api_key'           => ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '',
 				'instance'          => $this->wc_am_instance_id,
 			);
