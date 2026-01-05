@@ -351,24 +351,26 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 					}
 				}
 
-				foreach ( $staging_subdomains as $staging_pattern ) {
-					if ( substr( $staging_pattern, 0, 1 ) === '*' ) {
-						$needle = substr( $staging_pattern, 2 );
+				if ( ! $this->is_staging ) {
+					foreach ( $staging_subdomains as $staging_pattern ) {
+						if ( substr( $staging_pattern, 0, 1 ) === '*' ) {
+							$needle = substr( $staging_pattern, 2 );
 
-						if ( substr( $host, -strlen( $needle ) ) === $needle ) {
+							if ( substr( $host, -strlen( $needle ) ) === $needle ) {
+								$this->is_staging = true;
+								break;
+							}
+						} elseif ( substr( $staging_pattern, -1 ) === '.' || substr( $staging_pattern, -2 ) === '-.' ) {
+							$trimmed_pattern = rtrim( $staging_pattern, '.' );
+
+							if ( substr( $host, 0, strlen( $trimmed_pattern ) ) === $trimmed_pattern ) {
+								$this->is_staging = true;
+								break;
+							}
+						} elseif ( $host === $staging_pattern ) {
 							$this->is_staging = true;
 							break;
 						}
-					} elseif ( substr( $staging_pattern, -1 ) === '.' || substr( $staging_pattern, -2 ) === '-.' ) {
-						$trimmed_pattern = rtrim( $staging_pattern, '.' );
-
-						if ( substr( $host, 0, strlen( $trimmed_pattern ) ) === $trimmed_pattern ) {
-							$this->is_staging = true;
-							break;
-						}
-					} elseif ( $host === $staging_pattern ) {
-						$this->is_staging = true;
-						break;
 					}
 				}
 			}
