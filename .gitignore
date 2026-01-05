@@ -3,9 +3,11 @@ project.xml
 project.properties
 /nbproject/private/
 .buildpath
+.claude
+.gemini
+.idea
 .project
 .settings*
-.idea
 .vscode
 *.sublime-project
 *.sublime-workspace
