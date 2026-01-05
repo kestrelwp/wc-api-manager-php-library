@@ -2,7 +2,6 @@
 
 2026.nn.nn - version 2.12.0
 * Feature: Allow requesting updates while the client library runs on a staging or local development environment
-* Misc: Send the site URL as part of a request payload
 
 2025.06.09 - version 2.11.1
 * Fix: Correctly output HTML links in API error messages

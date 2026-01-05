@@ -1334,8 +1334,8 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 		 */
 		public function send_query( $args ) {
 
-			if ( ! isset( $args['site_url'] ) ) {
-				$args['site_url'] = home_url();
+			if ( ! isset( $args['object'] ) ) {
+				$args['object'] = $this->wc_am_domain ? $this->wc_am_domain : str_replace( array( 'http://', 'https://' ), '', home_url() );
 			}
 
 			$target_url = esc_url_raw( add_query_arg( 'wc-api', 'wc-am-api', $this->api_url ) . '&' . http_build_query( $args ) );
