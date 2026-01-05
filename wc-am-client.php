@@ -1334,7 +1334,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 		 */
 		public function send_query( $args ) {
 
-			if ( ! isset( $args['object'] ) ) {
+			if ( empty( $args['object'] ) ) {
 				$args['object'] = $this->wc_am_domain ? $this->wc_am_domain : str_replace( array( 'http://', 'https://' ), '', home_url() );
 			}
 
