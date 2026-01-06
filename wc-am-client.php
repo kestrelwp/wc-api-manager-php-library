@@ -698,12 +698,12 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 				if ( ! current_user_can( 'manage_options' ) ) {
 					return;
 				}
-				// Do not show activation notice on staging/development sites.
-				if ( $this->is_staging() ) {
-					return;
-				}
 				// phpcs:ignore
 				if ( isset( $_GET['page'] ) && $this->wc_am_activation_tab_key === $_GET['page'] ) {
+					return;
+				}
+				// Do not show activation notice on staging/development sites.
+				if ( $this->is_staging() ) {
 					return;
 				}
 				?>
@@ -721,7 +721,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 		 */
 		public function check_external_blocking() {
 
-			// Show a  notice if external requests are blocked through the WP_HTTP_BLOCK_EXTERNAL constant.
+			// Show a notice if external requests are blocked through the WP_HTTP_BLOCK_EXTERNAL constant.
 			if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && WP_HTTP_BLOCK_EXTERNAL === true ) {
 
 				// Check if our API endpoint is in the allowed hosts.
