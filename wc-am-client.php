@@ -1315,10 +1315,10 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 
 			// Uses the flag above to determine if this is a plugin or a theme update request.
 			if ( $this->plugin_or_theme === 'plugin' ) {
-				add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'update_check' ) );
+				add_action( 'pre_set_site_transient_update_plugins', array( $this, 'update_check' ), 21 );
 				add_filter( 'plugins_api', array( $this, 'information_request' ), 10, 3 );
 			} elseif ( $this->plugin_or_theme === 'theme' ) {
-				add_filter( 'pre_set_site_transient_update_themes', array( $this, 'update_check' ) );
+				add_action( 'pre_set_site_transient_update_themes', array( $this, 'update_check' ), 21 );
 				// phpcs:ignore
 				// add_filter( 'themes_api', array( $this, 'information_request' ), 10, 3 );
 			}
@@ -1378,6 +1378,11 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 			// Check for a plugin update.
 			$response = json_decode( $this->send_query( $args ), true );
 
+			if ( false === $response ) {
+				return $transient;
+			}
+
+			// Error handling.
 			if ( isset( $response['data']['error_code'] ) ) {
 				if ( isset( $response['data']['error'] ) ) {
 					$error_message = $response['data']['error'];
@@ -1392,13 +1397,15 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 				}
 			}
 
-			if ( $response !== false && isset( $response['success'] ) && $response['success'] === true ) {
-				// New plugin version from the API.
-				$new_ver = (string) $response['data']['package']['new_version'];
-				// Current installed plugin version.
-				$curr_ver = (string) $this->wc_am_software_version;
+			if ( empty( $response['success'] ) || ! isset( $response['data']['package'] ) ) {
+				return $transient;
+			}
 
-				$package = array(
+			$new_ver  = (string) ( isset( $response['data']['package']['new_version'] ) ? $response['data']['package']['new_version'] : $this->wc_am_software_version );
+			$curr_ver = (string) $this->wc_am_software_version;
+			$package  = array_merge(
+				(array) $response['data']['package'],
+				array(
 					'id'             => $response['data']['package']['id'],
 					'slug'           => $response['data']['package']['slug'],
 					'plugin'         => $response['data']['package']['plugin'],
@@ -1407,18 +1414,18 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 					'tested'         => $response['data']['package']['tested'],
 					'package'        => $response['data']['package']['package'],
 					'upgrade_notice' => $response['data']['package']['upgrade_notice'],
-				);
+				)
+			);
 
-				if ( isset( $new_ver, $curr_ver ) ) {
-					if ( version_compare( $new_ver, $curr_ver, '>' ) ) {
-						if ( $this->plugin_or_theme === 'plugin' ) {
-							$transient->response[ $this->plugin_name ] = (object) $package;
-							unset( $transient->no_update[ $this->plugin_name ] );
-						} elseif ( $this->plugin_or_theme === 'theme' ) {
-							$transient->response[ $this->plugin_name ]['new_version'] = $response['data']['package']['new_version'];
-							$transient->response[ $this->plugin_name ]['url']         = $response['data']['package']['url'];
-							$transient->response[ $this->plugin_name ]['package']     = $response['data']['package']['package'];
-						}
+			if ( isset( $new_ver, $curr_ver ) ) {
+				if ( version_compare( $new_ver, $curr_ver, '>' ) ) {
+					if ( $this->plugin_or_theme === 'plugin' ) {
+						$transient->response[ $this->plugin_name ] = (object) $package;
+						unset( $transient->no_update[ $this->plugin_name ] );
+					} elseif ( $this->plugin_or_theme === 'theme' ) {
+						$transient->response[ $this->plugin_name ]['new_version'] = $response['data']['package']['new_version'];
+						$transient->response[ $this->plugin_name ]['url']         = $response['data']['package']['url'];
+						$transient->response[ $this->plugin_name ]['package']     = $response['data']['package']['package'];
 					}
 				}
 			}
@@ -1435,17 +1442,12 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 		 * @param false|object|array $result The result object or array. Default false.
 		 * @param string             $action The type of information being requested from the Plugin Install API.
 		 * @param object             $args Arguments.
-		 *
-		 * @return object
+		 * @return false|object|array
 		 */
 		public function information_request( $result, $action, $args ) {
 
 			// Check if this plugins API is about this plugin.
-			if ( isset( $args->slug ) ) {
-				if ( $args->slug !== $this->slug ) {
-					return $result;
-				}
-			} else {
+			if ( ! isset( $args->slug ) || $args->slug !== $this->slug ) {
 				return $result;
 			}
 
@@ -1460,13 +1462,15 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 				'object'            => $this->wc_am_domain,
 			);
 
-			$response = unserialize( $this->send_query( $args ) ); // phpcs:ignore
+			$response = $this->send_query( $args );
 
-			if ( isset( $response ) && is_object( $response ) && $response !== false ) {
-				return $response;
+			if ( ! $response ) {
+				return $result;
 			}
 
-			return $result;
+			$response = maybe_unserialize( $response );
+
+			return is_object( $response ) ? $response : $result;
 		}
 	}
 }
