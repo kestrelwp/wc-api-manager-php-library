@@ -16,22 +16,22 @@
  *
  * @link https://kestrelwp.com/developers
  *
- * @version     2.11.1
+ * @version     2.12.0
  * @author      Kestrel
- * @copyright   Copyright (c) 2013-2025 Kestrel
+ * @copyright   Copyright (c) 2013-2026 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  * @package     Kestrel API Manager for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 	/**
 	 * API Manager for WooCommerce client class.
 	 *
 	 * @since 1.0.0
 	 */
-	class WC_AM_Client_2_11_1 {
+	class WC_AM_Client_2_12_0 {
 
 		/** @var string API URL. */
 		private $api_url = '';
@@ -135,6 +135,9 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/** @var bool */
 		private $inactive_notice = true;
 
+		/** @var bool|null */
+		private $is_staging = null;
+
 		/**
 		 * Cache for the status result to prevent multiple API calls.
 		 *
@@ -144,6 +147,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Client constructor.
+		 *
+		 * @since 1.0.0
 		 *
 		 * @param string                   $file The main plugin or theme __FILE__ path.
 		 * @param int|null                 $product_id The product ID. If null, it should be provided by the customer in the API settings.
@@ -284,11 +289,103 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		}
 
 		/**
+		 * Determines if the current site is in a staging or development environment.
+		 *
+		 * This checks the host against known staging subdomains and TLDs.
+		 *
+		 * @since 2.12.0
+		 *
+		 * @return bool
+		 */
+		private function is_staging() {
+
+			if ( is_bool( $this->is_staging ) ) {
+				return $this->is_staging;
+			}
+
+			$this->is_staging = false;
+
+			$url  = wp_parse_url( (string) home_url() );
+			$host = strtolower( isset( $url->host ) ? $url->host : '' );
+
+			if ( $host && trim( $host ) !== '' ) {
+
+				// List of known dev/staging subdomains and wildcard domains.
+				$staging_subdomains = array(
+					'*.aubrie-app.fndr-infra.de',
+					'*.closte.com',
+					'*.cloudwaysapps.com',
+					'*.ddev.site',
+					'*.flywheelsites.com',
+					'*.flywheelstaging.com',
+					'*.instawp.xyz',
+					'*.kinsta.cloud',
+					'*.myftpupload.com',
+					'*.pantheonsite.io',
+					'*.sg-host.com',
+					'*.sozowebdesign.co.uk',
+					'*.staging.',
+					'*.templweb.com',
+					'*.test.',
+					'*.wordifysites.com',
+					'*.wpcomstaging.com',
+					'*.wpdns.site',
+					'*.wpengine.com',
+					'*.wpstage.net',
+					'dev.',
+					'dev.nfs.health',
+					'stage.',
+					'staging.',
+					'staging-*.',
+				);
+
+				// List of TLDs that usually indicate local or dev environments.
+				$dev_tlds = array(
+					'.dev',
+					'.local',
+					'.test',
+				);
+
+				foreach ( $dev_tlds as $dev_tld ) {
+					if ( substr( $host, -strlen( $dev_tld ) ) === $dev_tld ) {
+						$this->is_staging = true;
+						break;
+					}
+				}
+
+				if ( ! $this->is_staging ) {
+					foreach ( $staging_subdomains as $staging_pattern ) {
+						if ( substr( $staging_pattern, 0, 1 ) === '*' ) {
+							$needle = substr( $staging_pattern, 2 );
+
+							if ( substr( $host, -strlen( $needle ) ) === $needle ) {
+								$this->is_staging = true;
+								break;
+							}
+						} elseif ( substr( $staging_pattern, -1 ) === '.' || substr( $staging_pattern, -2 ) === '-.' ) {
+							$trimmed_pattern = rtrim( $staging_pattern, '.' );
+
+							if ( substr( $host, 0, strlen( $trimmed_pattern ) ) === $trimmed_pattern ) {
+								$this->is_staging = true;
+								break;
+							}
+						} elseif ( $host === $staging_pattern ) {
+							$this->is_staging = true;
+							break;
+						}
+					}
+				}
+			}
+
+			return $this->is_staging;
+		}
+
+		/**
 		 * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
 		 *
 		 * Non-scalar values are ignored.
 		 *
-		 * @since 2.9
+		 * @since 2.9.0
 		 *
 		 * @param string|array $item Data to sanitize.
 		 * @return string|array
@@ -304,7 +401,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 * Register a menu or submenu specific to this product.
 		 *
-		 * @updated 2.9
+		 * @return void
 		 */
 		public function register_menu() {
 
@@ -332,7 +429,9 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 *  Tries auto updates.
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
+		 *
+		 * @return void
 		 */
 		public function try_automatic_updates() {
 			global $wp_version;
@@ -349,7 +448,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 * Tries to set auto updates.
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
 		 *
 		 * @param bool|null $update Whether to update.
 		 * @param object    $item   The item to update.
@@ -381,7 +480,7 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		/**
 		 * Checks if auto updates are disabled.
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
 		 *
 		 * @return bool
 		 */
@@ -423,9 +522,9 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		 *
 		 * Plugin updates stored in 'auto_update_plugins' array.
 		 *
-		 * @see   'wp-admin/includes/class-wp-plugins-list-table.php'
+		 * @see `wp-admin/includes/class-wp-plugins-list-table.php`
 		 *
-		 * @since 2.8
+		 * @since 2.8.0
 		 *
 		 * @param string $html        HTML of the auto-update message.
 		 * @param string $plugin_file Plugin file.
@@ -496,6 +595,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Generate the default data.
+		 *
+		 * @reurn void
 		 */
 		public function activation() {
 			$instance_exists = get_option( $this->wc_am_instance_key );
@@ -558,6 +659,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Deactivates the license on the API server.
+		 *
+		 * @Since 1.0.0
 		 */
 		public function license_key_deactivation() {
 			$activation_status = get_option( $this->wc_am_activated_key );
@@ -576,8 +679,11 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Displays an inactive notice when the software is inactive.
+		 *
+		 * @return void
 		 */
 		public function inactive_notice() {
+
 			/**
 			 * Filters the inactive notice.
 			 *
@@ -596,6 +702,10 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 				if ( isset( $_GET['page'] ) && $this->wc_am_activation_tab_key === $_GET['page'] ) {
 					return;
 				}
+				// Do not show activation notice on staging/development sites.
+				if ( $this->is_staging() ) {
+					return;
+				}
 				?>
 				<div class="notice notice-error">
 					<p><?php printf( __( 'The <strong>%1$s</strong> license key has not been activated, so %2$s is inactive! %3$sClick here%4$s to activate <strong>%5$s</strong>.', $this->text_domain ), esc_attr( $this->software_title ), esc_attr( $this->plugin_or_theme ), '<a href="' . esc_url( admin_url( 'options-general.php?page=' . $this->wc_am_activation_tab_key ) ) . '">', '</a>', esc_attr( $this->software_title ) ); // phpcs:ignore ?></p>
@@ -606,10 +716,12 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Check for external blocking contstant.
+		 *
+		 * @return void
 		 */
 		public function check_external_blocking() {
 
-			// Show a  notice if external requests are blocked through the WP_HTTP_BLOCK_EXTERNAL constant.
+			// Show a notice if external requests are blocked through the WP_HTTP_BLOCK_EXTERNAL constant.
 			if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && WP_HTTP_BLOCK_EXTERNAL === true ) {
 
 				// Check if our API endpoint is in the allowed hosts.
@@ -1188,6 +1300,8 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 		/**
 		 * Check for software updates.
+		 *
+		 * @return void
 		 */
 		public function check_for_update() {
 			$this->plugin_name = $this->wc_am_plugin_name;
@@ -1201,10 +1315,10 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 
 			// Uses the flag above to determine if this is a plugin or a theme update request.
 			if ( $this->plugin_or_theme === 'plugin' ) {
-				add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'update_check' ) );
+				add_action( 'pre_set_site_transient_update_plugins', array( $this, 'update_check' ), 21 );
 				add_filter( 'plugins_api', array( $this, 'information_request' ), 10, 3 );
 			} elseif ( $this->plugin_or_theme === 'theme' ) {
-				add_filter( 'pre_set_site_transient_update_themes', array( $this, 'update_check' ) );
+				add_action( 'pre_set_site_transient_update_themes', array( $this, 'update_check' ), 21 );
 				// phpcs:ignore
 				// add_filter( 'themes_api', array( $this, 'information_request' ), 10, 3 );
 			}
@@ -1219,6 +1333,10 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		 * @return bool|string $response
 		 */
 		public function send_query( $args ) {
+
+			if ( empty( $args['object'] ) ) {
+				$args['object'] = $this->wc_am_domain ? $this->wc_am_domain : str_replace( array( 'http://', 'https://' ), '', home_url() );
+			}
 
 			$target_url = esc_url_raw( add_query_arg( 'wc-api', 'wc-am-api', $this->api_url ) . '&' . http_build_query( $args ) );
 			$request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
@@ -1260,6 +1378,11 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 			// Check for a plugin update.
 			$response = json_decode( $this->send_query( $args ), true );
 
+			if ( false === $response ) {
+				return $transient;
+			}
+
+			// Error handling.
 			if ( isset( $response['data']['error_code'] ) ) {
 				if ( isset( $response['data']['error'] ) ) {
 					$error_message = $response['data']['error'];
@@ -1274,13 +1397,15 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 				}
 			}
 
-			if ( $response !== false && isset( $response['success'] ) && $response['success'] === true ) {
-				// New plugin version from the API.
-				$new_ver = (string) $response['data']['package']['new_version'];
-				// Current installed plugin version.
-				$curr_ver = (string) $this->wc_am_software_version;
+			if ( empty( $response['success'] ) || ! isset( $response['data']['package'] ) ) {
+				return $transient;
+			}
 
-				$package = array(
+			$new_ver  = (string) ( isset( $response['data']['package']['new_version'] ) ? $response['data']['package']['new_version'] : $this->wc_am_software_version );
+			$curr_ver = (string) $this->wc_am_software_version;
+			$package  = array_merge(
+				(array) $response['data']['package'],
+				array(
 					'id'             => $response['data']['package']['id'],
 					'slug'           => $response['data']['package']['slug'],
 					'plugin'         => $response['data']['package']['plugin'],
@@ -1289,18 +1414,18 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 					'tested'         => $response['data']['package']['tested'],
 					'package'        => $response['data']['package']['package'],
 					'upgrade_notice' => $response['data']['package']['upgrade_notice'],
-				);
+				)
+			);
 
-				if ( isset( $new_ver, $curr_ver ) ) {
-					if ( version_compare( $new_ver, $curr_ver, '>' ) ) {
-						if ( $this->plugin_or_theme === 'plugin' ) {
-							$transient->response[ $this->plugin_name ] = (object) $package;
-							unset( $transient->no_update[ $this->plugin_name ] );
-						} elseif ( $this->plugin_or_theme === 'theme' ) {
-							$transient->response[ $this->plugin_name ]['new_version'] = $response['data']['package']['new_version'];
-							$transient->response[ $this->plugin_name ]['url']         = $response['data']['package']['url'];
-							$transient->response[ $this->plugin_name ]['package']     = $response['data']['package']['package'];
-						}
+			if ( isset( $new_ver, $curr_ver ) ) {
+				if ( version_compare( $new_ver, $curr_ver, '>' ) ) {
+					if ( $this->plugin_or_theme === 'plugin' ) {
+						$transient->response[ $this->plugin_name ] = (object) $package;
+						unset( $transient->no_update[ $this->plugin_name ] );
+					} elseif ( $this->plugin_or_theme === 'theme' ) {
+						$transient->response[ $this->plugin_name ]['new_version'] = $response['data']['package']['new_version'];
+						$transient->response[ $this->plugin_name ]['url']         = $response['data']['package']['url'];
+						$transient->response[ $this->plugin_name ]['package']     = $response['data']['package']['package'];
 					}
 				}
 			}
@@ -1317,17 +1442,12 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 		 * @param false|object|array $result The result object or array. Default false.
 		 * @param string             $action The type of information being requested from the Plugin Install API.
 		 * @param object             $args Arguments.
-		 *
-		 * @return object
+		 * @return false|object|array
 		 */
 		public function information_request( $result, $action, $args ) {
 
 			// Check if this plugins API is about this plugin.
-			if ( isset( $args->slug ) ) {
-				if ( $args->slug !== $this->slug ) {
-					return $result;
-				}
-			} else {
+			if ( ! isset( $args->slug ) || $args->slug !== $this->slug ) {
 				return $result;
 			}
 
@@ -1342,13 +1462,15 @@ if ( ! class_exists( 'WC_AM_Client_2_11_1' ) ) {
 				'object'            => $this->wc_am_domain,
 			);
 
-			$response = unserialize( $this->send_query( $args ) ); // phpcs:ignore
+			$response = $this->send_query( $args );
 
-			if ( isset( $response ) && is_object( $response ) && $response !== false ) {
-				return $response;
+			if ( ! $response ) {
+				return $result;
 			}
 
-			return $result;
+			$response = maybe_unserialize( $response );
+
+			return is_object( $response ) ? $response : $result;
 		}
 	}
 }
