@@ -1,6 +1,6 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
-2026.nn.nn - version 2.12.0
+2026.01.12 - version 2.12.0
 * Tweak: Do not display the license activation prompt on staging sites
 * Misc: Ensure to always send the current site URL to improve handling of staging site activations and updates with the latest API Manager server versions
 
