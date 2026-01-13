@@ -1525,22 +1525,21 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 
 			$slug = dirname( $this->wc_am_plugin_name );
 
-			// fallback for single-file plugins
+			// Fallback for single-file plugins.
 			if ( $slug === '.' ) {
 				$slug = $this->wc_am_plugin_name;
 			}
 
-			$url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . urlencode( $slug ) . '&TB_iframe=true&width=600&height=550' );
+			$url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . urlencode( $slug ) . '&TB_iframe=true&width=600&height=550' ); // phpcs:ignore
 
-			$view_details_link = sprintf(
+			$links[] = sprintf(
 				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
 				esc_url( $url ),
-				esc_attr( sprintf( __( 'More information about %s', $this->text_domain ), $this->software_title ) ),
+				/* translators: Placeholder: %s - Licensed plugin title */
+				esc_attr( sprintf( __( 'More information about %s', $this->text_domain ), $this->software_title ) ), // phpcs:ignore
 				esc_attr( $this->software_title ),
-				__( 'View details', $this->text_domain )
+				__( 'View details', $this->text_domain ) // phpcs:ignore
 			);
-
-			$links[] = $view_details_link;
 
 			return $links;
 		}
