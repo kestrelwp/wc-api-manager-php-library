@@ -303,76 +303,77 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 				return $this->is_staging;
 			}
 
+			$url  = (array) wp_parse_url( (string) home_url() );
+			$host = strtolower( (string) isset( $url['host'] ) ? $url['host'] : '' );
+
+			if ( trim( $host ) === '' ) {
+				return false;
+			}
+
 			$this->is_staging = false;
 
-			$url  = wp_parse_url( (string) home_url() );
-			$host = strtolower( isset( $url->host ) ? $url->host : '' );
+			// List of known dev/staging subdomains and wildcard domains.
+			$staging_subdomains = array(
+				'*.aubrie-app.fndr-infra.de',
+				'*.closte.com',
+				'*.cloudwaysapps.com',
+				'*.ddev.site',
+				'*.flywheelsites.com',
+				'*.flywheelstaging.com',
+				'*.instawp.xyz',
+				'*.kinsta.cloud',
+				'*.myftpupload.com',
+				'*.pantheonsite.io',
+				'*.sg-host.com',
+				'*.sozowebdesign.co.uk',
+				'*.staging.',
+				'*.templweb.com',
+				'*.test.',
+				'*.wordifysites.com',
+				'*.wpcomstaging.com',
+				'*.wpdns.site',
+				'*.wpengine.com',
+				'*.wpstage.net',
+				'dev.',
+				'dev.nfs.health',
+				'stage.',
+				'staging.',
+				'staging-*.',
+			);
 
-			if ( $host && trim( $host ) !== '' ) {
+			// List of TLDs that usually indicate local or dev environments.
+			$dev_tlds = array(
+				'.dev',
+				'.local',
+				'.test',
+			);
 
-				// List of known dev/staging subdomains and wildcard domains.
-				$staging_subdomains = array(
-					'*.aubrie-app.fndr-infra.de',
-					'*.closte.com',
-					'*.cloudwaysapps.com',
-					'*.ddev.site',
-					'*.flywheelsites.com',
-					'*.flywheelstaging.com',
-					'*.instawp.xyz',
-					'*.kinsta.cloud',
-					'*.myftpupload.com',
-					'*.pantheonsite.io',
-					'*.sg-host.com',
-					'*.sozowebdesign.co.uk',
-					'*.staging.',
-					'*.templweb.com',
-					'*.test.',
-					'*.wordifysites.com',
-					'*.wpcomstaging.com',
-					'*.wpdns.site',
-					'*.wpengine.com',
-					'*.wpstage.net',
-					'dev.',
-					'dev.nfs.health',
-					'stage.',
-					'staging.',
-					'staging-*.',
-				);
-
-				// List of TLDs that usually indicate local or dev environments.
-				$dev_tlds = array(
-					'.dev',
-					'.local',
-					'.test',
-				);
-
-				foreach ( $dev_tlds as $dev_tld ) {
-					if ( substr( $host, -strlen( $dev_tld ) ) === $dev_tld ) {
-						$this->is_staging = true;
-						break;
-					}
+			foreach ( $dev_tlds as $dev_tld ) {
+				if ( substr( $host, -strlen( $dev_tld ) ) === $dev_tld ) {
+					$this->is_staging = true;
+					break;
 				}
+			}
 
-				if ( ! $this->is_staging ) {
-					foreach ( $staging_subdomains as $staging_pattern ) {
-						if ( substr( $staging_pattern, 0, 1 ) === '*' ) {
-							$needle = substr( $staging_pattern, 2 );
+			if ( ! $this->is_staging ) {
+				foreach ( $staging_subdomains as $staging_pattern ) {
+					if ( substr( $staging_pattern, 0, 1 ) === '*' ) {
+						$needle = substr( $staging_pattern, 2 );
 
-							if ( substr( $host, -strlen( $needle ) ) === $needle ) {
-								$this->is_staging = true;
-								break;
-							}
-						} elseif ( substr( $staging_pattern, -1 ) === '.' || substr( $staging_pattern, -2 ) === '-.' ) {
-							$trimmed_pattern = rtrim( $staging_pattern, '.' );
-
-							if ( substr( $host, 0, strlen( $trimmed_pattern ) ) === $trimmed_pattern ) {
-								$this->is_staging = true;
-								break;
-							}
-						} elseif ( $host === $staging_pattern ) {
+						if ( substr( $host, -strlen( $needle ) ) === $needle ) {
 							$this->is_staging = true;
 							break;
 						}
+					} elseif ( substr( $staging_pattern, -1 ) === '.' || substr( $staging_pattern, -2 ) === '-.' ) {
+						$trimmed_pattern = rtrim( $staging_pattern, '.' );
+
+						if ( substr( $host, 0, strlen( $trimmed_pattern ) ) === $trimmed_pattern ) {
+							$this->is_staging = true;
+							break;
+						}
+					} elseif ( $host === $staging_pattern ) {
+						$this->is_staging = true;
+						break;
 					}
 				}
 			}
