@@ -1458,10 +1458,6 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 						$transient->response[ $this->plugin_name ]['url']         = $response['data']['package']['url'];
 						$transient->response[ $this->plugin_name ]['package']     = $response['data']['package']['package'];
 					}
-				} elseif ( $this->plugin_or_theme === 'plugin' ) {
-					// No update available, but add to no_update so "View details" link appears.
-					$transient->no_update[ $this->plugin_name ] = (object) $package;
-					unset( $transient->response[ $this->plugin_name ] );
 				}
 			}
 
