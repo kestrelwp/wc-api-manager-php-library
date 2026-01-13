@@ -1015,8 +1015,8 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 
 			// Load existing options, validate, and update with changes from input before returning.
 			$options                             = $this->data;
-			$options[ $this->wc_am_api_key_key ] = isset( $input[ $this->wc_am_api_key_key ] ) ? trim( $input[ $this->wc_am_api_key_key ] ) : '';
-			$api_key                             = isset( $input[ $this->wc_am_api_key_key ] ) ? trim( $input[ $this->wc_am_api_key_key ] ) : '';
+			$options[ $this->wc_am_api_key_key ] = isset( $input[ $this->wc_am_api_key_key ] ) ? trim( (string) $input[ $this->wc_am_api_key_key ] ) : '';
+			$api_key                             = isset( $input[ $this->wc_am_api_key_key ] ) ? trim( (string) $input[ $this->wc_am_api_key_key ] ) : '';
 			$activation_status                   = get_option( $this->wc_am_activated_key );
 			$checkbox_status                     = get_option( $this->wc_am_deactivate_checkbox_key );
 			$current_api_key                     = ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '';
