@@ -271,6 +271,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 
 				if ( $this->plugin_or_theme === 'plugin' ) {
 					add_filter( 'plugin_auto_update_setting_html', array( $this, 'auto_update_message' ), 10, 3 );
+					add_filter( 'plugin_row_meta', array( $this, 'add_plugin_view_details_link' ), 10, 2 );
 				}
 			}
 
@@ -1505,6 +1506,43 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 			$response = maybe_unserialize( $response );
 
 			return is_object( $response ) ? $response : $result;
+		}
+
+		/**
+		 * Adds a "View details" link to the plugin row meta.
+		 *
+		 * @since 2.12.0
+		 *
+		 * @param array<string, mixed>|mixed $links The existing row meta links.
+		 * @param string|mixed               $file  The plugin file name.
+		 * @return array<string, mixed>
+		 */
+		public function add_plugin_view_details_link( $links, $file ) {
+
+			if ( ! is_array( $links ) || $this->wc_am_plugin_name !== $file ) {
+				return $links;
+			}
+
+			$slug = dirname( $this->wc_am_plugin_name );
+
+			// fallback for single-file plugins
+			if ( $slug === '.' ) {
+				$slug = $this->wc_am_plugin_name;
+			}
+
+			$url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . urlencode( $slug ) . '&TB_iframe=true&width=600&height=550' );
+
+			$view_details_link = sprintf(
+				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
+				esc_url( $url ),
+				esc_attr( sprintf( __( 'More information about %s', $this->text_domain ), $this->software_title ) ),
+				esc_attr( $this->software_title ),
+				__( 'View details', $this->text_domain )
+			);
+
+			$links[] = $view_details_link;
+
+			return $links;
 		}
 	}
 }
