@@ -382,6 +382,31 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 		}
 
 		/**
+		 * Get HTTP request arguments for {@see wp_safe_remote_post()} calls from this class.
+		 *
+		 * Disables SSL verification on staging/development environments and extends the standard timeout.
+		 *
+		 * @since 2.12.1
+		 *
+		 * @param array<string, mixed> $custom_args Optional custom arguments to merge.
+		 * @return array<string, mixed>
+		 */
+		private function get_http_request_args( $custom_args = array() ) {
+
+			$defaults = array(
+				'timeout' => 15,
+			);
+
+			// Disable SSL verification and safe URLs for local/staging environments only.
+			if ( $this->is_staging() ) {
+				$defaults['reject_unsafe_urls'] = false;
+				$defaults['sslverify']          = false;
+			}
+
+			return wp_parse_args( $custom_args, $defaults );
+		}
+
+		/**
 		 * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
 		 *
 		 * Non-scalar values are ignored.
@@ -979,15 +1004,19 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 		 *
 		 * @since 2.0
 		 *
-		 * @param array $input Input data.
+		 * @param array<string, mixed>|mixed $input Input data.
 		 * @return mixed|string
 		 */
 		public function validate_options( $input ) {
 
+			if ( ! is_array( $input ) ) {
+				$input = array();
+			}
+
 			// Load existing options, validate, and update with changes from input before returning.
 			$options                             = $this->data;
-			$options[ $this->wc_am_api_key_key ] = trim( $input[ $this->wc_am_api_key_key ] );
-			$api_key                             = trim( $input[ $this->wc_am_api_key_key ] );
+			$options[ $this->wc_am_api_key_key ] = isset( $input[ $this->wc_am_api_key_key ] ) ? trim( $input[ $this->wc_am_api_key_key ] ) : '';
+			$api_key                             = isset( $input[ $this->wc_am_api_key_key ] ) ? trim( $input[ $this->wc_am_api_key_key ] ) : '';
 			$activation_status                   = get_option( $this->wc_am_activated_key );
 			$checkbox_status                     = get_option( $this->wc_am_deactivate_checkbox_key );
 			$current_api_key                     = ! empty( $this->data[ $this->wc_am_api_key_key ] ) ? $this->data[ $this->wc_am_api_key_key ] : '';
@@ -1207,7 +1236,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 
 			$args       = wp_parse_args( $defaults, $args );
 			$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
-			$request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
+			$request    = wp_safe_remote_post( $target_url, $this->get_http_request_args() );
 
 			// Request failed.
 			if ( ! is_wp_error( $request ) && wp_remote_retrieve_response_code( $request ) !== 200 ) {
@@ -1249,7 +1278,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 
 			$args       = wp_parse_args( $defaults, $args );
 			$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
-			$request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
+			$request    = wp_safe_remote_post( $target_url, $this->get_http_request_args() );
 
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) !== 200 ) {
 				// Request failed.
@@ -1284,7 +1313,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 			);
 
 			$target_url = esc_url_raw( $this->create_software_api_url( $defaults ) );
-			$request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
+			$request    = wp_safe_remote_post( $target_url, $this->get_http_request_args() );
 
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) !== 200 ) {
 
@@ -1340,7 +1369,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 			}
 
 			$target_url = esc_url_raw( add_query_arg( 'wc-api', 'wc-am-api', $this->api_url ) . '&' . http_build_query( $args ) );
-			$request    = wp_safe_remote_post( $target_url, array( 'timeout' => 15 ) );
+			$request    = wp_safe_remote_post( $target_url, $this->get_http_request_args() );
 
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) !== 200 ) {
 				return false;
