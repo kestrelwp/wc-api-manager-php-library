@@ -16,7 +16,7 @@
  *
  * @link https://kestrelwp.com/developers
  *
- * @version     2.12.0
+ * @version     2.12.1
  * @author      Kestrel
  * @copyright   Copyright (c) 2013-2026 Kestrel
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -25,13 +25,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_12_1' ) ) {
 	/**
 	 * API Manager for WooCommerce client class.
 	 *
 	 * @since 1.0.0
 	 */
-	class WC_AM_Client_2_12_0 {
+	class WC_AM_Client_2_12_1 {
 
 		/** @var string API URL. */
 		private $api_url = '';
@@ -1526,9 +1526,20 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 				$slug = $this->wc_am_plugin_name;
 			}
 
+			// Search for existing "View details" link (case-insensitive).
+			$view_details_index = null;
+
+			foreach ( $links as $index => $link ) {
+				// phpcs:ignore
+				if ( stripos( $link, __( 'View details' ) !== false ) || stripos( $link, __( 'View details', 'woocommerce' ) !== false ) ) {
+					$view_details_index = $index;
+					break;
+				}
+			}
+
 			$url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . urlencode( $slug ) . '&TB_iframe=true&width=600&height=550' ); // phpcs:ignore
 
-			$links[] = sprintf(
+			$new_link = sprintf(
 				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
 				esc_url( $url ),
 				/* translators: Placeholder: %s - Licensed plugin title */
@@ -1536,6 +1547,12 @@ if ( ! class_exists( 'WC_AM_Client_2_12_0' ) ) {
 				esc_attr( $this->software_title ),
 				__( 'View details', $this->text_domain ) // phpcs:ignore
 			);
+
+			if ( $view_details_index !== null ) {
+				$links[ $view_details_index ] = $new_link;
+			} else {
+				$links[] = $new_link;
+			}
 
 			return $links;
 		}

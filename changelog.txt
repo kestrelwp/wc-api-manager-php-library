@@ -1,5 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2026.02.02 - version 2.12.1
+* Fix: When appending a "View details" link in the plugins admin page, ensure to overwrite an existing link rather than appending a second one
+
 2026.01.13 version 2.12.0
 * Tweak: Do not display the license activation prompt on staging sites
 * Fix: Ensure that the "View details" link in plugins admin page are displayed for plugins using this library
