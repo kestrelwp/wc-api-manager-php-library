@@ -1531,7 +1531,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_1' ) ) {
 
 			foreach ( $links as $index => $link ) {
 				// phpcs:ignore
-				if ( stripos( $link, __( 'View details' ) !== false ) || stripos( $link, __( 'View details', 'woocommerce' ) !== false ) ) {
+				if ( stripos( $link, __( 'View details' ) ) !== false || stripos( $link, __( 'View details', 'woocommerce' ) ) !== false ) {
 					$view_details_index = $index;
 					break;
 				}
