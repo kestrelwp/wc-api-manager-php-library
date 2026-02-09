@@ -3,14 +3,14 @@
  * Plugin Name: Kestrel API Manager for WooCommerce PHP Library for Plugins and Themes Example
  * Plugin URI: https://kestrelwp.com/product/woocommerce-api-manager-php-library-for-plugins-and-themes/
  * Description: Drop the wc-am-client.php library into a plugin or theme, and use the example code below this comment block following carefully the instructions and the documentation.
- * Version: 2.12.1
+ * Version: 2.12.2
  * Author: Kestrel
  * Author URI: https://kestrelwp.com
  *
- * Copyright: (c) 2023-2026 Kestrel [hey@kestrelwp.com]
+ * Copyright: (c) 2023-2026 Kestrel Commerce LLC [support@kestrelwp.com]
  *
  * @package     API Manager for WooCommerce PHP Library for Plugins and Themes Example
- * @author      Kestrel
+ * @author      Kestrel Commerce LLC
  * @category    Plugin/Theme/library
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
  */
 
 // Load the WC_AM_Client client class if it exists.
-if ( ! class_exists( 'WC_AM_Client_2_12_1' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_12_2' ) ) {
 	/**
 	 * This library does not use Composer autoloading to support a wider range of implementations.
 	 *
@@ -38,7 +38,7 @@ if ( ! class_exists( 'WC_AM_Client_2_12_1' ) ) {
 }
 
 // Instantiate the WC_AM_Client class object if the WC_AM_Client class is loaded.
-if ( class_exists( 'WC_AM_Client_2_12_1' ) ) {
+if ( class_exists( 'WC_AM_Client_2_12_2' ) ) {
 	/**
 	 * This file is only an example that includes a plugin header, and this code is used to instantiate the client object.
 	 *
@@ -70,7 +70,7 @@ if ( class_exists( 'WC_AM_Client_2_12_1' ) ) {
 	 *
 	 * @NOTE Replace the dummy values with your own.
 	 */
-	$wcam_lib = new WC_AM_Client_2_12_1( __FILE__, 123, null, '1.0.0', 'theme', 'https://example.org/', __( 'Example WordPress Theme', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_12_2( __FILE__, 123, null, '1.0.0', 'theme', 'https://example.org/', __( 'Example WordPress Theme', 'example-textdomain' ), 'example-textdomain' );
 
 	/**
 	 * Plugin example (default menu).
@@ -81,13 +81,13 @@ if ( class_exists( 'WC_AM_Client_2_12_1' ) ) {
 	 */
 
 	// If the Product ID is not set the customer will see a form field when activating the API Key that requires the Product ID along with a form field for the API Key.
-	$wcam_lib = new WC_AM_Client_2_12_1( __FILE__, '', null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_12_2( __FILE__, '', null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	// Setting the Product ID below will eliminate the required form field for the customer to enter the Product ID, so the customer will only be required to enter the API Key.
-	$wcam_lib = new WC_AM_Client_2_12_1( __FILE__, 456, null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_12_2( __FILE__, 456, null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	// If you offer the product as a variable product where the customer can switch to another product with a different Product ID, then do not set the Product ID here, but you may pass a product parent ID instead (generally not recommended unless you are using subscription switches and not setting a product ID or letting the customer enter it).
-	$wcam_lib = new WC_AM_Client_2_12_1( __FILE__, null, 789, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
+	$wcam_lib = new WC_AM_Client_2_12_2( __FILE__, null, 789, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain' );
 
 	/**
 	 * Custom top level or top level submenu.
@@ -100,7 +100,7 @@ if ( class_exists( 'WC_AM_Client_2_12_1' ) ) {
 	 * @see add_options_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null );
 	 * @see add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $callback = '', $icon_url = '', $position = null );
 	 *
-	 * Then pass the custom menu settings as an array to the WC_AM_Client_2_12_1 class as shown in the example below.
+	 * Then pass the custom menu settings as an array to the WC_AM_Client_2_12_2 class as shown in the example below.
 	 */
 
 	$wcam_lib_custom_menu = array(
@@ -110,13 +110,13 @@ if ( class_exists( 'WC_AM_Client_2_12_1' ) ) {
 		'menu_title'  => __( 'Example API Key', 'example-textdomain' ),
 	);
 
-	$wcam_lib = new WC_AM_Client_2_12_1( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', $wcam_lib_custom_menu );
+	$wcam_lib = new WC_AM_Client_2_12_2( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', $wcam_lib_custom_menu );
 
 	/**
 	 * Suppress the inactive notice.
 	 *
-	 * When your plugin or theme is activated, the WC_AM_Client_2_12_1 class will display a notice in the admin area if the plugin or theme has not been activated.
+	 * When your plugin or theme is activated, the WC_AM_Client_2_12_2 class will display a notice in the admin area if the plugin or theme has not been activated.
 	 * You can disable this by setting the last argument passed to the client constructor to false.
 	 */
-	$wcam_lib = new WC_AM_Client_2_12_1( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', null, false );
+	$wcam_lib = new WC_AM_Client_2_12_2( __FILE__, 123, null, '1.2.3', 'plugin', 'https://example.org/', __( 'Example WordPress Plugin', 'example-textdomain' ), 'example-textdomain', null, false );
 }

@@ -16,22 +16,22 @@
  *
  * @link https://kestrelwp.com/developers
  *
- * @version     2.12.1
+ * @version     2.12.2
  * @author      Kestrel
- * @copyright   Copyright (c) 2013-2026 Kestrel
+ * @copyright   Copyright (c) 2013-2026 Kestrel Commerce LLC
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  * @package     Kestrel API Manager for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_AM_Client_2_12_1' ) ) {
+if ( ! class_exists( 'WC_AM_Client_2_12_2' ) ) {
 	/**
 	 * API Manager for WooCommerce client class.
 	 *
 	 * @since 1.0.0
 	 */
-	class WC_AM_Client_2_12_1 {
+	class WC_AM_Client_2_12_2 {
 
 		/** @var string API URL. */
 		private $api_url = '';

@@ -1,5 +1,5 @@
 {
-    "name": "kestrelwp/wc-api-manager-php-library",
+    "name": "kestrelcommerce/wc-api-manager-php-library",
     "description": "Kestrel API Manager for WooCommerce PHP client library",
     "type": "library",
     "license": "GPL-3.0",

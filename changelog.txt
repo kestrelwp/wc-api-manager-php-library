@@ -1,5 +1,8 @@
 *** WooCommerce API Manager PHP Library for Plugins and Themes Changelog ***
 
+2026.02.09 - version 2.12.2
+* Misc: Update composer dependency GitHub organization references to `kestrelcommerce`
+
 2026.02.02 - version 2.12.1
 * Fix: When appending a "View details" link in the plugins admin page, ensure to overwrite an existing link rather than appending a second one
 
